@@ -3,7 +3,18 @@ const app = express();
 const cors = require('cors');
 const pool = require('./db');
 const fetch = require('node-fetch');
+const path = require('path');
+require('dotenv').config();
 const { response } = require('express');
+const PORT = process.env.PORT || 5000;
+
+//process.env.PORT
+//process.env.NODE_ENV => production or undefined
+
+if (process.env.NODE_ENV === 'production') {
+	//gets static content route for heroku once npm build is run
+	app.use(express.static(path.join(__dirname, 'client/build')));
+}
 
 //middleware
 app.use(cors());
@@ -14,7 +25,8 @@ app.use(express.json());
 //search Google Books API
 app.get('/search', async (req, res) => {
 	try {
-		const key = 'AIzaSyBUcnhG0FWf7elsXN1sDMUR8CJhQ8NASrI';
+		const key = process.env.GOOGLE_BOOKS_API_KEY;
+		console.log(key);
 		const response = await fetch(
 			`https://www.googleapis.com/books/v1/volumes/zyTCAlFPjgYC?key=${key}`
 		);
@@ -30,6 +42,7 @@ app.get('/search', async (req, res) => {
 });
 
 //load database with dummy data
+
 app.post('/load', async (req, res) => {
 	try {
 		const key = 'AIzaSyBUcnhG0FWf7elsXN1sDMUR8CJhQ8NASrI';
@@ -59,6 +72,6 @@ app.get('/books', async (req, res) => {
 	}
 });
 
-app.listen(5000, () => {
-	console.log('server has started on port 5000');
+app.listen(PORT, () => {
+	console.log(`server has started on port ${PORT}`);
 });
