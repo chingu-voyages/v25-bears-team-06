@@ -1,0 +1,23 @@
+{
+  "name": "communitybookshare",
+  "version": "1.0.0",
+  "description": "Community Book Share React App",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "concurrently": "^5.3.0",
+    "nodemon": "^2.0.6"
+  },
+  "scripts": {
+    "client": "npm start --prefix client",
+    "start": "node server/index",
+    "server": "nodemon server/index",
+    "dev": "concurrently \"npm run client\" \"npm run server\" "
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/orgs/chingu-voyages/teams/v25-bears-team-06"
+  },
+  "author": "Bears_06-Voyage25",
+  "license": "ISC"
+}
