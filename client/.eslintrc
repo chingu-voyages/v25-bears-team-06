@@ -12,6 +12,7 @@
   ],
   "rules": {
     "semi": 1,
+    "no-underscore-dangle": "off",
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
     "prettier/prettier": [
       "error", {
