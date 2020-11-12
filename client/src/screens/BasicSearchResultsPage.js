@@ -5,16 +5,20 @@ import Grid from "@material-ui/core/Grid";
 
 import dummyData from "../dummyData";
 
+// TODO
+
+// 1. import searchbox component to filter displayed data
+// 2. import BasicSearchBox from "../components/BasicSearchBox"
+
 // search results styles
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    margin: "auto",
   },
   paper: {
     padding: theme.spacing(2),
     textAlign: "center",
-    // color: theme.palette.text.secondary,
+    color: theme.palette.text.secondary,
   },
 }));
 
@@ -28,7 +32,7 @@ const BasicSearchResultsPage = () => {
       <h1>page to display basic search results</h1>
       <Grid
         container
-        spacing={3}
+        spacing={2}
         direction="column"
         alignItems="center"
         justify="flex-start"
@@ -36,8 +40,10 @@ const BasicSearchResultsPage = () => {
         {dummyData.map((book) => (
           <Grid item xs={12}>
             <Paper className={classes.paper}>
-              <h3>{book.name}</h3>
-              <p>{book.author}</p>
+              <div>
+                <h3>{book.name}</h3>
+                <p>{book.author}</p>
+              </div>
             </Paper>
           </Grid>
         ))}

@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const BookInDB = () => {
+const SingleBookInfo = () => {
   const classes = useStyles();
 
   return (
@@ -71,4 +71,4 @@ const BookInDB = () => {
   );
 };
 
-export default BookInDB;
+export default SingleBookInfo;
