@@ -26,7 +26,6 @@ app.use(express.json());
 app.get('/search', async (req, res) => {
 	try {
 		const key = process.env.GOOGLE_BOOKS_API_KEY;
-		console.log(key);
 		const response = await fetch(
 			`https://www.googleapis.com/books/v1/volumes/zyTCAlFPjgYC?key=${key}`
 		);
