@@ -18,6 +18,13 @@
       "error", {
         "semi": true
       }
+    ],
+    "react/prop-types": [
+      0,
+      {
+        "ignore": "ignore",
+        "customValidators": "customValidator"
+      }
     ]
   }
 }

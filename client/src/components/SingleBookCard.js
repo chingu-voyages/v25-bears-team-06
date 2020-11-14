@@ -3,11 +3,13 @@ import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
+import Button from "@material-ui/core/Button";
 import ButtonBase from "@material-ui/core/ButtonBase";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
+    margin: "1rem",
   },
   paper: {
     padding: theme.spacing(2),
@@ -26,8 +28,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SingleBookInfo = () => {
+// card template for book output
+const SingleBookCard = (props) => {
   const classes = useStyles();
+  const { title, author, thumbnail } = props;
 
   return (
     <div className={classes.root}>
@@ -35,34 +39,32 @@ const SingleBookInfo = () => {
         <Grid container spacing={2}>
           <Grid item>
             <ButtonBase className={classes.image}>
-              <img
-                className={classes.img}
-                alt="complex"
-                src="/static/images/grid/complex.jpg"
-              />
+              <img className={classes.img} alt="complex" src={thumbnail} />
             </ButtonBase>
           </Grid>
           <Grid item xs={12} sm container>
             <Grid item xs container direction="column" spacing={2}>
               <Grid item xs>
                 <Typography gutterBottom variant="subtitle1">
-                  Standard license
+                  Title: {title}
                 </Typography>
                 <Typography variant="body2" gutterBottom>
-                  Full resolution 1920x1080 • JPEG
+                  Author: {author}
                 </Typography>
-                <Typography variant="body2" color="textSecondary">
-                  ID: 1030114
+                <Typography variant="body2" color="textPrimary">
+                  someInfo
                 </Typography>
               </Grid>
               <Grid item>
                 <Typography variant="body2" style={{ cursor: "pointer" }}>
-                  Remove
+                  {author}
                 </Typography>
               </Grid>
             </Grid>
             <Grid item>
-              <Typography variant="subtitle1">$19.00</Typography>
+              <Button variant="contained" color="primary" disableElevation>
+                Learn More
+              </Button>
             </Grid>
           </Grid>
         </Grid>
@@ -71,4 +73,4 @@ const SingleBookInfo = () => {
   );
 };
 
-export default SingleBookInfo;
+export default SingleBookCard;
