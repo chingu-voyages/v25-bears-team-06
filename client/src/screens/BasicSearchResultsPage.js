@@ -3,14 +3,11 @@ import { Button } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import dummyData from "../dummyData";
 import SingleBookCard from "../components/SingleBookCard";
-// TODO
-
-// 1. import searchbox component to filter displayed data
-// import BasicSearchBox from "../components/BasicSearchBox"
 
 // Display Search Results in a Grid
 
 const BasicSearchResultsPage = () => {
+  // TODO replace this hardcoded word with the value the user entered in "basicSearchBox.js"
   const word = "appl";
   const history = useHistory();
 
@@ -26,10 +23,12 @@ const BasicSearchResultsPage = () => {
         Go Back
       </Button>
 
-      <h2> with filter function </h2>
+      <p> using a case insensitive filter function </p>
       {dummyData
         .filter(
-          (book) => book.title.includes(word) || book.author.includes("berr"),
+          (book) =>
+            book.title.toLowerCase().includes(word.toLowerCase()) ||
+            book.author.toLowerCase().includes("LEMON".toLowerCase()),
         )
         .map((filteredBook) => (
           <div>

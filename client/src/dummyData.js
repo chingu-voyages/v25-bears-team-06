@@ -2,19 +2,19 @@ const dummyData = [
   {
     _id: "1",
     title: "appleBook",
-    author: "appleWriter",
+    author: "Rosie Sanders",
     thumbnail:
-      "https://secure-ecsd.elsevier.com/covers/80/Tango2/large/9780081010136.jpg",
-    averageRating: "3.5",
+      "https://images-na.ssl-images-amazon.com/images/I/9197PeHU8vL.jpg",
+    averageRating: 3.5,
     infoLink: "something",
   },
   {
     _id: "2",
-    title: "pearBook",
-    author: "pearWriter",
+    title: "pears and Apples Book",
+    author: "Johnny Appleseed",
     thumbnail:
-      "http://books.google.com/books/content?id=zyTCAlFPjgYC&printsec=frontcover&img=1&zoom=1&edge=curl&imgtk=AFLRE70sYwAdpWh66VPaZX9WogEmYyYrAWeBuoqpxXsLjW0X4ppAnw52QMl9Jp_nbrVFRCsSTR3NQSdz5Br9popaCrnh2yMuBLh_W6v54Co2m6-jCFciXHL7y6cR-Y3KB5rNZcy0ymIO&source=gbs_api",
-    averageRating: "4.0",
+      "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1435084464i/21538364._UY630_SR1200,630_.jpg",
+    averageRating: 4.0,
     infoLink:
       "https://play.google.com/store/books/details?id=zyTCAlFPjgYC&source=gbs_api",
   },
@@ -23,28 +23,27 @@ const dummyData = [
     title: "bananaBook",
     author: "bananaWriter",
     thumbnail:
-      "http://books.google.com/books/content?id=zyTCAlFPjgYC&printsec=frontcover&img=1&zoom=1&edge=curl&imgtk=AFLRE70sYwAdpWh66VPaZX9WogEmYyYrAWeBuoqpxXsLjW0X4ppAnw52QMl9Jp_nbrVFRCsSTR3NQSdz5Br9popaCrnh2yMuBLh_W6v54Co2m6-jCFciXHL7y6cR-Y3KB5rNZcy0ymIO&source=gbs_api",
-    averageRating: "4.2",
+      "https://images.immediate.co.uk/production/volatile/sites/30/2017/01/Bananas-218094b-scaled.jpg?webp=true&quality=90&resize=620%2C563",
+    averageRating: 4.2,
     infoLink:
       "https://play.google.com/store/books/details?id=zyTCAlFPjgYC&source=gbs_api",
   },
   {
     _id: "4",
     title: "berryBook",
-    author: "berryWriter",
+    author: "Gail Gibbons",
     thumbnail:
-      "http://books.google.com/books/content?id=zyTCAlFPjgYC&printsec=frontcover&img=1&zoom=1&edge=curl&imgtk=AFLRE70sYwAdpWh66VPaZX9WogEmYyYrAWeBuoqpxXsLjW0X4ppAnw52QMl9Jp_nbrVFRCsSTR3NQSdz5Br9popaCrnh2yMuBLh_W6v54Co2m6-jCFciXHL7y6cR-Y3KB5rNZcy0ymIO&source=gbs_api",
-    averageRating: "3.0",
+      "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348614380l/2094830.jpg",
+    averageRating: 3.0,
     infoLink:
       "https://play.google.com/store/books/details?id=zyTCAlFPjgYC&source=gbs_api",
   },
   {
     _id: "5",
-    title: "lemonBook",
-    author: "lemonWriter",
-    thumbnail:
-      "http://books.google.com/books/content?id=zyTCAlFPjgYC&printsec=frontcover&img=1&zoom=1&edge=curl&imgtk=AFLRE70sYwAdpWh66VPaZX9WogEmYyYrAWeBuoqpxXsLjW0X4ppAnw52QMl9Jp_nbrVFRCsSTR3NQSdz5Br9popaCrnh2yMuBLh_W6v54Co2m6-jCFciXHL7y6cR-Y3KB5rNZcy0ymIO&source=gbs_api",
-    averageRating: "3.8",
+    title: "A Series of Unfortunate Events",
+    author: "Lemony Snicket",
+    thumbnail: "https://i.harperapps.com/covers/9780062796042/x298.jpg",
+    averageRating: 3.8,
     infoLink:
       "https://play.google.com/store/books/details?id=zyTCAlFPjgYC&source=gbs_api",
   },

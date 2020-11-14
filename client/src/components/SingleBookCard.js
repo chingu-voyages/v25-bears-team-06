@@ -49,7 +49,7 @@ const SingleBookCard = (props) => {
                   Title: {title}
                 </Typography>
                 <Typography variant="body2" gutterBottom>
-                  Author: {author}
+                  Edition: tbd
                 </Typography>
                 <Typography variant="body2" color="textPrimary">
                   someInfo
@@ -57,7 +57,7 @@ const SingleBookCard = (props) => {
               </Grid>
               <Grid item>
                 <Typography variant="body2" style={{ cursor: "pointer" }}>
-                  {author}
+                  by {author}
                 </Typography>
               </Grid>
             </Grid>

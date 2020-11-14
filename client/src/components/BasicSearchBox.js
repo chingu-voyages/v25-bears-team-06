@@ -27,13 +27,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-// Basic Search
+// Basic Search Box
+
 const BasicSearchBox = () => {
   const classes = useStyles();
   const history = useHistory();
 
   const [searchInput, setSearchInput] = useState("");
-  // showing until find a way to export into searchResultsPage function
+  // TODO 1of2 showing until find a way to export into searchResultsPage function.
   const [show, setShow] = useState("");
 
   const handleSearchChange = (event) => {
@@ -41,12 +42,13 @@ const BasicSearchBox = () => {
     setSearchInput(newValue);
   };
 
-  // function to link to results page
+  // HANDLE SEARCH BUTTON CLICK FUNCTION
   const handleClick = () => {
+    // TODO 2of2 have now captured user input, how to export without using it as a prop because we dont want to display the physical searchbox in the results page
     setShow(searchInput);
-    // props.userClicked(searchInput);
-    // clear the text in the inputfield
+    // clear the text in the inputfield after clicking search btn
     setSearchInput("");
+    // redirect to search results page. Must push onto history stack for "back" to work correctly
     history.push("/basicsearch");
   };
 
@@ -63,7 +65,8 @@ const BasicSearchBox = () => {
         <Button onClick={handleClick} variant="contained" color="primary">
           <SearchIcon className={classes.searchIcon} />
         </Button>
-        <p>input was: {show}</p>
+        {/* DELETE this below when solution found */}
+        <small>{show}</small>
       </div>
     </div>
   );
