@@ -1,8 +1,8 @@
-const authResolver = require("./auth");
+const userResolver = require("./user");
 const bookResolver = require("./book");
 
 const rootResolver = {
-  ...authResolver,
+  ...userResolver,
   ...bookResolver,
 };
 
