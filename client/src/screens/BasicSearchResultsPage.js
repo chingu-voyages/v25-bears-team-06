@@ -1,15 +1,20 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Button } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import dummyData from "../dummyData";
 import SingleBookCard from "../components/SingleBookCard";
+import { SearchContext } from "../SearchContext";
 
 // Display Search Results in a Grid
 
 const BasicSearchResultsPage = () => {
-  // TODO replace this hardcoded word with the value the user entered in "basicSearchBox.js"
-  const word = "appl";
   const history = useHistory();
+  const { value, setValue } = useContext(SearchContext);
+
+  const searchTerm = value;
+  // setValue is updated in basicSearchBox.js
+  // eslint-disable-next-line no-unused-expressions
+  setValue;
 
   const handleGoBack = () => {
     history.goBack();
@@ -17,18 +22,20 @@ const BasicSearchResultsPage = () => {
 
   return (
     <div>
-      <h1>page to display basic search results</h1>
-
+      <h1>Search Results Page</h1>
+      <h2>
+        Authors and titles that contain:{" "}
+        <span style={{ color: "red" }}>{value}</span>
+      </h2>
       <Button variant="contained" onClick={handleGoBack}>
         Go Back
       </Button>
 
-      <p> using a case insensitive filter function </p>
       {dummyData
         .filter(
           (book) =>
-            book.title.toLowerCase().includes(word.toLowerCase()) ||
-            book.author.toLowerCase().includes("LEMON".toLowerCase()),
+            book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            book.author.toLowerCase().includes(searchTerm.toLowerCase()),
         )
         .map((filteredBook) => (
           <div>
