@@ -1,11 +1,34 @@
 const { buildSchema } = require("graphql");
 
 module.exports = buildSchema(`
+  type User {
+    _id: ID!
+    email: String!
+    displayName: String!
+    password: String
+    books: [Book!]
+    location: Location
+  }
+
+  type Location {
+    country: String
+    city: String
+    latitude: Float
+    longitude: Float
+  }
+
   type Book {
     _id: ID!
     title: String!
     authors: [String!]!
-    imageThumbnail: String!
+    description: String!
+    categories: [String!]
+    imgThumbnail: String!
+    imgLarge: String!
+    pageCount: Int!
+    publishedDate: String!
+    publisher: String!
+    ownedBy: [User!]!
   }
 
   type AuthData {
@@ -13,14 +36,33 @@ module.exports = buildSchema(`
     token: String!
     tokenExpiration: Int!
     email: String!
+    displayName: String!
+  }
+
+  input BookInput {
+    title: String!
+    authors: [String!]!
+    description: String!
+    categories: [String!]
+    imgThumbnail: String!
+    imgLarge: String!
+    pageCount: Int!
+    publishedDate: String!
+    publisher: String!
   }
 
   type RootQuery {
-    books: [Book!]
+    books(query: String): [Book!]
+  }
+
+  type RootMutation {
     login(email: String!, password: String!): AuthData!
+    createAccount(email: String!, displayName: String!, password: String!, confirmPassword: String!): AuthData!
+    addBook(bookInput: BookInput!): Book!
   }
 
   schema {
     query: RootQuery
+    mutation: RootMutation
   }
 `);
