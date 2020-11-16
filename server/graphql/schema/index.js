@@ -4,8 +4,17 @@ module.exports = buildSchema(`
   type User {
     _id: ID!
     email: String!
+    displayName: String!
     password: String
     books: [Book!]
+    location: Location
+  }
+
+  type Location {
+    country: String
+    city: String
+    latitude: Float
+    longitude: Float
   }
 
   type Book {
@@ -14,11 +23,11 @@ module.exports = buildSchema(`
     authors: [String!]!
     description: String!
     categories: [String!]
-    imgThumbnail: String
-    imgLarge: String
+    imgThumbnail: String!
+    imgLarge: String!
     pageCount: Int!
-    publishedDate: String
-    publisher: String
+    publishedDate: String!
+    publisher: String!
     ownedBy: [User!]!
   }
 
@@ -27,16 +36,29 @@ module.exports = buildSchema(`
     token: String!
     tokenExpiration: Int!
     email: String!
+    displayName: String!
+  }
+
+  input BookInput {
+    title: String!
+    authors: [String!]!
+    description: String!
+    categories: [String!]
+    imgThumbnail: String!
+    imgLarge: String!
+    pageCount: Int!
+    publishedDate: String!
+    publisher: String!
   }
 
   type RootQuery {
-    getAllBooks: [Book!]
+    books(query: String): [Book!]
   }
 
   type RootMutation {
     login(email: String!, password: String!): AuthData!
-    register(email: String!, password: String!, confirmPassword: String!): AuthData!
-    addBook: [Book!]
+    createAccount(email: String!, displayName: String!, password: String!, confirmPassword: String!): AuthData!
+    addBook(bookInput: BookInput!): Book!
   }
 
   schema {
