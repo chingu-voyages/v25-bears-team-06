@@ -7,22 +7,18 @@ const bookSchema = new Schema({
     type: String,
     required: true,
   },
-  authors: [
-    {
-      type: String,
-      required: true,
-    },
-  ],
+  authors: {
+    type: [String],
+    validate: (v) => Array.isArray(v) && v.length > 0,
+  },
   description: {
     type: String,
     required: true,
   },
-  categories: [
-    {
-      type: String,
-      required: true,
-    },
-  ],
+  categories: {
+    type: [String],
+    required: true,
+  },
   imgThumbnail: {
     type: String,
     required: false,
@@ -50,6 +46,12 @@ const bookSchema = new Schema({
       required: true,
     },
   ],
+});
+
+bookSchema.index({
+  title: "text",
+  authors: "text",
+  categories: "text",
 });
 
 module.exports = mongoose.model("Book", bookSchema);
