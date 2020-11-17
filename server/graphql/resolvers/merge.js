@@ -59,6 +59,7 @@ const users = async (userIds) => {
 const transformUser = (user) => {
   return {
     ...user._doc,
+    password: null,
     books: () => bookLoader.loadMany(user._doc.books),
   };
 };
