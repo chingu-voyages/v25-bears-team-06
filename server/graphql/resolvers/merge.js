@@ -17,7 +17,7 @@ const usersLoader = new DataLoader((userIds) => {
 
 const books = async (bookIds) => {
   try {
-    const books = await Book.find({ _id: { $in: eventIds } });
+    const books = await Book.find({ _id: { $in: bookIds } });
     books.sort((a, b) => {
       return (
         bookIds.indexOf(a._id.toString()) - bookIds.indexOf(b._id.toString())
@@ -66,7 +66,7 @@ const transformUser = (user) => {
 const transformBook = (book) => {
   return {
     ...book._doc,
-    ownedBy: () => usersLoader.loadMany(user._doc.users),
+    ownedBy: () => usersLoader.loadMany(book._doc.ownedBy),
   };
 };
 
