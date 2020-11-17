@@ -19,10 +19,8 @@ module.exports = {
       throw new Error("The email or password entered is incorrect");
     }
 
-    const { _id, displayName } = user;
-
     const token = jwt.sign(
-      { userId: _id, email, displayName },
+      { userId: user._id, email },
       process.env.AUTH_SECRET,
       {
         expiresIn: "1h",
@@ -32,9 +30,9 @@ module.exports = {
     return {
       token,
       tokenExpiration: 1,
-      userId: _id,
+      userId: user._id,
       email,
-      displayName,
+      displayName: user.displayName,
     };
   },
   createAccount: async ({ email, displayName, password, confirmPassword }) => {
@@ -66,7 +64,7 @@ module.exports = {
         const newUser = await user.save();
 
         const token = jwt.sign(
-          { userId: newUser.id, email, displayName },
+          { userId: newUser.id, email },
           process.env.AUTH_SECRET,
           { expiresIn: "1h" }
         );
