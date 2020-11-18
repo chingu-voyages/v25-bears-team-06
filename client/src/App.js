@@ -8,6 +8,7 @@ import BookInfoPage from "./screens/BookInfoPage";
 import AboutPage from "./screens/AboutPage";
 import SignupPage from "./screens/SignupPage";
 import LoginPage from "./screens/LoginPage";
+import UploadBookPage from "./screens/UploadBookPage";
 import { SearchContext } from "./SearchContext";
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
               component={BasicSearchResultsPage}
             />
             <Route path="/book/:id" component={BookInfoPage} />
+            <Route path="/uploadbook" component={UploadBookPage} />
             <Route exact path="/" component={HomePage} />
             <Route exact path="/about" component={AboutPage} />
             <Route exact path="/signup" component={SignupPage} />

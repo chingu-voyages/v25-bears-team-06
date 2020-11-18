@@ -1,11 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
-import Paper from "@material-ui/core/Paper";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
+import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
 import ButtonBase from "@material-ui/core/ButtonBase";
 
 const useStyles = makeStyles((theme) => ({
@@ -16,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
   paper: {
     padding: theme.spacing(2),
     margin: "auto",
-    maxWidth: 500,
+    width: 500,
   },
   image: {
     width: 128,
@@ -31,27 +30,35 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // card template for book output
-const SingleBookCard = (props) => {
+const UploadBookCard = (props) => {
   const classes = useStyles();
-  const { title, author, thumbnail } = props;
+  const { title, author, thumbnail, rating, language } = props;
+
+  // functions for checkboxes
+
+  const [state, setState] = useState(true);
+
+  const handleChange = (event) => {
+    setState({ state, [event.target.name]: event.target.checked });
+  };
 
   return (
     <div className={classes.root}>
-      <Paper className={classes.paper}>
-        <Grid container>
-          {/* checkbox on left  */}
-          <FormControlLabel
-            control={
-              <Checkbox
-                // checked={state.checkedB}
-                // onChange={handleChange}
-                name="checkedB"
-                color="primary"
-              />
-            }
-            label="Primary"
-          />
-          {/* Book Info Section  */}
+      <Grid container direction="row">
+        {/* checkbox on left */}
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={state.checkingBox}
+              onChange={handleChange}
+              name="checkedB"
+              color="primary"
+            />
+          }
+          label="Add"
+        />
+        {/* book information section on right */}
+        <Paper className={classes.paper}>
           <Grid container spacing={2}>
             <Grid item>
               <ButtonBase className={classes.image}>
@@ -65,10 +72,10 @@ const SingleBookCard = (props) => {
                     Title: {title}
                   </Typography>
                   <Typography variant="body2" gutterBottom>
-                    Edition: tbd
+                    Language: {language}
                   </Typography>
                   <Typography variant="body2" color="textPrimary">
-                    someInfo
+                    Rating: {rating}
                   </Typography>
                 </Grid>
                 <Grid item>
@@ -77,17 +84,12 @@ const SingleBookCard = (props) => {
                   </Typography>
                 </Grid>
               </Grid>
-              <Grid item>
-                <Button variant="contained" color="primary" disableElevation>
-                  Learn More
-                </Button>
-              </Grid>
             </Grid>
           </Grid>
-        </Grid>
-      </Paper>
+        </Paper>
+      </Grid>
     </div>
   );
 };
 
-export default SingleBookCard;
+export default UploadBookCard;
