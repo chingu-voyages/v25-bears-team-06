@@ -19,6 +19,7 @@ module.exports = buildSchema(`
 
   type Book {
     _id: ID!
+    googleId: String!
     title: String!
     authors: [String!]!
     description: String!
@@ -40,6 +41,7 @@ module.exports = buildSchema(`
   }
 
   input BookInput {
+    googleId: String!
     title: String!
     authors: [String!]!
     description: String!
