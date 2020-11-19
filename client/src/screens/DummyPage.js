@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-console */
 /* eslint-disable no-param-reassign */
 import React, { useState } from "react";
 import axios from "axios";
@@ -6,7 +8,8 @@ import Grid from "@material-ui/core/Grid";
 import SearchIcon from "@material-ui/icons/Search";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
-import UploadBookCard from "../components/UploadBookCard";
+import Pagination from "../components/Pagination";
+// import UploadBookCard from "../components/UploadBookCard";
 
 // searchbar styling
 const useStyles = makeStyles(() => ({
@@ -31,44 +34,44 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const UploadBook = () => {
+const DummyWithApiKey = () => {
   const classes = useStyles();
 
   const [searchInput, setSearchInput] = useState("");
-  const [books, setBooks] = useState({ items: [] });
+  const [result, setResult] = useState([]);
 
-  const apiKey = process.env.REACT_APP_API_KEY;
+  // Brad's stuff for pagination
+  const [loading, setLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [booksPerPage, setBooksPerPage] = useState(4);
 
-  // set user input
-  const handleChange = (event) => {
+  const apiKey = "AIzaSyBYQsJshapxdYzybuciNuBb8jJf9mOV5ZA";
+
+  function handleChange(event) {
     const newValue = event.target.value;
     setSearchInput(newValue);
+  }
+
+  const handleSubmit = async () => {
+    await axios
+      .get(
+        `https://www.googleapis.com/books/v1/volumes?q=${searchInput}&key=${apiKey}&maxResults=40`,
+      )
+      .then((data) => {
+        console.log(data.data.items);
+        setResult(data.data.items);
+      });
   };
 
-  const handleClick = async () => {
-    const result = await axios.get(
-      `https://www.googleapis.com/books/v1/volumes?q=${searchInput}&key=${apiKey}&maxResults=40`,
-    );
-    setBooks(result.data);
-  };
-
-  const allAuthors = (authors) => {
-    if (authors.length <= 2) {
-      authors = authors.join(" and ");
-    } else if (authors.length > 2) {
-      const lastAuthor = ` and ${authors.slice(-1)}`;
-      authors.pop();
-      authors = authors.join(", ");
-      authors += lastAuthor;
-    }
-    return authors;
-  };
+  // Get currents books - for pagination
+  const indexOfLastBook = currentPage * booksPerPage;
+  const indexOfFirstBook = indexOfLastBook - booksPerPage;
+  const currentBooks = result.slice(indexOfFirstBook, indexOfLastBook);
 
   return (
     <div className={classes.root}>
       <Grid container direction="column" alignItems="center">
         <h1>Upload New Book</h1>
-        <p>api is: {apiKey}</p>
         <h3>
           To upload a book to your inventory, enter the title below to search
           for a book that matches.
@@ -80,34 +83,26 @@ const UploadBook = () => {
               className={classes.searchInput}
               label="Find and select the book you wish to upload"
               variant="standard"
-              value={searchInput}
               onChange={handleChange}
             />
-            <Button variant="contained" color="primary" onClick={handleClick}>
+            <Button variant="contained" color="primary" onClick={handleSubmit}>
               <SearchIcon className={classes.searchIcon} />
             </Button>
           </div>
         </div>
         {/* Display search results  */}
-        {books.items.map((book) => {
-          return (
-            <UploadBookCard
-              thumbnail={`http://books.google.com/books/content?id=${book.id}&printsec=frontcover&img=1&zoom=1&source=gbs_api`}
-              title={book.volumeInfo.title}
-              author={allAuthors(book.volumeInfo.authors)}
-              rating={book.volumeInfo.averageRating}
-              language={book.volumeInfo.language}
-            />
-          );
-        })}
+        {currentBooks.map((boek) => (
+          <img src={boek.volumeInfo.imageLinks.thumbnail} alt={boek.title} />
+        ))}
         {/* upload book button  */}
         <Button variant="contained" color="secondary">
           {" "}
           Upload
         </Button>
+        <Pagination booksPerPage={booksPerPage} totalBooks={result.length} />
       </Grid>
     </div>
   );
 };
 
-export default UploadBook;
+export default DummyWithApiKey;
