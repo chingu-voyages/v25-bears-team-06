@@ -68,7 +68,6 @@ const UploadBook = () => {
     <div className={classes.root}>
       <Grid container direction="column" alignItems="center">
         <h1>Upload New Book</h1>
-        <p>api is: {apiKey}</p>
         <h3>
           To upload a book to your inventory, enter the title below to search
           for a book that matches.

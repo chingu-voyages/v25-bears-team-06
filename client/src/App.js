@@ -9,7 +9,6 @@ import AboutPage from "./screens/AboutPage";
 import SignupPage from "./screens/SignupPage";
 import LoginPage from "./screens/LoginPage";
 import UploadBookPage from "./screens/UploadBookPage";
-import DummyPage from "./screens/DummyPage";
 import UploadPaginated from "./screens/UploadBookPaginatedPage";
 import { SearchContext } from "./SearchContext";
 
@@ -31,7 +30,6 @@ function App() {
             <Route path="/book/:id" component={BookInfoPage} />
             <Route path="/uploadbook" component={UploadBookPage} />
             <Route path="/uploadpaginated/" component={UploadPaginated} />
-            <Route path="/dummy" component={DummyPage} />
             <Route exact path="/" component={HomePage} />
             <Route exact path="/about" component={AboutPage} />
             <Route exact path="/signup" component={SignupPage} />
