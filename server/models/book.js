@@ -13,7 +13,7 @@ const bookSchema = new Schema({
   },
   authors: {
     type: [String],
-    validate: (v) => Array.isArray(v) && v.length > 0,
+    validate: (v) => Array.isArray(v), // && v.length > 0,
   },
   description: {
     type: String,
