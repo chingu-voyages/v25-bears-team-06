@@ -1,6 +1,6 @@
 const dummyData = [
   {
-    _id: "1",
+    id: "1",
     title: "appleBook",
     author: "Rosie Sanders",
     thumbnail:
@@ -9,7 +9,7 @@ const dummyData = [
     infoLink: "something",
   },
   {
-    _id: "2",
+    id: "2",
     title: "pears and Apples Book",
     author: "Johnny Appleseed",
     thumbnail:
@@ -19,7 +19,7 @@ const dummyData = [
       "https://play.google.com/store/books/details?id=zyTCAlFPjgYC&source=gbs_api",
   },
   {
-    _id: "3",
+    id: "3",
     title: "bananaBook",
     author: "bananaWriter",
     thumbnail:
@@ -29,7 +29,7 @@ const dummyData = [
       "https://play.google.com/store/books/details?id=zyTCAlFPjgYC&source=gbs_api",
   },
   {
-    _id: "4",
+    id: "4",
     title: "berryBook",
     author: "Gail Gibbons",
     thumbnail:
@@ -39,7 +39,7 @@ const dummyData = [
       "https://play.google.com/store/books/details?id=zyTCAlFPjgYC&source=gbs_api",
   },
   {
-    _id: "5",
+    id: "5",
     title: "A Series of Unfortunate Events",
     author: "Lemony Snicket",
     thumbnail: "https://i.harperapps.com/covers/9780062796042/x298.jpg",

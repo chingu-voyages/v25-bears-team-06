@@ -32,8 +32,8 @@ const BasicSearchBox = () => {
   const classes = useStyles();
   const history = useHistory();
 
-  // This value is passed to search results page
-  const { value, setValue } = useContext(SearchContext);
+  // This value is passed to search results page. Not declaring value before setValue as not needed here.
+  const { setValue } = useContext(SearchContext);
 
   const [searchInput, setSearchInput] = useState("");
 
@@ -61,7 +61,6 @@ const BasicSearchBox = () => {
       <div className={classes.searchContainer}>
         <TextField
           className={classes.searchInput}
-          searchedTerm={value}
           label="Search our database"
           variant="standard"
           onChange={handleSearchChange}
