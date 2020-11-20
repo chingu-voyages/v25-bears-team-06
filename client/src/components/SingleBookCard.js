@@ -41,14 +41,7 @@ const SingleBookCard = (props) => {
         <Grid container>
           {/* checkbox on left  */}
           <FormControlLabel
-            control={
-              <Checkbox
-                // checked={state.checkedB}
-                // onChange={handleChange}
-                name="checkedB"
-                color="primary"
-              />
-            }
+            control={<Checkbox name="checkedB" color="primary" />}
             label="Primary"
           />
           {/* Book Info Section  */}
