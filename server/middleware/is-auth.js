@@ -19,6 +19,9 @@ module.exports = (req, res, next) => {
     decodedToken = jwt.verify(token, process.env.AUTH_SECRET);
   } catch (err) {
     req.isAuth = false;
+    if (err.name === "TokenExpiredError") {
+      req.error = `${err.name}: ${err.message}`;
+    }
     return next();
   }
 
