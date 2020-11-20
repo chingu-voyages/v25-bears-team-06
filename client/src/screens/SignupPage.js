@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Redirect } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import { TextField, Button } from "@material-ui/core";
+import signupRequest from "../dataservice/signupRequest";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -15,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SignupPage = () => {
+export default function SignupPage() {
   const [signupEmail, setSignupEmail] = useState("");
   const [signupDisplayName, setSignupDisplayName] = useState("");
   const [signupPassword, setSignupPassword] = useState("");
@@ -27,84 +28,52 @@ const SignupPage = () => {
   );
   const [shouldRedirect, setShouldRedirect] = useState(false);
 
-  useEffect(() => {
-    const reqBody = {
-      query: `
-        mutation SignUp($email: String!, $displayName: String!, $password: String!, $confirmPassword: String!) {
-          createAccount(
-            email: $email,
-            displayName: $displayName,
-            password: $password,
-            confirmPassword: $confirmPassword
-          ) {
-            userId
-            token
-            email
-            displayName
+  useEffect(
+    function handleEffect() {
+      async function signupEffect() {
+        try {
+          const { createAccount, message } = await signupRequest({
+            email: signupEmail,
+            displayName: signupDisplayName,
+            password: signupPassword,
+            confirmPassword: signupConfirmPassword,
+          });
+          if (createAccount) {
+            const { email, displayName, token, userId } = createAccount;
+            window.localStorage.setItem("email", email);
+            window.localStorage.setItem("displayName", displayName);
+            window.localStorage.setItem("token", token);
+            window.localStorage.setItem("userId", userId);
+            setShouldSubmit(false);
+            setShouldRedirect(true);
+          } else if (message) {
+            setHasError(true);
+            setErrorMessage(message);
+            setShouldSubmit(false);
           }
-        }    
-      `,
-      variables: {
-        email: signupEmail,
-        displayName: signupDisplayName,
-        password: signupPassword,
-        confirmPassword: signupConfirmPassword,
-      },
-    };
-
-    const url =
-      process.env.REACT_APP_API_URL || "http://localhost:5000/graphql";
-
-    const opts = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(reqBody),
-    };
-
-    const signUpRequest = async () => {
-      try {
-        const response = await fetch(url, opts);
-        const result = await response.json();
-        if (response.ok) {
-          const {
-            data: {
-              createAccount: { email, displayName, token, userId },
-            },
-          } = result;
-          window.localStorage.setItem("email", email);
-          window.localStorage.setItem("displayName", displayName);
-          window.localStorage.setItem("token", token);
-          window.localStorage.setItem("userId", userId);
-          setShouldSubmit(false);
-          setShouldRedirect(true);
-        } else {
+        } catch (err) {
           setHasError(true);
-          setErrorMessage(result.errors[0].message);
+          setErrorMessage(err.message);
+          setShouldSubmit(false);
         }
-      } catch (err) {
-        setHasError(true);
-        setErrorMessage(err.message);
-      } finally {
-        setShouldSubmit(false);
       }
-    };
-    if (shouldSubmit) {
-      signUpRequest().catch((err) => {
-        setHasError(true);
-        setErrorMessage(err.message);
-      });
-    }
-  }, [
-    shouldSubmit,
-    signupEmail,
-    signupDisplayName,
-    signupPassword,
-    signupConfirmPassword,
-  ]);
+      if (shouldSubmit) {
+        signupEffect().catch((err) => {
+          setHasError(true);
+          setErrorMessage(err.message);
+        });
+      }
+    },
+    [
+      shouldSubmit,
+      signupEmail,
+      signupDisplayName,
+      signupPassword,
+      signupConfirmPassword,
+    ],
+  );
 
-  const handleChange = ({ target: { name, value } }) => {
+  function handleChange({ target: { name, value } }) {
     switch (name) {
       case "signup-email":
         setSignupEmail(value);
@@ -120,12 +89,12 @@ const SignupPage = () => {
         break;
       default:
     }
-  };
+  }
 
-  const handleSubmit = (event) => {
+  function handleSubmit(event) {
     event.preventDefault();
     setShouldSubmit(true);
-  };
+  }
 
   const classes = useStyles();
 
@@ -187,6 +156,4 @@ const SignupPage = () => {
       </form>
     </>
   );
-};
-
-export default SignupPage;
+}
