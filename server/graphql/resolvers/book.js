@@ -16,10 +16,10 @@ module.exports = {
       throw err;
     }
   },
-  //5fb2519d2602e52ff53b9dcb
   addBook: async (
     {
       bookInput: {
+        googleId,
         title,
         authors,
         description,
@@ -37,19 +37,24 @@ module.exports = {
       throw new Error("Authentication required!");
     }
 
-    const book = new Book({
-      title,
-      authors,
-      description,
-      categories,
-      imgThumbnail,
-      imgLarge,
-      pageCount,
-      publishedDate,
-      publisher,
-    });
-
     try {
+      // Check if the book is already created
+      let book = await Book.findOne({ googleId });
+      if (!book) {
+        book = new Book({
+          googleId,
+          title,
+          authors,
+          description,
+          categories,
+          imgThumbnail,
+          imgLarge,
+          pageCount,
+          publishedDate,
+          publisher,
+        });
+      }
+
       // first check if user who requested exists
       const owner = await User.findById(req.userId);
 
