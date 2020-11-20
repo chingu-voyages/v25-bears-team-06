@@ -1,11 +1,12 @@
-// import React from "react";
-// import SingleBookInfo from "../components/SingleBookInfo";
+import React from "react";
 
-// const BookInfoPage = (props) => {
-//   const { id } = props;
-//   const book = dummyData.find((item) => item._id === match.params.id);
+const BookInfoPage = () => {
+  return (
+    <div>
+      <h1>Info about book user wants to learn more about</h1>
+      <p>Info tbd</p>
+    </div>
+  );
+};
 
-//   return <div>SingleBookInfo</div>;
-// };
-
-// export default BookInfoPage;
+export default BookInfoPage;

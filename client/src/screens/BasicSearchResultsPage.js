@@ -40,6 +40,7 @@ const BasicSearchResultsPage = () => {
         .map((filteredBook) => (
           <div>
             <SingleBookCard
+              key={filteredBook.id}
               title={filteredBook.title}
               author={filteredBook.author}
               thumbnail={filteredBook.thumbnail}

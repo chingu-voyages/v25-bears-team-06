@@ -1,11 +1,11 @@
-/* eslint-disable no-param-reassign */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
+import InputAdornment from "@material-ui/core/InputAdornment";
 import SearchIcon from "@material-ui/icons/Search";
-import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
+import Pagination from "../components/Pagination";
 import UploadBookCard from "../components/UploadBookCard";
 
 // searchbar styling
@@ -29,34 +29,57 @@ const useStyles = makeStyles(() => ({
     width: "30rem",
     margin: "0.4rem",
   },
+  resultsCount: {
+    color: "gray",
+    marginLeft: "-19rem",
+  },
 }));
 
-const UploadBook = () => {
+const UploadLiveSearchPage = () => {
   const classes = useStyles();
 
   const [searchInput, setSearchInput] = useState("");
-  const [books, setBooks] = useState({ items: [] });
+  const [books, setBooks] = useState([]);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const booksPerPage = 5;
 
   const apiKey = process.env.REACT_APP_API_KEY;
 
+  const numberofbooks = books.length;
   // set user input
   const handleChange = (event) => {
     const newValue = event.target.value;
     setSearchInput(newValue);
   };
 
-  const handleClick = async () => {
-    const result = await axios.get(
-      `https://www.googleapis.com/books/v1/volumes?q=${searchInput}&key=${apiKey}&maxResults=40`,
-    );
-    setBooks(result.data);
-  };
+  useEffect(() => {
+    const fetchBooks = async () => {
+      const result = await axios.get(
+        `https://www.googleapis.com/books/v1/volumes?q=${searchInput}&key=${apiKey}&maxResults=40`,
+      );
+      setBooks(result.data.items);
+    };
+    fetchBooks();
+  }, [apiKey, searchInput]);
 
-  const allAuthors = (authors) => {
-    if (authors.length <= 2) {
+  // Get currents books - for pagination
+  const indexOfLastBook = currentPage * booksPerPage;
+  const indexOfFirstBook = indexOfLastBook - booksPerPage;
+  const currentBooks = books.slice(indexOfFirstBook, indexOfLastBook);
+
+  // change page
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  // display all authors from api response array
+  const allAuthors = (namesArr) => {
+    let authors = namesArr;
+    if (authors == null) {
+      authors = "No author listed";
+    } else if (authors.length > 0 && authors.length <= 2) {
       authors = authors.join(" and ");
     } else if (authors.length > 2) {
-      const lastAuthor = ` and ${authors.slice(-1)}`;
+      const lastAuthor = `, and ${authors.slice(-1)}`;
       authors.pop();
       authors = authors.join(", ");
       authors += lastAuthor;
@@ -77,18 +100,26 @@ const UploadBook = () => {
           <div className={classes.searchContainer}>
             <TextField
               className={classes.searchInput}
-              label="Find and select the book you wish to upload"
-              variant="standard"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon color="secondary" />
+                  </InputAdornment>
+                ),
+              }}
+              variant="outlined"
+              label="Start typing to find the book you wish to upload"
               value={searchInput}
               onChange={handleChange}
             />
-            <Button variant="contained" color="primary" onClick={handleClick}>
-              <SearchIcon className={classes.searchIcon} />
-            </Button>
           </div>
         </div>
+        <small className={classes.resultsCount}>
+          Showing {indexOfFirstBook}-{indexOfLastBook} of {numberofbooks}{" "}
+          results
+        </small>
         {/* Display search results  */}
-        {books.items.map((book) => {
+        {currentBooks.map((book) => {
           return (
             <UploadBookCard
               thumbnail={`http://books.google.com/books/content?id=${book.id}&printsec=frontcover&img=1&zoom=1&source=gbs_api`}
@@ -99,14 +130,15 @@ const UploadBook = () => {
             />
           );
         })}
-        {/* upload book button  */}
-        <Button variant="contained" color="secondary">
-          {" "}
-          Upload
-        </Button>
+        {/* Display pagination  */}
+        <Pagination
+          booksPerPage={booksPerPage}
+          totalBooks={books.length}
+          paginate={paginate}
+        />
       </Grid>
     </div>
   );
 };
 
-export default UploadBook;
+export default UploadLiveSearchPage;

@@ -1,7 +1,4 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable no-param-reassign */
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
@@ -34,15 +31,14 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const UploadBookPaginatedPage = () => {
+const UploadBookButtonPage = () => {
   const classes = useStyles();
 
   const [searchInput, setSearchInput] = useState("");
   const [books, setBooks] = useState([]);
 
-  // const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [booksPerPage] = useState(10);
+  const booksPerPage = 10;
 
   const apiKey = process.env.REACT_APP_API_KEY;
 
@@ -55,7 +51,7 @@ const UploadBookPaginatedPage = () => {
 
   const handleClick = async () => {
     const result = await axios.get(
-      `https://www.googleapis.com/books/v1/volumes?q=${searchInput}&key=${apiKey}&maxResults=30`,
+      `https://www.googleapis.com/books/v1/volumes?q=${searchInput}&key=${apiKey}&maxResults=40`,
     );
     setBooks(result.data.items);
   };
@@ -69,13 +65,14 @@ const UploadBookPaginatedPage = () => {
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   // display all authors from api response array
-  const allAuthors = (authors) => {
+  const allAuthors = (namesArr) => {
+    let authors = namesArr;
     if (authors == null) {
       authors = "No author listed";
     } else if (authors.length > 0 && authors.length <= 2) {
       authors = authors.join(" and ");
     } else if (authors.length > 2) {
-      const lastAuthor = ` and ${authors.slice(-1)}`;
+      const lastAuthor = `, and ${authors.slice(-1)}`;
       authors.pop();
       authors = authors.join(", ");
       authors += lastAuthor;
@@ -111,7 +108,7 @@ const UploadBookPaginatedPage = () => {
         {currentBooks.map((book) => {
           return (
             <UploadBookCard
-              thumbnail={`http://books.google.com/books/content?id=${book.id}&printsec=frontcover&img=1&zoom=1&source=gbs_api`}
+              thumbnail={book.volumeInfo.imageLinks.thumbnail}
               title={book.volumeInfo.title}
               author={allAuthors(book.volumeInfo.authors)}
               rating={book.volumeInfo.averageRating}
@@ -134,4 +131,4 @@ const UploadBookPaginatedPage = () => {
   );
 };
 
-export default UploadBookPaginatedPage;
+export default UploadBookButtonPage;

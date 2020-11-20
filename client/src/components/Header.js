@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -10,6 +10,7 @@ import { Link, Route } from "react-router-dom";
 // import basic search box
 import BasicSearchBox from "./BasicSearchBox";
 
+// Styling for heading component
 const useStyles = makeStyles((theme) => ({
   logoContainer: {
     padding: 0,
@@ -24,8 +25,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// Header component
 const Header = () => {
   const classes = useStyles();
+
+  const [value, setValue] = useState(0);
+
+  // eslint-disable-next-line no-shadow
+  const handleChange = (event, value) => {
+    setValue(value);
+  };
 
   return (
     <div>
@@ -38,7 +47,11 @@ const Header = () => {
               </Typography>
             </Button>
             <Route render={() => <BasicSearchBox />} />
-            <Tabs className={classes.tabContainer}>
+            <Tabs
+              value={value}
+              onChange={handleChange}
+              className={classes.tabContainer}
+            >
               <Tab
                 className={classes.tab}
                 component={Link}
