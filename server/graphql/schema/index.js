@@ -6,7 +6,7 @@ module.exports = buildSchema(`
     email: String!
     displayName: String!
     password: String
-    books: [Book!]
+    owns: [Ownership!]
     location: Location
   }
 
@@ -29,7 +29,14 @@ module.exports = buildSchema(`
     pageCount: Int!
     publishedDate: String!
     publisher: String!
-    ownedBy: [User!]!
+    owners: [Ownership!]!
+  }
+
+  type Ownership {
+    _id: ID!
+    owner: User!
+    book: Book!
+    isAvailable: Boolean!
   }
 
   type AuthData {
