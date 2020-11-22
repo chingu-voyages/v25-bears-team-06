@@ -14,6 +14,7 @@ const bookSchema = new Schema({
   authors: {
     type: [String],
     validate: (v) => Array.isArray(v), // && v.length > 0,
+    required: false,
   },
   description: {
     type: String,
@@ -43,13 +44,12 @@ const bookSchema = new Schema({
     type: String,
     required: false,
   },
-  ownedBy: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
-    },
-  ],
+  owners: {
+    type: [Schema.Types.ObjectId],
+    ref: "Ownership",
+    validate: (v) => Array.isArray(v) && v.length > 0,
+    required: true,
+  },
 });
 
 bookSchema.index({

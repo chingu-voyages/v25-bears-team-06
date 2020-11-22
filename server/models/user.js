@@ -15,12 +15,12 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
-  books: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "Book",
-    },
-  ],
+  owns: {
+    type: [Schema.Types.ObjectId],
+    ref: "Ownership",
+    validate: (v) => Array.isArray(v),
+    required: false,
+  },
   location: {
     country: {
       type: String,

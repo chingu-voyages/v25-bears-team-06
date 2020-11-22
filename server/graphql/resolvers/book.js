@@ -1,5 +1,6 @@
 const Book = require("../../models/book");
 const User = require("../../models/user");
+const Ownership = require("../../models/ownership");
 const { transformBook } = require("./merge");
 
 module.exports = {
@@ -60,22 +61,24 @@ module.exports = {
 
       // first check if user who requested exists
       const owner = await User.findById(req.userId);
-
       if (!owner) {
-        throw new Error("User not found.");
+        throw new Error("Could not find a user with the requester's userId");
       }
 
-      // Give ownership to book
-      book.ownedBy.push(owner);
+      const ownership = new Ownership({
+        owner,
+        book,
+        isAvailable: true,
+      });
 
-      let newBook = await book.save();
+      owner.owns.push(ownership);
+      book.owners.push(ownership);
 
-      // Add book to owner's inventory
-      owner.books.push(book);
-
+      await ownership.save();
       await owner.save();
+      await book.save();
 
-      return transformBook(newBook);
+      return transformBook(book);
     } catch (err) {
       throw err;
     }
