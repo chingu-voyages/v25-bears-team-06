@@ -11,7 +11,7 @@ import SignupPage from "./screens/SignupPage";
 import LoginPage from "./screens/LoginPage";
 import UploadBookButtonPage from "./screens/UploadBookButtonPage";
 import UploadLiveSearchPage from "./screens/UploadBookLiveSearchPage";
-import { SearchContext } from "./SearchContext";
+import { SearchContext } from "./Context";
 
 function App() {
   // sharing searchbox user input value across pages with context

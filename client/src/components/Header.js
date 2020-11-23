@@ -1,11 +1,10 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable react/jsx-fragments */
 import React, { useState, useEffect } from "react";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
+import LocalLibraryIcon from "@material-ui/icons/LocalLibrary";
 import AddBoxIcon from "@material-ui/icons/AddBox";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import Tabs from "@material-ui/core/Tabs";
@@ -23,11 +22,29 @@ import BasicSearchBox from "./BasicSearchBox";
 
 // Styling for heading component
 const useStyles = makeStyles((theme) => ({
+  toolbarMargin: {
+    ...theme.mixins.toolbar,
+    marginBottom: "3em",
+    [theme.breakpoints.down("md")]: {
+      marginBottom: "2em",
+      [theme.breakpoints.down("xs")]: {
+        marginBottom: "1.25em",
+      },
+    },
+  },
   logoContainer: {
     padding: 0,
     [theme.breakpoints.down("md")]: {
       height: "2rem",
     },
+    marginRight: "auto",
+  },
+  logoIcon: {
+    marginRight: 5,
+  },
+  title: {
+    color: "white",
+    marginRight: "20",
   },
   tabContainer: {
     marginLeft: "auto",
@@ -46,6 +63,7 @@ const useStyles = makeStyles((theme) => ({
   drawerIcon: {
     width: "3rem",
     height: "3rem",
+    color: "white",
   },
   drawer: {
     backgroundColor: "#3F51B5",
@@ -53,6 +71,9 @@ const useStyles = makeStyles((theme) => ({
   drawerItem: {
     ...theme.typography.tab,
     color: "#fff",
+  },
+  appbar: {
+    zIndex: theme.zIndex.modal + 1,
   },
 }));
 
@@ -70,7 +91,10 @@ const Header = () => {
   // keep active tab highlighted on refresh
 
   useEffect(() => {
-    if (window.location.pathname === "/" && value !== 0) {
+    if (
+      (window.location.pathname === "/" && value !== 0) ||
+      (window.location.pathname === "/basicsearch" && value !== 0)
+    ) {
       setValue(0);
     } else if (window.location.pathname === "/about" && value !== 1) {
       setValue(1);
@@ -95,11 +119,12 @@ const Header = () => {
 
   // responsiveness menu items
   const tabs = (
-    <React.Fragment>
+    <>
       <Tabs
         value={value}
         onChange={handleChange}
         className={classes.tabContainer}
+        indicatorColor="primary"
       >
         <Tab
           className={(classes.tab, classes.hideHome)}
@@ -154,12 +179,12 @@ const Header = () => {
           />
         )}
       </Tabs>
-    </React.Fragment>
+    </>
   );
 
   // responsiveness mobile drawer
   const drawer = (
-    <React.Fragment>
+    <>
       <SwipeableDrawer
         disableBackdropTransition={!iOS}
         disableDiscovery={iOS}
@@ -167,7 +192,9 @@ const Header = () => {
         onClose={() => setOpenDrawer(false)}
         onOpen={() => setOpenDrawer(true)}
         classes={{ paper: classes.drawer }}
+        anchor="right"
       >
+        <div className={classes.toolbarMargin} />
         <List>
           <ListItem
             onClick={() => {
@@ -272,13 +299,13 @@ const Header = () => {
       >
         <MenuIcon className={classes.drawerIcon} />
       </IconButton>
-    </React.Fragment>
+    </>
   );
 
   return (
     <div>
       <header>
-        <AppBar position="static">
+        <AppBar position="fixed" className={classes.appbar}>
           <Toolbar>
             <Button
               component={Link}
@@ -287,14 +314,18 @@ const Header = () => {
               onClick={() => setValue(0)}
             >
               <Typography className={classes.title} variant="h6" noWrap>
+                <LocalLibraryIcon className={classes.logoIcon} />
                 CommunityBooks
               </Typography>
             </Button>
-            <Route render={() => <BasicSearchBox />} />
+            <Route
+              render={() => <BasicSearchBox className={classes.searchBox} />}
+            />
             {/* check if screensize below md to display tabs or burger */}
             {matches ? drawer : tabs}
           </Toolbar>
         </AppBar>
+        <div className={classes.toolbarMargin} />
       </header>
     </div>
   );

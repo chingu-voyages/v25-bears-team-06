@@ -21,10 +21,6 @@ const useStyles = makeStyles(() => ({
     marginBottom: "0.4rem",
     marginLeft: "1rem",
   },
-  searchIcon: {
-    alignSelf: "flex-end",
-    marginBottom: "5px",
-  },
   searchInput: {
     width: "30rem",
     margin: "0.4rem",
@@ -42,7 +38,7 @@ const UploadLiveSearchPage = () => {
   const [books, setBooks] = useState([]);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const booksPerPage = 5;
+  const booksPerPage = 8;
 
   const apiKey = process.env.REACT_APP_API_KEY;
 
@@ -101,13 +97,13 @@ const UploadLiveSearchPage = () => {
             <TextField
               className={classes.searchInput}
               InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SearchIcon color="secondary" />
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <SearchIcon color="primary" />
                   </InputAdornment>
                 ),
               }}
-              variant="outlined"
+              variant="filled"
               label="Start typing to find the book you wish to upload"
               value={searchInput}
               onChange={handleChange}
