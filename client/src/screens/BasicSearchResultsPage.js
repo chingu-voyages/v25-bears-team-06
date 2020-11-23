@@ -3,7 +3,7 @@ import { Button } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import dummyData from "../dummyData";
 import SingleBookCard from "../components/SingleBookCard";
-import { SearchContext } from "../SearchContext";
+import { SearchContext } from "../Context";
 
 // Display Search Results in a Grid
 
