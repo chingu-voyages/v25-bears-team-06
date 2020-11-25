@@ -33,7 +33,7 @@ module.exports = {
         description,
         categories,
         pageCount,
-        publishDate,
+        publishedDate,
         publisher,
       },
     },
@@ -57,7 +57,7 @@ module.exports = {
           description,
           categories,
           pageCount,
-          publishDate,
+          publishedDate,
           publisher,
         });
       }

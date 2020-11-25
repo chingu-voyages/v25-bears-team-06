@@ -25,7 +25,7 @@ module.exports = buildSchema(`
     description: String!
     categories: [String!]
     pageCount: Int!
-    publishDate: String!
+    publishedDate: String!
     publisher: String!
     owners: [Ownership!]!
   }
@@ -52,7 +52,7 @@ module.exports = buildSchema(`
     description: String!
     categories: [String!]
     pageCount: Int!
-    publishDate: String!
+    publishedDate: String!
     publisher: String!
   }
 
