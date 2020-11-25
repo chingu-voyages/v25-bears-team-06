@@ -28,40 +28,43 @@ export default function LoginPage() {
   const [shouldRedirect, setShouldRedirect] = useState(false);
   const auth = useContext(AuthContext);
 
-  useEffect(function handleEffect() {
-    async function loginEffect() {
-      try {
-        const { login, message } = await loginRequest({
-          email: loginEmail,
-          password: loginPassword,
-        });
-        if (login) {
-          const { email, displayName, token, userId } = login;
-          window.localStorage.setItem("email", email);
-          window.localStorage.setItem("displayName", displayName);
-          window.localStorage.setItem("token", token);
-          window.localStorage.setItem("userId", userId);
-          auth.setUser({ email, token, displayName, userId });
-          setShouldSubmit(false);
-          setShouldRedirect(true);
-        } else if (message) {
+  useEffect(
+    function handleEffect() {
+      async function loginEffect() {
+        try {
+          const { login, message } = await loginRequest({
+            email: loginEmail,
+            password: loginPassword,
+          });
+          if (login) {
+            const { email, displayName, token, userId } = login;
+            window.localStorage.setItem("email", email);
+            window.localStorage.setItem("displayName", displayName);
+            window.localStorage.setItem("token", token);
+            window.localStorage.setItem("userId", userId);
+            auth.setUser({ email, token, displayName, userId });
+            setShouldSubmit(false);
+            setShouldRedirect(true);
+          } else if (message) {
+            setHasError(true);
+            setErrorMessage(message);
+            setShouldSubmit(false);
+          }
+        } catch (err) {
           setHasError(true);
-          setErrorMessage(message);
+          setErrorMessage(err.message);
           setShouldSubmit(false);
         }
-      } catch (err) {
-        setHasError(true);
-        setErrorMessage(err.message);
-        setShouldSubmit(false);
       }
-    }
-    if (shouldSubmit) {
-      loginEffect().catch((err) => {
-        setHasError(true);
-        setErrorMessage(err.message);
-      });
-    }
-  });
+      if (shouldSubmit) {
+        loginEffect().catch((err) => {
+          setHasError(true);
+          setErrorMessage(err.message);
+        });
+      }
+    },
+    [shouldSubmit, auth, loginEmail, loginPassword],
+  );
 
   function handleChange({ target: { name, value } }) {
     switch (name) {

@@ -73,6 +73,7 @@ export default function SignupPage() {
       signupDisplayName,
       signupPassword,
       signupConfirmPassword,
+      auth,
     ],
   );
 
