@@ -72,3 +72,4 @@ const transformBook = (book) => {
 };
 
 exports.transformBook = transformBook;
+exports.transformOwner = transformOwner;
