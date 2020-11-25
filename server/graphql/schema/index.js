@@ -27,7 +27,7 @@ module.exports = buildSchema(`
     imgThumbnail: String!
     imgLarge: String!
     pageCount: Int!
-    publishedDate: String!
+    publishDate: String!
     publisher: String!
     owners: [Ownership!]!
   }
@@ -56,7 +56,7 @@ module.exports = buildSchema(`
     imgThumbnail: String!
     imgLarge: String!
     pageCount: Int!
-    publishedDate: String!
+    publishDate: String!
     publisher: String!
   }
 

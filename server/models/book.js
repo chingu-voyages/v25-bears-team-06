@@ -36,7 +36,7 @@ const bookSchema = new Schema({
     type: Number,
     required: true,
   },
-  publishedDate: {
+  publishDate: {
     type: String,
     required: false,
   },

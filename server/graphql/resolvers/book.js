@@ -28,7 +28,7 @@ module.exports = {
         imgThumbnail,
         imgLarge,
         pageCount,
-        publishedDate,
+        publishDate,
         publisher,
       },
     },
