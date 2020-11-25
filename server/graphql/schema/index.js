@@ -62,6 +62,7 @@ module.exports = buildSchema(`
 
   type RootQuery {
     books(query: String): [Book!]
+    getInventory: [Ownership!]
   }
 
   type RootMutation {
