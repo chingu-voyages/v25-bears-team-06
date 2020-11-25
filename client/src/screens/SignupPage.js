@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Redirect } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import { TextField, Button } from "@material-ui/core";
 import signupRequest from "../dataservice/signupRequest";
+import { AuthContext } from "../Context";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -27,6 +28,7 @@ export default function SignupPage() {
     "Something went wrong. Please try again later.",
   );
   const [shouldRedirect, setShouldRedirect] = useState(false);
+  const auth = useContext(AuthContext);
 
   useEffect(
     function handleEffect() {
@@ -44,6 +46,7 @@ export default function SignupPage() {
             window.localStorage.setItem("displayName", displayName);
             window.localStorage.setItem("token", token);
             window.localStorage.setItem("userId", userId);
+            auth.setUser({ email, token, displayName, userId });
             setShouldSubmit(false);
             setShouldRedirect(true);
           } else if (message) {
