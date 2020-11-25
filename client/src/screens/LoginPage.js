@@ -41,9 +41,9 @@ export default function LoginPage() {
           window.localStorage.setItem("displayName", displayName);
           window.localStorage.setItem("token", token);
           window.localStorage.setItem("userId", userId);
+          auth.setUser({ email, token, displayName, userId });
           setShouldSubmit(false);
           setShouldRedirect(true);
-          auth.setUser({ email, token, displayName, userId });
         } else if (message) {
           setHasError(true);
           setErrorMessage(message);
