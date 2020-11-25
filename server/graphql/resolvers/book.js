@@ -25,8 +25,6 @@ module.exports = {
         authors,
         description,
         categories,
-        imgThumbnail,
-        imgLarge,
         pageCount,
         publishDate,
         publisher,
@@ -51,10 +49,8 @@ module.exports = {
           authors,
           description,
           categories,
-          imgThumbnail,
-          imgLarge,
           pageCount,
-          publishedDate,
+          publishDate,
           publisher,
         });
       }

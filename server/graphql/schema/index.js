@@ -24,8 +24,6 @@ module.exports = buildSchema(`
     authors: [String!]
     description: String!
     categories: [String!]
-    imgThumbnail: String!
-    imgLarge: String!
     pageCount: Int!
     publishDate: String!
     publisher: String!
@@ -53,8 +51,6 @@ module.exports = buildSchema(`
     authors: [String!]
     description: String!
     categories: [String!]
-    imgThumbnail: String!
-    imgLarge: String!
     pageCount: Int!
     publishDate: String!
     publisher: String!
