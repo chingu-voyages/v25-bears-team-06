@@ -17,6 +17,13 @@ module.exports = {
       throw err;
     }
   },
+  getBookById: async ({ bookId }) => {
+    const book = await Book.findById(bookId);
+    if (!book) {
+      throw new Error("Cannot find a Book by that ID!");
+    }
+    return transformBook(book);
+  },
   addBook: async (
     {
       bookInput: {
