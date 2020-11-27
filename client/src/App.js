@@ -11,35 +11,53 @@ import SignupPage from "./screens/SignupPage";
 import LoginPage from "./screens/LoginPage";
 import UploadBookButtonPage from "./screens/UploadBookButtonPage";
 import UploadLiveSearchPage from "./screens/UploadBookLiveSearchPage";
-import { SearchContext } from "./Context";
+import { SearchContext, AuthContext } from "./Context";
 
 function App() {
   // sharing searchbox user input value across pages with context
   const [value, setValue] = useState("");
+  const [user, setUser] = useState(
+    localStorage.getItem("email") &&
+      localStorage.getItem("token") &&
+      localStorage.getItem("displayName") &&
+      localStorage.getItem("userId")
+      ? {
+          email: localStorage.getItem("email"),
+          token: localStorage.getItem("token"),
+          displayName: localStorage.getItem("displayName"),
+          userId: localStorage.getItem("userId"),
+        }
+      : null,
+  );
 
   return (
     <Router>
       <ThemeProvider theme={theme}>
-        <SearchContext.Provider value={{ value, setValue }}>
-          <Header />
-          <Switch>
-            <Route
-              exact
-              path="/basicsearch"
-              component={BasicSearchResultsPage}
-            />
-            <Route path="/book/:id" component={BookInfoPage} />
-            <Route path="/uploadbookbutton" component={UploadBookButtonPage} />
-            <Route
-              path="/uploadbooklivesearch"
-              component={UploadLiveSearchPage}
-            />
-            <Route exact path="/" component={HomePage} />
-            <Route exact path="/about" component={AboutPage} />
-            <Route exact path="/signup" component={SignupPage} />
-            <Route exact path="/login" component={LoginPage} />
-          </Switch>
-        </SearchContext.Provider>
+        <AuthContext.Provider value={{ user, setUser }}>
+          <SearchContext.Provider value={{ value, setValue }}>
+            <Header />
+            <Switch>
+              <Route
+                exact
+                path="/basicsearch"
+                component={BasicSearchResultsPage}
+              />
+              <Route path="/book/:id" component={BookInfoPage} />
+              <Route
+                path="/uploadbookbutton"
+                component={UploadBookButtonPage}
+              />
+              <Route
+                path="/uploadbooklivesearch"
+                component={UploadLiveSearchPage}
+              />
+              <Route exact path="/" component={HomePage} />
+              <Route exact path="/about" component={AboutPage} />
+              <Route exact path="/signup" component={SignupPage} />
+              <Route exact path="/login" component={LoginPage} />
+            </Switch>
+          </SearchContext.Provider>
+        </AuthContext.Provider>
       </ThemeProvider>
     </Router>
   );
