@@ -28,7 +28,7 @@ function App() {
               path="/basicsearch"
               component={BasicSearchResultsPage}
             />
-            <Route path="/book/:id" component={BookInfoPage} />
+            <Route path="/bookinfo" component={BookInfoPage} />
             <Route path="/uploadbookbutton" component={UploadBookButtonPage} />
             <Route
               path="/uploadbooklivesearch"

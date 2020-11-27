@@ -1,6 +1,5 @@
 import React, { useContext } from "react";
-import { Button } from "@material-ui/core";
-import { useHistory } from "react-router-dom";
+import Typography from "@material-ui/core/Typography";
 import dummyData from "../dummyData";
 import SingleBookCard from "../components/SingleBookCard";
 import { SearchContext } from "../Context";
@@ -8,7 +7,6 @@ import { SearchContext } from "../Context";
 // Display Search Results in a Grid
 
 const BasicSearchResultsPage = () => {
-  const history = useHistory();
   const { value, setValue } = useContext(SearchContext);
 
   const searchTerm = value;
@@ -16,20 +14,13 @@ const BasicSearchResultsPage = () => {
   // eslint-disable-next-line no-unused-expressions
   setValue;
 
-  const handleGoBack = () => {
-    history.goBack();
-  };
-
   return (
     <div>
       <h1>Search Results Page</h1>
-      <h2>
+      <Typography variant="subtitle1">
         Authors and titles that contain:{" "}
         <span style={{ color: "red" }}>{value}</span>
-      </h2>
-      <Button variant="contained" onClick={handleGoBack}>
-        Go Back
-      </Button>
+      </Typography>
 
       {dummyData
         .filter(
