@@ -24,14 +24,6 @@ const bookSchema = new Schema({
     type: [String],
     required: true,
   },
-  imgThumbnail: {
-    type: String,
-    required: false,
-  },
-  imgLarge: {
-    type: String,
-    required: false,
-  },
   pageCount: {
     type: Number,
     required: true,

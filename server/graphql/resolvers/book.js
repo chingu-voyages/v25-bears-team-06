@@ -1,7 +1,7 @@
 const Book = require("../../models/book");
 const User = require("../../models/user");
 const Ownership = require("../../models/ownership");
-const { transformBook } = require("./merge");
+const { transformBook, transformOwner } = require("./merge");
 
 module.exports = {
   books: async ({ query }) => {
@@ -17,6 +17,13 @@ module.exports = {
       throw err;
     }
   },
+  getBookById: async ({ bookId }) => {
+    const book = await Book.findById(bookId);
+    if (!book) {
+      throw new Error("Cannot find a Book by that ID!");
+    }
+    return transformBook(book);
+  },
   addBook: async (
     {
       bookInput: {
@@ -25,8 +32,6 @@ module.exports = {
         authors,
         description,
         categories,
-        imgThumbnail,
-        imgLarge,
         pageCount,
         publishedDate,
         publisher,
@@ -51,8 +56,6 @@ module.exports = {
           authors,
           description,
           categories,
-          imgThumbnail,
-          imgLarge,
           pageCount,
           publishedDate,
           publisher,
@@ -79,6 +82,27 @@ module.exports = {
       await book.save();
 
       return transformBook(book);
+    } catch (err) {
+      throw err;
+    }
+  },
+  getInventory: async (args, req) => {
+    if (!req.isAuth) {
+      if (req.error) {
+        throw new Error(req.error);
+      }
+      throw new Error("Authentication required!");
+    }
+
+    try {
+      const user = await User.findById(req.userId);
+      if (!user) {
+        throw new Error("Could not find a user with the requester's userId");
+      }
+
+      const ownerships = await Ownership.find({ _id: { $in: user.owns } });
+
+      return ownerships.map(transformOwner);
     } catch (err) {
       throw err;
     }

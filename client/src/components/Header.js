@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -19,6 +19,7 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 // import basic search box
 import BasicSearchBox from "./BasicSearchBox";
+import { AuthContext } from "../Context";
 
 // Styling for heading component
 const useStyles = makeStyles((theme) => ({
@@ -109,7 +110,8 @@ const Header = () => {
   }, [value]);
 
   // is user logged in?
-  const loggedIn = false;
+  const auth = useContext(AuthContext);
+  const loggedIn = auth && auth.user && auth.user.token;
 
   // responsiveness variables
   const theme = useTheme();
@@ -165,7 +167,16 @@ const Header = () => {
             component={Link}
             to="/"
             label={
-              <div>
+              // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
+              <div
+                onClick={() => {
+                  localStorage.removeItem("email");
+                  localStorage.removeItem("token");
+                  localStorage.removeItem("displayName");
+                  localStorage.removeItem("userId");
+                  auth.setUser(null);
+                }}
+              >
                 <ExitToAppIcon style={{ verticalAlign: "middle" }} /> Logout{" "}
               </div>
             }

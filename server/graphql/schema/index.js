@@ -24,8 +24,6 @@ module.exports = buildSchema(`
     authors: [String!]
     description: String!
     categories: [String!]
-    imgThumbnail: String!
-    imgLarge: String!
     pageCount: Int!
     publishedDate: String!
     publisher: String!
@@ -53,8 +51,6 @@ module.exports = buildSchema(`
     authors: [String!]
     description: String!
     categories: [String!]
-    imgThumbnail: String!
-    imgLarge: String!
     pageCount: Int!
     publishedDate: String!
     publisher: String!
@@ -62,6 +58,8 @@ module.exports = buildSchema(`
 
   type RootQuery {
     books(query: String): [Book!]
+    getInventory: [Ownership!]
+    getBookById(bookId: ID!): Book!
   }
 
   type RootMutation {
