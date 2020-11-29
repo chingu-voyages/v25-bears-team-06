@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-// card template for book output
+// Template for book info page
 const BookInfoPage = (props) => {
   const classes = useStyles();
   const history = useHistory();

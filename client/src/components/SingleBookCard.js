@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-
+import React, { useState, useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
@@ -10,6 +9,9 @@ import { useHistory, Link } from "react-router-dom";
 // Modal imports
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
+
+// auth import
+import { AuthContext } from "../Context";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -90,7 +92,9 @@ const SingleBookCard = (props) => {
   const [open, setOpen] = useState(false);
 
   // auth state
-  // const loggedIn = false;
+  // is user logged in?
+  const auth = useContext(AuthContext);
+  const loggedIn = auth && auth.user && auth.user.token;
 
   return (
     <div className={classes.root}>
@@ -162,92 +166,95 @@ const SingleBookCard = (props) => {
                     </Grid>
                   </Grid>
                   {/* check auth state for modal options */}
+                  {loggedIn ? (
+                    <Grid item container spacing={2}>
+                      <Grid item>
+                        <Typography variant="body1">
+                          Available Copies
+                        </Typography>
+                      </Grid>
+                      <Grid item container>
+                        <Grid
+                          item
+                          container
+                          xs={12}
+                          className={classes.availItem}
+                        >
+                          <Grid item xs={9}>
+                            <Typography>Username 123</Typography>
+                          </Grid>
+
+                          <Grid item xs={3}>
+                            <Button
+                              className={classes.availBtn}
+                              variant="contained"
+                              color="primary"
+                              disableElevation
+                            >
+                              Checkout
+                            </Button>
+                          </Grid>
+                        </Grid>
+                        <Grid
+                          item
+                          container
+                          xs={12}
+                          className={classes.notAvailItem}
+                        >
+                          <Grid item xs={9}>
+                            <Typography>Username 789</Typography>
+                          </Grid>
+
+                          <Grid item xs={3}>
+                            {" "}
+                            <Button
+                              className={classes.availBtn}
+                              variant="contained"
+                              color="primary"
+                              disableElevation
+                            >
+                              Join Waitlist
+                            </Button>
+                          </Grid>
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                  ) : (
+                    <Grid item container>
+                      <Grid item>
+                        {" "}
+                        <Typography variant="body1">
+                          You must be logged in to check out this book.
+                        </Typography>{" "}
+                      </Grid>
+                      <Grid item container>
+                        <Button
+                          component={Link}
+                          to="/login"
+                          className={classes.modalBtn}
+                          variant="contained"
+                          color="primary"
+                          disableElevation
+                        >
+                          Login
+                        </Button>
+                        <Button
+                          component={Link}
+                          to="/signup"
+                          className={classes.modalBtn}
+                          variant="contained"
+                          color="primary"
+                          disableElevation
+                        >
+                          Sign Up
+                        </Button>
+                      </Grid>
+                    </Grid>
+                  )}
                   {/* logged OUT */}
-                  <Grid item container>
-                    <Grid item>
-                      {" "}
-                      <Typography variant="body1">
-                        You must be logged in to check out this book.
-                      </Typography>{" "}
-                    </Grid>
-                    <Grid item container>
-                      <Button
-                        component={Link}
-                        to="/login"
-                        className={classes.modalBtn}
-                        variant="contained"
-                        color="primary"
-                        disableElevation
-                      >
-                        Login
-                      </Button>
-                      <Button
-                        component={Link}
-                        to="/signup"
-                        className={classes.modalBtn}
-                        variant="contained"
-                        color="primary"
-                        disableElevation
-                      >
-                        Sign Up
-                      </Button>
-                    </Grid>
-                  </Grid>
+
                   {/* logged IN */}
-                  <Grid item container spacing={2}>
-                    <Grid item>
-                      <Typography variant="body1">Available Copies</Typography>
-                    </Grid>
-                    <Grid item container>
-                      <Grid
-                        item
-                        container
-                        xs={12}
-                        className={classes.availItem}
-                      >
-                        <Grid item xs={9}>
-                          <Typography>Username 123</Typography>
-                        </Grid>
 
-                        <Grid item xs={3}>
-                          <Button
-                            component={Link}
-                            to="/login"
-                            className={classes.availBtn}
-                            variant="contained"
-                            color="primary"
-                            disableElevation
-                          >
-                            Checkout
-                          </Button>
-                        </Grid>
-                      </Grid>
-                      <Grid
-                        item
-                        container
-                        xs={12}
-                        className={classes.notAvailItem}
-                      >
-                        <Grid item xs={9}>
-                          <Typography>Username 789</Typography>
-                        </Grid>
-
-                        <Grid item xs={3}>
-                          {" "}
-                          <Button
-                            component={Link}
-                            to="/login"
-                            className={classes.availBtn}
-                            variant="contained"
-                            color="primary"
-                            disableElevation
-                          >
-                            Join Waitlist
-                          </Button>
-                        </Grid>
-                      </Grid>
-                    </Grid>
-                  </Grid>
                   {/* edit before this line  */}
                 </Grid>
               </Paper>
