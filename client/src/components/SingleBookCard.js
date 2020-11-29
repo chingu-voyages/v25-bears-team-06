@@ -38,25 +38,16 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: "100%",
     maxHeight: "100%",
   },
-  infoContainer: {
-    // backgroundColor: "yellow",
-  },
-  btnContainer: {
-    // backgroundColor: "blue",
-  },
   btn: {
-    // backgroundColor: "orange",
     margin: 2,
     [theme.breakpoints.down("xl")]: {
       marginBottom: "1rem",
-      // backgroundColor: "black",
       width: "100%",
     },
     [theme.breakpoints.down("xs")]: {
       marginRight: "0.3rem",
       marginLeft: "0.3rem",
       width: "46%",
-      // backgroundColor: "pink",
     },
   },
   modalBtn: {
@@ -251,11 +242,6 @@ const SingleBookCard = (props) => {
                       </Grid>
                     </Grid>
                   )}
-                  {/* logged OUT */}
-
-                  {/* logged IN */}
-
-                  {/* edit before this line  */}
                 </Grid>
               </Paper>
             </DialogContent>
