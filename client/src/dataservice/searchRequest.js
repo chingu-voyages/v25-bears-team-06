@@ -1,10 +1,10 @@
 import baseRequest from "./baseRequest";
 
-export default async function searchBooks() {
+export default async function searchBooks(title, authors) {
   const reqBody = {
     query: `
-      query books($query: String!) {
-        books(query:$query) {
+      query SearchBooks($query: String!) {
+        books {
           _id
         googleId
         title
@@ -18,7 +18,8 @@ export default async function searchBooks() {
       }
     `,
     variables: {
-      //
+      title,
+      authors,
     },
   };
 
