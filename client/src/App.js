@@ -11,6 +11,7 @@ import SignupPage from "./screens/SignupPage";
 import LoginPage from "./screens/LoginPage";
 import UploadBookButtonPage from "./screens/UploadBookButtonPage";
 import UploadLiveSearchPage from "./screens/UploadBookLiveSearchPage";
+import MyInventoryPage from "./screens/MyInventoryPage";
 import { SearchContext, AuthContext } from "./Context";
 
 function App() {
@@ -42,16 +43,15 @@ function App() {
                 path="/basicsearch"
                 component={BasicSearchResultsPage}
               />
-              <Route path="/book/:id" component={BookInfoPage} />
+              <Route exact path="/bookinfo" component={BookInfoPage} />
               <Route
+                exact
                 path="/uploadbookbutton"
                 component={UploadBookButtonPage}
               />
-              <Route
-                path="/uploadbooklivesearch"
-                component={UploadLiveSearchPage}
-              />
+              <Route path="/uploadbook" component={UploadLiveSearchPage} />
               <Route exact path="/" component={HomePage} />
+              <Route exact path="/myinventory" component={MyInventoryPage} />
               <Route exact path="/about" component={AboutPage} />
               <Route exact path="/signup" component={SignupPage} />
               <Route exact path="/login" component={LoginPage} />

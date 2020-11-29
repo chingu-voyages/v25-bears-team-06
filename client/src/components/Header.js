@@ -101,10 +101,13 @@ const Header = () => {
       setValue(1);
     } else if (
       (window.location.pathname === "/signup" && value !== 2) ||
-      (window.location.pathname === "/uploadbooklivesearch" && value !== 2)
+      (window.location.pathname === "/uploadbook" && value !== 2)
     ) {
       setValue(2);
-    } else if (window.location.pathname === "/login" && value !== 3) {
+    } else if (
+      (window.location.pathname === "/login" && value !== 3) ||
+      (window.location.pathname === "/myinventory" && value !== 3)
+    ) {
       setValue(3);
     }
   }, [value]);
@@ -112,6 +115,15 @@ const Header = () => {
   // is user logged in?
   const auth = useContext(AuthContext);
   const loggedIn = auth && auth.user && auth.user.token;
+
+  // clear local storage on logout
+  const clearLocalStorage = () => {
+    localStorage.removeItem("email");
+    localStorage.removeItem("token");
+    localStorage.removeItem("displayName");
+    localStorage.removeItem("userId");
+    auth.setUser(null);
+  };
 
   // responsiveness variables
   const theme = useTheme();
@@ -144,7 +156,7 @@ const Header = () => {
           <Tab
             className={classes.tab}
             component={Link}
-            to="/uploadbooklivesearch"
+            to="/uploadbook"
             display="inline"
             label={
               <div>
@@ -161,22 +173,25 @@ const Header = () => {
           />
         )}
 
+        {loggedIn && (
+          <Tab
+            className={classes.tab}
+            component={Link}
+            to="/myinventory"
+            label="My Inventory"
+          />
+        )}
+
         {loggedIn ? (
           <Tab
             className={classes.tab}
             component={Link}
             to="/"
+            onClick={() => {
+              clearLocalStorage();
+            }}
             label={
-              // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
-              <div
-                onClick={() => {
-                  localStorage.removeItem("email");
-                  localStorage.removeItem("token");
-                  localStorage.removeItem("displayName");
-                  localStorage.removeItem("userId");
-                  auth.setUser(null);
-                }}
-              >
+              <div>
                 <ExitToAppIcon style={{ verticalAlign: "middle" }} /> Logout{" "}
               </div>
             }
@@ -246,7 +261,7 @@ const Header = () => {
               divider
               button
               component={Link}
-              to="/uploadbooklivesearch"
+              to="/uploadbook"
               selected={value === 2}
             >
               <ListItemText className={classes.drawerItem} disableTypography>
@@ -270,11 +285,30 @@ const Header = () => {
               </ListItemText>{" "}
             </ListItem>
           )}
+          {loggedIn && (
+            <ListItem
+              onClick={() => {
+                setOpenDrawer(false);
+                setValue(3);
+              }}
+              divider
+              button
+              component={Link}
+              to="/myinventory"
+              selected={value === 3}
+            >
+              <ListItemText className={classes.drawerItem} disableTypography>
+                My Inventory{" "}
+              </ListItemText>{" "}
+            </ListItem>
+          )}
+
           {loggedIn ? (
             <ListItem
               onClick={() => {
                 setOpenDrawer(false);
                 setValue(0);
+                clearLocalStorage();
               }}
               button
               component={Link}

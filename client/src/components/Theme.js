@@ -19,6 +19,7 @@ export default createMuiTheme({
   typography: {
     tab: {
       textTransform: "none",
+      fontFamily: "Roboto",
     },
   },
 });
