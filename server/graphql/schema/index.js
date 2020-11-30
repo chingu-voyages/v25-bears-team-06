@@ -21,7 +21,7 @@ module.exports = buildSchema(`
     _id: ID!
     googleId: String!
     title: String!
-    authors: [String!]
+    authors: String
     description: String!
     categories: [String!]
     pageCount: Int!
@@ -48,7 +48,7 @@ module.exports = buildSchema(`
   input BookInput {
     googleId: String!
     title: String!
-    authors: [String!]
+    authors: String
     description: String!
     categories: [String!]
     pageCount: Int!

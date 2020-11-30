@@ -25,6 +25,7 @@
         "ignore": "ignore",
         "customValidators": "customValidator"
       }
-    ]
+    ],
+    "no-unused-vars": "warn"
   }
 }

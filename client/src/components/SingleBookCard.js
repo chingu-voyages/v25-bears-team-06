@@ -73,7 +73,7 @@ const SingleBookCard = (props) => {
   const classes = useStyles();
   const history = useHistory();
 
-  const { title, author, thumbnail, publishedDate } = props;
+  const { title, author, googleId, publishedDate } = props;
   // go to book info page
   const handleClick = () => {
     history.push("/bookinfo");
@@ -87,6 +87,8 @@ const SingleBookCard = (props) => {
   const auth = useContext(AuthContext);
   const loggedIn = auth && auth.user && auth.user.token;
 
+  const thumbnail = `http://books.google.com/books/content?id=${googleId}&printsec=frontcover&img=1&zoom=1&source=gbs_api`;
+
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
@@ -98,11 +100,9 @@ const SingleBookCard = (props) => {
             <Grid item xs container direction="column" spacing={2}>
               <Grid item xs>
                 <Typography gutterBottom variant="subtitle1">
-                  Title: {title}
+                  {title}
                 </Typography>
-                <Typography variant="body2">
-                  Published: {publishedDate}
-                </Typography>
+                <Typography variant="body2">{publishedDate}</Typography>
               </Grid>
               <Grid item>
                 <Typography variant="body2">by {author}</Typography>
@@ -145,11 +145,9 @@ const SingleBookCard = (props) => {
                     <Grid item xs container direction="column" spacing={2}>
                       <Grid item xs>
                         <Typography gutterBottom variant="subtitle1">
-                          Title: {title}
+                          {title}
                         </Typography>
-                        <Typography variant="body2">
-                          Published: {publishedDate}
-                        </Typography>
+                        <Typography variant="body2">{publishedDate}</Typography>
                       </Grid>
                       <Grid item>
                         <Typography variant="body2">by {author}</Typography>

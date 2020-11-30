@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
@@ -7,7 +7,8 @@ import SearchIcon from "@material-ui/icons/Search";
 import TextField from "@material-ui/core/TextField";
 import Pagination from "../components/Pagination";
 import UploadBookCard from "../components/UploadBookCard";
-// import uploadBookRequest from "../dataservice/uploadBookRequest";
+import uploadBookRequest from "../dataservice/uploadBookRequest";
+import { AuthContext } from "../Context";
 
 // searchbar styling
 const useStyles = makeStyles(() => ({
@@ -34,6 +35,9 @@ const useStyles = makeStyles(() => ({
 
 const UploadLiveSearchPage = () => {
   const classes = useStyles();
+  // auth state
+  // assuming user is user logged in?
+  const auth = useContext(AuthContext);
 
   const [searchInput, setSearchInput] = useState("");
   const [books, setBooks] = useState([]);
@@ -84,6 +88,44 @@ const UploadLiveSearchPage = () => {
     return authors;
   };
 
+  const uploadBook = async (bookIndex) => {
+    const selectedBook = currentBooks[bookIndex];
+
+    const googleId = selectedBook.id;
+    const {
+      title,
+      authors,
+      description,
+      categories,
+      pageCount,
+      publishedDate,
+      publisher,
+    } = selectedBook.volumeInfo;
+
+    const formattedAuthors = allAuthors(authors);
+
+    try {
+      const { addBook, message } = await uploadBookRequest(
+        {
+          googleId,
+          title,
+          authors: formattedAuthors,
+          description,
+          categories,
+          pageCount,
+          publishedDate,
+          publisher,
+        },
+        auth.user.token,
+      );
+
+      // redirect to user's inventory page
+    } catch (err) {
+      return false;
+    }
+    return true;
+  };
+
   return (
     <div className={classes.root}>
       <Grid container direction="column" alignItems="center">
@@ -116,14 +158,15 @@ const UploadLiveSearchPage = () => {
           results
         </small>
         {/* Display search results  */}
-        {currentBooks.map((book) => {
+        {currentBooks.map((book, index) => {
           return (
             <UploadBookCard
+              key={book.id}
               thumbnail={`http://books.google.com/books/content?id=${book.id}&printsec=frontcover&img=1&zoom=1&source=gbs_api`}
               title={book.volumeInfo.title}
               author={allAuthors(book.volumeInfo.authors)}
-              rating={book.volumeInfo.averageRating}
-              language={book.volumeInfo.language}
+              publishedDate={book.volumeInfo.publishedDate}
+              uploadBook={() => uploadBook(index)}
             />
           );
         })}

@@ -1,11 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import ButtonBase from "@material-ui/core/ButtonBase";
+import Button from "@material-ui/core/Button";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -32,31 +31,11 @@ const useStyles = makeStyles((theme) => ({
 // card template for book output
 const UploadBookCard = (props) => {
   const classes = useStyles();
-  const { title, author, thumbnail, rating, language } = props;
-
-  // functions for checkboxes
-
-  const [state, setState] = useState(true);
-
-  const handleChange = (event) => {
-    setState({ state, [event.target.name]: event.target.checked });
-  };
+  const { title, author, publishedDate, uploadBook, thumbnail } = props;
 
   return (
     <div className={classes.root}>
       <Grid container direction="row">
-        {/* checkbox on left */}
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={state.checkingBox}
-              onChange={handleChange}
-              name="checkedB"
-              color="primary"
-            />
-          }
-          label="Add"
-        />
         {/* book information section on right */}
         <Paper className={classes.paper}>
           <Grid container spacing={2}>
@@ -72,10 +51,7 @@ const UploadBookCard = (props) => {
                     Title: {title}
                   </Typography>
                   <Typography variant="body2" gutterBottom>
-                    Language: {language}
-                  </Typography>
-                  <Typography variant="body2" color="textPrimary">
-                    Rating: {rating}
+                    Published: {publishedDate}
                   </Typography>
                 </Grid>
                 <Grid item>
@@ -84,6 +60,9 @@ const UploadBookCard = (props) => {
                   </Typography>
                 </Grid>
               </Grid>
+              <Button variant="contained" onClick={uploadBook}>
+                Upload
+              </Button>
             </Grid>
           </Grid>
         </Paper>
