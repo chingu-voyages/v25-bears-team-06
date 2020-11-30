@@ -49,7 +49,8 @@ const BasicSearchResultsPage = () => {
   return (
     <div>
       {hasError && <div className={classes.errorDiv}>{errorMessage}</div>}
-      <h1>Search Results Page</h1>
+      <Typography variant="h4">Search Results </Typography>
+
       <Typography variant="subtitle1">
         Authors and titles that contain:{" "}
         <span style={{ color: "red" }}>{query}</span>

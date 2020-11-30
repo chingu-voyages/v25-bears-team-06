@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
+import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import SearchIcon from "@material-ui/icons/Search";
@@ -11,32 +12,37 @@ import uploadBookRequest from "../dataservice/uploadBookRequest";
 import { AuthContext } from "../Context";
 
 // searchbar styling
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
     margin: "1rem",
   },
+  pageContainer: {
+    maxWidth: 1200,
+    margin: "auto",
+  },
   searchContainer: {
-    display: "flex",
-    paddingLeft: "1rem",
+    [theme.breakpoints.down("xl")]: {
+      width: "30rem",
+    },
+    [theme.breakpoints.down("sm")]: {
+      width: "20rem",
+    },
     marginTop: "0.4rem",
-    marginBottom: "0.4rem",
-    marginLeft: "1rem",
   },
   searchInput: {
-    width: "30rem",
     margin: "0.4rem",
+    width: "98%",
+    marginBottom: "2rem",
   },
   resultsCount: {
     color: "gray",
-    marginLeft: "-19rem",
   },
 }));
 
 const UploadLiveSearchPage = () => {
   const classes = useStyles();
-  // auth state
-  // assuming user is user logged in?
+  // auth state - assuming user is logged in
   const auth = useContext(AuthContext);
 
   const [searchInput, setSearchInput] = useState("");
@@ -128,48 +134,61 @@ const UploadLiveSearchPage = () => {
 
   return (
     <div className={classes.root}>
-      <Grid container direction="column" alignItems="center">
-        <h1>Upload New Book</h1>
-        <h3>
+      <Grid
+        className={classes.pageContainer}
+        container
+        direction="column"
+        alignItems="center"
+      >
+        <Typography variant="h3" gutterBottom>
+          Upload New Book
+        </Typography>
+        <Typography variant="body1" gutterBottom>
           To upload a book to your inventory, enter the title below to search
           for a book that matches.
-        </h3>
+        </Typography>
+
         {/* Search input area  */}
-        <div>
-          <div className={classes.searchContainer}>
-            <TextField
-              className={classes.searchInput}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <SearchIcon color="primary" />
-                  </InputAdornment>
-                ),
-              }}
-              variant="filled"
-              label="Start typing to find the book you wish to upload"
-              value={searchInput}
-              onChange={handleChange}
-            />
-          </div>
-        </div>
-        <small className={classes.resultsCount}>
-          Showing {indexOfFirstBook}-{indexOfLastBook} of {numberofbooks}{" "}
-          results
-        </small>
+        <Grid item className={classes.searchContainer}>
+          <TextField
+            className={classes.searchInput}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <SearchIcon color="primary" />
+                </InputAdornment>
+              ),
+            }}
+            variant="filled"
+            label="Start typing to find the book you wish to upload"
+            value={searchInput}
+            onChange={handleChange}
+          />
+        </Grid>
+
+        <Grid item>
+          <Typography variant="subtitle2" className={classes.resultsCount}>
+            Showing {indexOfFirstBook}-{indexOfLastBook} of {numberofbooks}{" "}
+            results
+          </Typography>
+        </Grid>
+
         {/* Display search results  */}
-        {currentBooks.map((book, index) => {
-          return (
-            <UploadBookCard
-              key={book.id}
-              thumbnail={`http://books.google.com/books/content?id=${book.id}&printsec=frontcover&img=1&zoom=1&source=gbs_api`}
-              title={book.volumeInfo.title}
-              author={allAuthors(book.volumeInfo.authors)}
-              publishedDate={book.volumeInfo.publishedDate}
-              uploadBook={() => uploadBook(index)}
-            />
-          );
-        })}
+        <Grid>
+          {currentBooks.map((book, index) => {
+            return (
+              <UploadBookCard
+                key={book.id}
+                thumbnail={`http://books.google.com/books/content?id=${book.id}&printsec=frontcover&img=1&zoom=1&source=gbs_api`}
+                title={book.volumeInfo.title}
+                author={allAuthors(book.volumeInfo.authors)}
+                publishedDate={book.volumeInfo.publishedDate}
+                uploadBook={() => uploadBook(index)}
+              />
+            );
+          })}
+        </Grid>
+
         {/* Display pagination  */}
         <Pagination
           booksPerPage={booksPerPage}
