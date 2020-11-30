@@ -8,14 +8,28 @@ export default async function searchBooks({ query }) {
           query: $query
         ) {
           _id
-        googleId
-        title
-        authors
-        description
-        categories
-        pageCount
-        publishedDate
-        publisher
+          googleId
+          title
+          authors
+          description
+          categories
+          pageCount
+          publishedDate
+          publisher
+          owners {
+            _id
+            owner {
+              _id
+              displayName
+              location {
+                country
+                city
+                latitude
+                longitude
+              }
+            }
+            isAvailable
+          }
         }  
       }
     `,
