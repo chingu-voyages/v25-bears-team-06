@@ -21,52 +21,53 @@ const BasicSearchResultsPage = () => {
   );
   const { query } = useContext(SearchContext);
 
-  useEffect(function handleEffect() {
-    async function searchEffect() {
-      try {
-        const { books, message } = await searchRequest({ query });
-        if (books && Array.isArray(books)) {
-          setBookResults(books);
-        } else if (message) {
+  useEffect(
+    function handleEffect() {
+      async function searchEffect() {
+        try {
+          const { books, message } = await searchRequest({ query });
+          if (books && Array.isArray(books)) {
+            setBookResults(books);
+          } else if (message) {
+            setHasError(true);
+            setErrorMessage(message);
+          }
+        } catch (err) {
           setHasError(true);
-          setErrorMessage(message);
+          setErrorMessage(err.message);
         }
-      } catch (err) {
+      }
+      searchEffect().catch((err) => {
         setHasError(true);
         setErrorMessage(err.message);
-      }
-    }
-    searchEffect().catch((err) => {
-      setHasError(true);
-      setErrorMessage(err.message);
-    });
-  }, []);
+      });
+    },
+    [query],
+  );
 
   const classes = useStyles();
-
   return (
     <div>
       {hasError && <div className={classes.errorDiv}>{errorMessage}</div>}
-      <h1>Search Results Page</h1>
+      <Typography variant="h4">Search Results </Typography>
+
       <Typography variant="subtitle1">
         Authors and titles that contain:{" "}
         <span style={{ color: "red" }}>{query}</span>
       </Typography>
-
-      {bookResults
-        .filter(
-          (book) =>
-            book.title.toLowerCase().includes(query.toLowerCase()) ||
-            book.author.toLowerCase().includes(query.toLowerCase()),
-        )
-        .map((filteredBook) => (
+      {bookResults.length === 0 ? (
+        <span>no results found</span>
+      ) : (
+        bookResults.map((book) => (
           <SingleBookCard
-            key={filteredBook._id}
-            title={filteredBook.title}
-            author={filteredBook.author}
-            thumbnail={filteredBook.thumbnail}
+            key={book._id}
+            title={book.title}
+            author={book.authors}
+            googleId={book.googleId}
+            publishedDate={book.publishedDate}
           />
-        ))}
+        ))
+      )}
     </div>
   );
 };

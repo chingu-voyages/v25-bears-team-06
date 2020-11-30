@@ -42,6 +42,7 @@ const useStyles = makeStyles((theme) => ({
   },
   formButtonHelperText: {
     textAlign: "center",
+    marginBottom: "0.2rem",
   },
   errorDiv: {
     height: "50px",
@@ -172,13 +173,17 @@ export default function LoginPage() {
             <div className={classes.formButtonContainer}>
               <Typography
                 className={classes.formButtonHelperText}
-                component="p"
-                variant="p"
+                variant="body2"
               >
-                Not a memeber?
+                Not a member?
               </Typography>
-              <Button className={classes.formButton} variant="contained">
-                <Link to="/signup">Sign Up</Link>
+              <Button
+                className={classes.formButton}
+                variant="contained"
+                component={Link}
+                to="/signup"
+              >
+                Sign Up
               </Button>
             </div>
           </form>

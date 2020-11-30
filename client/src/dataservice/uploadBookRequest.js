@@ -1,27 +1,43 @@
 import baseRequest from "./baseRequest";
 
-export default async function uploadBookRequest({
-  googleId,
-  title,
-  authors,
-  description,
-  categories,
-  pageCount,
-  publishedDate,
-  publisher,
-}) {
+export default async function uploadBookRequest(
+  {
+    googleId,
+    title,
+    authors,
+    description,
+    categories,
+    pageCount,
+    publishedDate,
+    publisher,
+  },
+  token,
+) {
   const reqBody = {
     query: `
-    mutation addBook(bookInput: {
-    googleId: String!
-    title: String!
-    authors: [String!]
-    description: String!
-    categories: [String!]
-    pageCount: Int!
-    publishedDate: String!
-    publisher: String!
-  })
+    mutation AddBook(
+      $googleId: String!,
+      $title: String!,
+      $authors: String,
+      $description: String!,
+      $categories: [String!],
+      $pageCount: Int!,
+      $publishedDate: String!,
+      $publisher: String!
+    ) {
+      addBook(bookInput: {
+        googleId: $googleId,
+        title: $title,
+        authors: $authors,
+        description: $description,
+        categories: $categories,
+        pageCount: $pageCount,
+        publishedDate: $publishedDate,
+        publisher:  $publisher
+      }) {
+        _id
+      }
+    }
     `,
     variables: {
       googleId,
@@ -39,6 +55,7 @@ export default async function uploadBookRequest({
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(reqBody),
   };
