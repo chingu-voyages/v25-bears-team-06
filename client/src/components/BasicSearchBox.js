@@ -44,22 +44,21 @@ const BasicSearchBox = () => {
   const history = useHistory();
 
   // This value is passed to search results page. Not declaring value before setValue as not needed here.
-  const { setValue } = useContext(SearchContext);
+  const { setQuery } = useContext(SearchContext);
 
-  const [searchInput, setSearchInput] = useState("");
+  const [input, setInput] = useState("");
 
   const handleSearchChange = (event) => {
-    const newValue = event.target.value;
-    setSearchInput(newValue);
+    setInput(event.target.value);
   };
 
   // HANDLE SEARCH BUTTON CLICK FUNCTION
   const handleClick = () => {
-    setValue(searchInput);
+    setQuery(input);
     // clear the text in the inputfield after clicking search btn
-    setSearchInput("");
+    setInput("");
     // redirect to search results page. Must push onto history stack for "back" to work correctly
-    if (searchInput.length > 0) {
+    if (input.length > 0) {
       history.push("/basicsearch");
     } else {
       // eslint-disable-next-line no-alert
@@ -75,7 +74,7 @@ const BasicSearchBox = () => {
           label="Search our database"
           variant="filled"
           onChange={handleSearchChange}
-          value={searchInput}
+          value={input}
           color="primary"
         />
         <Button

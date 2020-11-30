@@ -16,7 +16,7 @@ import { SearchContext, AuthContext } from "./Context";
 
 function App() {
   // sharing searchbox user input value across pages with context
-  const [value, setValue] = useState("");
+  const [query, setQuery] = useState("");
   const [user, setUser] = useState(
     localStorage.getItem("email") &&
       localStorage.getItem("token") &&
@@ -35,7 +35,7 @@ function App() {
     <Router>
       <ThemeProvider theme={theme}>
         <AuthContext.Provider value={{ user, setUser }}>
-          <SearchContext.Provider value={{ value, setValue }}>
+          <SearchContext.Provider value={{ query, setQuery }}>
             <Header />
             <Switch>
               <Route
