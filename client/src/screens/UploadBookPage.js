@@ -11,7 +11,6 @@ import UploadBookCard from "../components/UploadBookCard";
 import uploadBookRequest from "../dataservice/uploadBookRequest";
 import { AuthContext } from "../Context";
 
-// searchbar styling
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -40,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const UploadLiveSearchPage = () => {
+const UploadBookPage = () => {
   const classes = useStyles();
   // auth state - assuming user is logged in
   const auth = useContext(AuthContext);
@@ -70,7 +69,7 @@ const UploadLiveSearchPage = () => {
     fetchBooks();
   }, [apiKey, searchInput]);
 
-  // Get currents books - for pagination
+  // Get currently displayed books - for pagination
   const indexOfLastBook = currentPage * booksPerPage;
   const indexOfFirstBook = indexOfLastBook - booksPerPage;
   const currentBooks = books.slice(indexOfFirstBook, indexOfLastBook);
@@ -79,7 +78,7 @@ const UploadLiveSearchPage = () => {
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   // display all authors from api response array
-  const allAuthors = (namesArr) => {
+  const authorsToString = (namesArr) => {
     let authors = namesArr;
     if (authors == null) {
       authors = "No author listed";
@@ -108,7 +107,7 @@ const UploadLiveSearchPage = () => {
       publisher,
     } = selectedBook.volumeInfo;
 
-    const formattedAuthors = allAuthors(authors);
+    const formattedAuthors = authorsToString(authors);
 
     try {
       const { addBook, message } = await uploadBookRequest(
@@ -181,7 +180,7 @@ const UploadLiveSearchPage = () => {
                 key={book.id}
                 thumbnail={`http://books.google.com/books/content?id=${book.id}&printsec=frontcover&img=1&zoom=1&source=gbs_api`}
                 title={book.volumeInfo.title}
-                author={allAuthors(book.volumeInfo.authors)}
+                author={authorsToString(book.volumeInfo.authors)}
                 publishedDate={book.volumeInfo.publishedDate}
                 uploadBook={() => uploadBook(index)}
               />
@@ -200,4 +199,4 @@ const UploadLiveSearchPage = () => {
   );
 };
 
-export default UploadLiveSearchPage;
+export default UploadBookPage;

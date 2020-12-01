@@ -39,7 +39,7 @@ const useStyles = makeStyles(() => ({
 
 // Basic Search Box
 
-const BasicSearchBox = () => {
+const HeaderSearchBox = () => {
   const classes = useStyles();
   const history = useHistory();
 
@@ -59,7 +59,7 @@ const BasicSearchBox = () => {
     setInput("");
     // redirect to search results page. Must push onto history stack for "back" to work correctly
     if (input.length > 0) {
-      history.push("/basicsearch");
+      history.push("/searchresults");
     } else {
       // eslint-disable-next-line no-alert
       alert("Please specify what book you are looking for!");
@@ -91,4 +91,4 @@ const BasicSearchBox = () => {
   );
 };
 
-export default BasicSearchBox;
+export default HeaderSearchBox;

@@ -4,13 +4,12 @@ import { ThemeProvider } from "@material-ui/styles";
 import theme from "./components/Theme";
 import Header from "./components/Header";
 import HomePage from "./screens/HomePage";
-import BasicSearchResultsPage from "./screens/BasicSearchResultsPage";
+import SearchResultsPage from "./screens/SearchResultsPage";
 import BookInfoPage from "./screens/BookInfoPage";
 import AboutPage from "./screens/AboutPage";
 import SignupPage from "./screens/SignupPage";
 import LoginPage from "./screens/LoginPage";
-import UploadBookButtonPage from "./screens/UploadBookButtonPage";
-import UploadLiveSearchPage from "./screens/UploadBookLiveSearchPage";
+import UploadBookPage from "./screens/UploadBookPage";
 import MyInventoryPage from "./screens/MyInventoryPage";
 import { SearchContext, AuthContext } from "./Context";
 
@@ -40,16 +39,11 @@ function App() {
             <Switch>
               <Route
                 exact
-                path="/basicsearch"
-                component={BasicSearchResultsPage}
+                path="/searchresults"
+                component={SearchResultsPage}
               />
               <Route exact path="/bookinfo" component={BookInfoPage} />
-              <Route
-                exact
-                path="/uploadbookbutton"
-                component={UploadBookButtonPage}
-              />
-              <Route path="/uploadbook" component={UploadLiveSearchPage} />
+              <Route path="/uploadbook" component={UploadBookPage} />
               <Route exact path="/" component={HomePage} />
               <Route exact path="/myinventory" component={MyInventoryPage} />
               <Route exact path="/about" component={AboutPage} />

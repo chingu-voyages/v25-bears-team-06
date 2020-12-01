@@ -10,12 +10,10 @@ const useStyles = makeStyles(() => ({
     marginRight: "0.2rem",
     marginBottom: 5,
     borderRadius: 5,
-    // color: "white",
     height: 25,
     "&:focus": {
       background: "#5f5fc4",
     },
-    // padding: "0",
   },
 }));
 
