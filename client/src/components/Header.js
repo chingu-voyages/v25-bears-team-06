@@ -17,8 +17,8 @@ import MenuIcon from "@material-ui/icons/Menu";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
-// import basic search box
-import BasicSearchBox from "./BasicSearchBox";
+// import search box component
+import HeaderSearchBox from "./HeaderSearchBox";
 import { AuthContext } from "../Context";
 
 // Styling for heading component
@@ -94,7 +94,7 @@ const Header = () => {
   useEffect(() => {
     if (
       (window.location.pathname === "/" && value !== 0) ||
-      (window.location.pathname === "/basicsearch" && value !== 0)
+      (window.location.pathname === "/searchresults" && value !== 0)
     ) {
       setValue(0);
     } else if (window.location.pathname === "/about" && value !== 1) {
@@ -364,7 +364,7 @@ const Header = () => {
               </Typography>
             </Button>
             <Route
-              render={() => <BasicSearchBox className={classes.searchBox} />}
+              render={() => <HeaderSearchBox className={classes.searchBox} />}
             />
             {/* check if screensize below md to display tabs or burger */}
             {matches ? drawer : tabs}
