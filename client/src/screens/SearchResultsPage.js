@@ -120,6 +120,7 @@ const SearchResultsPage = () => {
               author={book.authors}
               googleId={book.googleId}
               publishedDate={book.publishedDate}
+              owners={book.owners}
             />
           ))
         )}
