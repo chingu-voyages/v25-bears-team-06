@@ -116,6 +116,7 @@ const SearchResultsPage = () => {
           currentBooks.map((book) => (
             <SingleBookCard
               key={book._id}
+              id={book._id}
               title={book.title}
               author={book.authors}
               googleId={book.googleId}
