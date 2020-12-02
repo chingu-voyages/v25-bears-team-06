@@ -12,6 +12,7 @@ module.exports = {
       } else {
         books = await Book.find({ $text: { $search: query } });
       }
+
       return books.map(transformBook);
     } catch (err) {
       throw err;
