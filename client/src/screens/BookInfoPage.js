@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
+import getBookByIdRequest from "../dataservice/getBookByIdRequest";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -48,95 +49,127 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // Template for book info page
-const BookInfoPage = (props) => {
+const BookInfoPage = () => {
   const classes = useStyles();
   const history = useHistory();
+  const { id } = useParams();
 
-  const {
-    title,
-    author,
-    thumbnail,
-    description,
-    mainCategory,
-    pageCount,
-    publishedDate,
-    publisher,
-  } = props;
+  const [bookResult, setBookResult] = useState([]);
+  const [hasError, setHasError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(
+    "Something went wrong. Please try again later",
+  );
+
+  useEffect(
+    function handleEffect() {
+      async function getBookByIdEffect() {
+        try {
+          const { getBookById, message } = await getBookByIdRequest({ id });
+          if (getBookById) {
+            setBookResult(getBookById);
+          } else if (message) {
+            setHasError(true);
+            setErrorMessage(message);
+          }
+        } catch (err) {
+          setHasError(true);
+          setErrorMessage(err.message);
+        }
+      }
+      getBookByIdEffect().catch((err) => {
+        setHasError(true);
+        setErrorMessage(err.message);
+      });
+    },
+    [id],
+  );
 
   // back to search results
   const handleGoBack = () => {
     history.goBack();
   };
 
+  const thumbnail = `http://books.google.com/books/content?id=${bookResult.googleId}&printsec=frontcover&img=1&zoom=1&source=gbs_api`;
+
   return (
-    <div className={classes.root}>
-      <Button onClick={handleGoBack}> Back to search results</Button>
-      <Paper className={classes.paper}>
-        <Grid container spacing={2}>
-          <Grid item xs={3} md={2} className={classes.imageContainer}>
-            <img className={classes.img} alt="book cover" src={thumbnail} />
-          </Grid>
-          <Grid item xs={9} sm={6} container className={classes.infoContainer}>
-            <Grid item xs container direction="column" spacing={2}>
-              <Grid item xs>
-                <Typography gutterBottom variant="subtitle1">
-                  Title: {title} Example Title
-                </Typography>
-                <Typography variant="body2">
-                  Category: {mainCategory} Business & Economics
-                </Typography>
-                <Typography variant="body2">
-                  Page Count: {pageCount} 321
-                </Typography>
-                <Typography variant="body2">
-                  Publisher: {publisher} Random House
-                </Typography>
-                <Typography variant="body2">
-                  Published: {publishedDate} 2005-01-01
-                </Typography>
-              </Grid>
-              <Grid item>
-                <Typography variant="body2">
-                  by {author} some Person and some other Person
-                </Typography>
+    <>
+      {hasError && <div className={classes.errorDiv}>{errorMessage}</div>}
+      <div className={classes.root}>
+        <Button onClick={handleGoBack}> Back to search results</Button>
+        <Paper className={classes.paper}>
+          <Grid container spacing={2}>
+            <Grid item xs={3} md={2} className={classes.imageContainer}>
+              <img className={classes.img} alt="book cover" src={thumbnail} />
+            </Grid>
+            <Grid
+              item
+              xs={9}
+              sm={6}
+              container
+              className={classes.infoContainer}
+            >
+              <Grid item xs container direction="column" spacing={2}>
+                <Grid item xs>
+                  <Typography gutterBottom variant="subtitle1">
+                    {bookResult.title}
+                  </Typography>
+                  {bookResult.categories && (
+                    <Typography variant="body2">
+                      {bookResult.categories.join(" ")}
+                    </Typography>
+                  )}
+                  {bookResult.pageCount && (
+                    <Typography variant="body2">
+                      {bookResult.pageCount} pages
+                    </Typography>
+                  )}
+                  {bookResult.publisher && (
+                    <Typography variant="body2">
+                      {bookResult.publisher}
+                    </Typography>
+                  )}
+                  {bookResult.publishedDate && (
+                    <Typography variant="body2">
+                      {bookResult.publishedDate}
+                    </Typography>
+                  )}
+                </Grid>
+                <Grid item>
+                  {bookResult.author && (
+                    <Typography variant="body2">
+                      by {bookResult.author} some Person and some other Person
+                    </Typography>
+                  )}
+                </Grid>
               </Grid>
             </Grid>
-          </Grid>
-          <Grid item xs={12} container className={classes.btnContainer} sm={3}>
-            <Button
-              className={classes.btn}
-              variant="contained"
-              color="primary"
-              disableElevation
+            <Grid
+              item
+              xs={12}
+              container
+              className={classes.btnContainer}
+              sm={3}
             >
-              Checkout
-            </Button>
+              <Button
+                className={classes.btn}
+                variant="contained"
+                color="primary"
+                disableElevation
+              >
+                Checkout
+              </Button>
+            </Grid>
+            <Grid item container>
+              {bookResult.description && (
+                <Typography variant="body2">
+                  {bookResult.description}
+                </Typography>
+              )}
+            </Grid>
           </Grid>
-          <Grid item container>
-            <Typography variant="subtitle1">Description</Typography>{" "}
-            <Typography variant="body2">
-              {description}
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus
-              nihil rem aliquam repudiandae soluta itaque voluptatem quam
-              officia facilis dicta. Molestias eos repellendus cum aut qui
-              officia, nesciunt, doloribus enim saepe quia odio quos. Totam
-              dicta atque molestias vitae excepturi?
-              <br />
-              <br />
-              Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-              Consequuntur reiciendis magni molestias impedit necessitatibus
-              ipsam debitis at labore ex iste, tenetur architecto eos cupiditate
-              suscipit aut in aperiam reprehenderit dolorum! Lorem ipsum dolor
-              sit amet consectetur adipisicing elit. Accusamus tempore earum
-              officia asperiores repudiandae quibusdam nam nemo voluptatem,
-              excepturi qui aliquid ea labore deleniti iste a corporis?
-              Distinctio aperiam tempora officia aspernatur, labore cupiditate
-              quas, accusantium impedit, quibusdam minima nihil?
-            </Typography>
-          </Grid>
-        </Grid>
-      </Paper>
-    </div>
+        </Paper>
+      </div>
+    </>
   );
 };
 
