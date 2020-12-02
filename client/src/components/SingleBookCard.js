@@ -178,51 +178,36 @@ const SingleBookCard = (props) => {
                           Available Copies
                         </Typography>
                       </Grid>
-                      <Grid item container>
-                        <Grid
-                          item
-                          container
-                          xs={12}
-                          className={classes.availItem}
-                        >
-                          <Grid item xs={9}>
-                            <Typography>Username 123</Typography>
-                          </Grid>
-
-                          <Grid item xs={3}>
-                            <Button
-                              className={classes.availBtn}
-                              variant="contained"
-                              color="primary"
-                              disableElevation
-                            >
-                              Checkout
-                            </Button>
-                          </Grid>
-                        </Grid>
-                        <Grid
-                          item
-                          container
-                          xs={12}
-                          className={classes.notAvailItem}
-                        >
-                          <Grid item xs={9}>
-                            <Typography>Username 789</Typography>
-                          </Grid>
-
-                          <Grid item xs={3}>
-                            {" "}
-                            <Button
-                              className={classes.availBtn}
-                              variant="contained"
-                              color="primary"
-                              disableElevation
-                            >
-                              Join Waitlist
-                            </Button>
+                      {owners.map((owner) => (
+                        <Grid item container>
+                          <Grid
+                            item
+                            container
+                            xs={12}
+                            className={
+                              owner.isAvailable
+                                ? classes.availItem
+                                : classes.notAvailItem
+                            }
+                          >
+                            <Grid item xs={9}>
+                              <Typography>{owner.owner.displayName}</Typography>
+                            </Grid>
+                            <Grid item xs={3}>
+                              <Button
+                                className={classes.availBtn}
+                                variant="contained"
+                                color="primary"
+                                disableElevation
+                              >
+                                {owner.isAvailable
+                                  ? "Checkout"
+                                  : "Join Waitlist"}
+                              </Button>
+                            </Grid>
                           </Grid>
                         </Grid>
-                      </Grid>
+                      ))}
                     </Grid>
                   ) : (
                     <Grid item container>
