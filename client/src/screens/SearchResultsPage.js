@@ -58,9 +58,9 @@ const SearchResultsPage = () => {
     [query],
   );
 
-  const booksPerPage = 8;
   const [currentPage, setCurrentPage] = useState(1);
   const numberofbooks = bookResults.length;
+  const booksPerPage = bookResults.length > 7 ? 8 : bookResults.length;
 
   // Get currently displayed books - for pagination
   const indexOfLastBook = currentPage * booksPerPage;
@@ -116,10 +116,12 @@ const SearchResultsPage = () => {
           currentBooks.map((book) => (
             <SingleBookCard
               key={book._id}
+              id={book._id}
               title={book.title}
-              author={book.authors}
+              authors={book.authors}
               googleId={book.googleId}
               publishedDate={book.publishedDate}
+              owners={book.owners}
             />
           ))
         )}
