@@ -73,7 +73,7 @@ const SingleBookCard = (props) => {
   const classes = useStyles();
   const history = useHistory();
 
-  const { title, author, googleId, publishedDate, owners } = props;
+  const { id, title, author, googleId, publishedDate, owners } = props;
   // go to book info page
   const handleClick = () => {
     history.push("/bookinfo");
@@ -121,7 +121,8 @@ const SingleBookCard = (props) => {
           </Grid>
           <Grid item xs={12} container className={classes.btnContainer} sm={3}>
             <Button
-              onClick={handleClick}
+              component={Link}
+              to={`/bookinfo/${id}`}
               className={classes.btn}
               variant="contained"
               color="primary"
