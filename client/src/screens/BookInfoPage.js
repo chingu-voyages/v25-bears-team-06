@@ -1,11 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { useHistory, useParams } from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
+import Dialog from "@material-ui/core/Dialog";
 import getBookByIdRequest from "../dataservice/getBookByIdRequest";
+import CheckOutModal from "../components/CheckOutModal";
+import { AuthContext } from "../Context";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -53,7 +56,10 @@ const BookInfoPage = () => {
   const classes = useStyles();
   const history = useHistory();
   const { id } = useParams();
+  const auth = useContext(AuthContext);
+  const loggedIn = auth && auth.user && auth.user.token;
 
+  const [open, setOpen] = useState(false);
   const [bookResult, setBookResult] = useState([]);
   const [hasError, setHasError] = useState(false);
   const [errorMessage, setErrorMessage] = useState(
@@ -87,6 +93,14 @@ const BookInfoPage = () => {
   // back to search results
   const handleGoBack = () => {
     history.goBack();
+  };
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
   };
 
   const thumbnail = `http://books.google.com/books/content?id=${bookResult.googleId}&printsec=frontcover&img=1&zoom=1&source=gbs_api`;
@@ -137,7 +151,7 @@ const BookInfoPage = () => {
                 <Grid item>
                   {bookResult.author && (
                     <Typography variant="body2">
-                      by {bookResult.author} some Person and some other Person
+                      by {bookResult.author}
                     </Typography>
                   )}
                 </Grid>
@@ -155,10 +169,21 @@ const BookInfoPage = () => {
                 variant="contained"
                 color="primary"
                 disableElevation
+                onClick={handleOpen}
               >
                 Checkout
               </Button>
             </Grid>
+            <Dialog open={open} onClose={handleClose}>
+              <CheckOutModal
+                title={bookResult.title}
+                thumbnail={thumbnail}
+                publishedDate={bookResult.publishedDate}
+                authors={bookResult.authors}
+                loggedIn={loggedIn}
+                owners={bookResult.owners}
+              />
+            </Dialog>
             <Grid item container>
               {bookResult.description && (
                 <Typography variant="body2">
