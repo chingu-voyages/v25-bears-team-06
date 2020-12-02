@@ -118,7 +118,7 @@ const SearchResultsPage = () => {
               key={book._id}
               id={book._id}
               title={book.title}
-              author={book.authors}
+              authors={book.authors}
               googleId={book.googleId}
               publishedDate={book.publishedDate}
               owners={book.owners}
