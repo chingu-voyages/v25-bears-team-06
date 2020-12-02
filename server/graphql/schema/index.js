@@ -6,8 +6,9 @@ module.exports = buildSchema(`
     email: String!
     displayName: String!
     password: String
-    owns: [Ownership!]
     location: Location
+    owns: [Ownership!]
+    checkedOut: [Ownership!]
   }
 
   type Location {
@@ -35,6 +36,15 @@ module.exports = buildSchema(`
     owner: User!
     book: Book!
     isAvailable: Boolean!
+    checkoutData: [Checkout!]
+  }
+
+  type Checkout {
+    user: User!
+    checkoutDate: String!
+    dueDate: String!
+    returnDate: String
+    condition: String
   }
 
   type AuthData {
@@ -66,6 +76,8 @@ module.exports = buildSchema(`
     login(email: String!, password: String!): AuthData!
     createAccount(email: String!, displayName: String!, password: String!, confirmPassword: String!): AuthData!
     addBook(bookInput: BookInput!): Book!
+    checkoutBook(ownershipId: ID!, checkoutDate: String!, dueDate: String!): Ownership!
+    returnBook(ownershipId: ID!, returnDate: String!, condition: String): Ownership!
   }
 
   schema {
