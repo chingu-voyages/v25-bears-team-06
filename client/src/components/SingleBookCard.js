@@ -82,6 +82,14 @@ const SingleBookCard = (props) => {
   // Modal actions
   const [open, setOpen] = useState(false);
 
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   // auth state
   // is user logged in?
   const auth = useContext(AuthContext);
@@ -126,13 +134,13 @@ const SingleBookCard = (props) => {
               variant="contained"
               color="primary"
               disableElevation
-              onClick={() => setOpen(true)}
+              onClick={handleOpen}
             >
               Checkout
             </Button>
           </Grid>
           {/* Modal  */}
-          <Dialog open={open} onClose={() => setOpen(false)}>
+          <Dialog open={open} onClose={handleClose}>
             <DialogContent>
               <Paper className={classes.paper}>
                 <Grid container spacing={2} disableElevation>
