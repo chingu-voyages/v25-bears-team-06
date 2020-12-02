@@ -58,9 +58,9 @@ const SearchResultsPage = () => {
     [query],
   );
 
-  const booksPerPage = 8;
   const [currentPage, setCurrentPage] = useState(1);
   const numberofbooks = bookResults.length;
+  const booksPerPage = bookResults.length > 7 ? 8 : bookResults.length;
 
   // Get currently displayed books - for pagination
   const indexOfLastBook = currentPage * booksPerPage;
