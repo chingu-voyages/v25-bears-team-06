@@ -73,7 +73,7 @@ const SingleBookCard = (props) => {
   const classes = useStyles();
   const history = useHistory();
 
-  const { title, author, googleId, publishedDate } = props;
+  const { title, author, googleId, publishedDate, owners } = props;
   // go to book info page
   const handleClick = () => {
     history.push("/bookinfo");
@@ -102,10 +102,12 @@ const SingleBookCard = (props) => {
                 <Typography gutterBottom variant="subtitle1">
                   {title}
                 </Typography>
-                <Typography variant="body2">{publishedDate}</Typography>
+                {publishedDate && (
+                  <Typography variant="body2">{publishedDate}</Typography>
+                )}
               </Grid>
               <Grid item>
-                <Typography variant="body2">by {author}</Typography>
+                {author && <Typography variant="body2">by {author}</Typography>}
               </Grid>
             </Grid>
           </Grid>
@@ -147,10 +149,16 @@ const SingleBookCard = (props) => {
                         <Typography gutterBottom variant="subtitle1">
                           {title}
                         </Typography>
-                        <Typography variant="body2">{publishedDate}</Typography>
+                        {publishedDate && (
+                          <Typography variant="body2">
+                            {publishedDate}
+                          </Typography>
+                        )}
                       </Grid>
                       <Grid item>
-                        <Typography variant="body2">by {author}</Typography>
+                        {author && (
+                          <Typography variant="body2">by {author}</Typography>
+                        )}
                       </Grid>
                     </Grid>
                   </Grid>
