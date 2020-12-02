@@ -8,7 +8,7 @@ import { useHistory, Link } from "react-router-dom";
 
 // Modal imports
 import Dialog from "@material-ui/core/Dialog";
-import DialogContent from "@material-ui/core/DialogContent";
+import CheckOutModal from "./CheckOutModal";
 
 // auth import
 import { AuthContext } from "../Context";
@@ -50,22 +50,6 @@ const useStyles = makeStyles((theme) => ({
       width: "46%",
     },
   },
-  modalBtn: {
-    width: "43%",
-    margin: "0.5rem",
-  },
-  availBtn: {
-    width: "100%",
-    fontSize: "0.8rem",
-  },
-  availItem: {
-    backgroundColor: "lime",
-    marginBottom: "0.3rem",
-  },
-  notAvailItem: {
-    backgroundColor: "red",
-    marginBottom: "0.3rem",
-  },
 }));
 
 // card template for book output
@@ -73,11 +57,7 @@ const SingleBookCard = (props) => {
   const classes = useStyles();
   const history = useHistory();
 
-  const { id, title, author, googleId, publishedDate, owners } = props;
-  // go to book info page
-  const handleClick = () => {
-    history.push("/bookinfo");
-  };
+  const { id, title, authors, googleId, publishedDate, owners } = props;
 
   // Modal actions
   const [open, setOpen] = useState(false);
@@ -115,7 +95,9 @@ const SingleBookCard = (props) => {
                 )}
               </Grid>
               <Grid item>
-                {author && <Typography variant="body2">by {author}</Typography>}
+                {authors && (
+                  <Typography variant="body2">by {authors}</Typography>
+                )}
               </Grid>
             </Grid>
           </Grid>
@@ -142,109 +124,14 @@ const SingleBookCard = (props) => {
           </Grid>
           {/* Modal  */}
           <Dialog open={open} onClose={handleClose}>
-            <DialogContent>
-              <Paper className={classes.paper}>
-                <Grid container spacing={2} disableElevation>
-                  <Grid item xs={3} className={classes.imageContainer}>
-                    <img
-                      className={classes.img}
-                      alt="complex"
-                      src={thumbnail}
-                    />
-                  </Grid>
-                  <Grid item xs={9} container className={classes.infoContainer}>
-                    <Grid item xs container direction="column" spacing={2}>
-                      <Grid item xs>
-                        <Typography gutterBottom variant="subtitle1">
-                          {title}
-                        </Typography>
-                        {publishedDate && (
-                          <Typography variant="body2">
-                            {publishedDate}
-                          </Typography>
-                        )}
-                      </Grid>
-                      <Grid item>
-                        {author && (
-                          <Typography variant="body2">by {author}</Typography>
-                        )}
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                  {/* check auth state for modal options */}
-                  {loggedIn ? (
-                    <Grid item container spacing={2}>
-                      <Grid item>
-                        <Typography variant="body1">
-                          Available Copies
-                        </Typography>
-                      </Grid>
-                      {owners.map((owner) => (
-                        <Grid item container>
-                          <Grid
-                            item
-                            container
-                            xs={12}
-                            className={
-                              owner.isAvailable
-                                ? classes.availItem
-                                : classes.notAvailItem
-                            }
-                          >
-                            <Grid item xs={9}>
-                              <Typography>{owner.owner.displayName}</Typography>
-                            </Grid>
-                            <Grid item xs={3}>
-                              <Button
-                                className={classes.availBtn}
-                                variant="contained"
-                                color="primary"
-                                disableElevation
-                              >
-                                {owner.isAvailable
-                                  ? "Checkout"
-                                  : "Join Waitlist"}
-                              </Button>
-                            </Grid>
-                          </Grid>
-                        </Grid>
-                      ))}
-                    </Grid>
-                  ) : (
-                    <Grid item container>
-                      <Grid item>
-                        {" "}
-                        <Typography variant="body1">
-                          You must be logged in to check out this book.
-                        </Typography>{" "}
-                      </Grid>
-                      <Grid item container>
-                        <Button
-                          component={Link}
-                          to="/login"
-                          className={classes.modalBtn}
-                          variant="contained"
-                          color="primary"
-                          disableElevation
-                        >
-                          Login
-                        </Button>
-                        <Button
-                          component={Link}
-                          to="/signup"
-                          className={classes.modalBtn}
-                          variant="contained"
-                          color="primary"
-                          disableElevation
-                        >
-                          Sign Up
-                        </Button>
-                      </Grid>
-                    </Grid>
-                  )}
-                </Grid>
-              </Paper>
-            </DialogContent>
+            <CheckOutModal
+              title={title}
+              thumbnail={thumbnail}
+              publishedDate={publishedDate}
+              authors={authors}
+              loggedIn={loggedIn}
+              owners={owners}
+            />
           </Dialog>
         </Grid>
       </Paper>
