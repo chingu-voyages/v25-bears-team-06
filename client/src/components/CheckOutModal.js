@@ -14,6 +14,8 @@ import IconButton from "@material-ui/core/IconButton";
 import CancelIcon from "@material-ui/icons/Cancel";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import { addDays, format } from "date-fns";
+// checkout request
+import checkoutRequest from "../dataservice/checkoutRequest";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -92,14 +94,21 @@ export default function CheckOutModal({
 
   // book due by date
   const date = new Date();
-  const dueByDate = addDays(date, 14);
-  const formattedDate = format(dueByDate, "PPPP");
+  const checkoutDate = date.toISOString();
+  console.log(typeof checkoutDate);
+  const setDueDate = addDays(date, 14);
+  const dueDate = format(setDueDate, "PPPP");
 
   // set expanded
   const [expanded, setExpanded] = useState(false);
 
   const toggleExpanded = (currentAccordion) => (event, isExpanded) => {
     setExpanded(isExpanded ? currentAccordion : false);
+  };
+
+  // checkout book function
+  const handleCheckout = () => {
+    // todo
   };
 
   return (
@@ -160,12 +169,12 @@ export default function CheckOutModal({
                         }
                         alignItems="center"
                       >
-                        <Grid item xs={9}>
+                        <Grid item xs={8} sm={9}>
                           <Typography className={classes.ownerName}>
                             {owner.owner.displayName}
                           </Typography>
                         </Grid>
-                        <Grid item xs={3}>
+                        <Grid item xs={4} sm={3}>
                           <Button
                             className={classes.availBtn}
                             variant="contained"
@@ -186,7 +195,7 @@ export default function CheckOutModal({
                               Confirm Checkout
                             </Typography>
                             <Typography variant="body2">
-                              Book will be due by {formattedDate}
+                              Book will be due by {dueDate}
                             </Typography>
                           </Grid>
 
@@ -197,7 +206,10 @@ export default function CheckOutModal({
                             >
                               <CancelIcon className={classes.iconBtn} />
                             </IconButton>
-                            <IconButton className={classes.confirm}>
+                            <IconButton
+                              className={classes.confirm}
+                              onClick={handleCheckout}
+                            >
                               <CheckCircleIcon className={classes.iconBtn} />
                             </IconButton>
                           </Grid>
