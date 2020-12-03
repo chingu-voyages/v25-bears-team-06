@@ -5,8 +5,14 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import { Link } from "react-router-dom";
-import Dialog from "@material-ui/core/Dialog";
 import { makeStyles } from "@material-ui/core/styles";
+// Expansion imports
+import Accordion from "@material-ui/core/Accordion";
+import AccordionDetails from "@material-ui/core/AccordionDetails";
+import AccordionSummary from "@material-ui/core/AccordionSummary";
+import IconButton from "@material-ui/core/IconButton";
+import CancelIcon from "@material-ui/icons/Cancel";
+import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -57,6 +63,18 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "red",
     marginBottom: "0.3rem",
   },
+  accordionSummary: {
+    padding: 1,
+  },
+  iconBtn: {
+    fontSize: "2rem",
+  },
+  cancel: {
+    color: "red",
+  },
+  confirm: {
+    color: "lime",
+  },
 }));
 
 export default function CheckOutModal({
@@ -68,6 +86,7 @@ export default function CheckOutModal({
   owners,
 }) {
   const classes = useStyles();
+
   return (
     <DialogContent>
       <Paper className={classes.paper}>
@@ -94,38 +113,77 @@ export default function CheckOutModal({
           </Grid>
           {/* check auth state for modal options */}
           {loggedIn ? (
-            <Grid item container spacing={2}>
+            <Grid item container spacing={1}>
               <Grid item>
                 <Typography variant="body1">Available Copies</Typography>
               </Grid>
+              {/* start accordion here  */}
               {owners.map((owner) => (
-                <Grid key={owner._id} item container>
-                  <Grid
-                    item
-                    container
-                    xs={12}
-                    className={
-                      owner.isAvailable
-                        ? classes.availItem
-                        : classes.notAvailItem
-                    }
-                  >
-                    <Grid item xs={9}>
-                      <Typography>{owner.owner.displayName}</Typography>
-                    </Grid>
-                    <Grid item xs={3}>
-                      <Button
-                        className={classes.availBtn}
-                        variant="contained"
-                        color="primary"
-                        disableElevation
+                <Grid
+                  key={owner._id}
+                  item
+                  xs={12}
+                  className={classes.userContainer}
+                >
+                  <Accordion>
+                    <AccordionSummary
+                      aria-controls="panel1c-content"
+                      id="panel1c-header"
+                      className={classes.accordionSummary}
+                    >
+                      <Grid
+                        item
+                        container
+                        xs={12}
+                        className={
+                          owner.isAvailable
+                            ? classes.availItem
+                            : classes.notAvailItem
+                        }
                       >
-                        {owner.isAvailable ? "Checkout" : "Join Waitlist"}
-                      </Button>
-                    </Grid>
-                  </Grid>
+                        <Grid item xs={9}>
+                          <Typography>{owner.owner.displayName}</Typography>
+                        </Grid>
+                        <Grid item xs={3}>
+                          <Button
+                            className={classes.availBtn}
+                            variant="contained"
+                            color="primary"
+                            disableElevation
+                          >
+                            {owner.isAvailable ? "Checkout" : "Join Waitlist"}
+                          </Button>
+                        </Grid>
+                      </Grid>
+                    </AccordionSummary>
+                    {/* accordion expanded details below  */}
+                    <AccordionDetails>
+                      <Grid item container xs={12}>
+                        <Grid item xs={8}>
+                          <Typography variant="h6">Confirm Checkout</Typography>
+                          <Typography variant="body2">
+                            Book will be due by
+                          </Typography>
+                        </Grid>
+
+                        <Grid item container xs={4}>
+                          <IconButton>
+                            <CancelIcon
+                              className={[classes.iconBtn, classes.cancel]}
+                            />
+                          </IconButton>
+                          <IconButton>
+                            <CheckCircleIcon
+                              className={[classes.iconBtn, classes.confirm]}
+                            />
+                          </IconButton>
+                        </Grid>
+                      </Grid>
+                    </AccordionDetails>
+                  </Accordion>
                 </Grid>
               ))}
+              {/* end Accordion above the last grid close  */}
             </Grid>
           ) : (
             <Grid item container>
