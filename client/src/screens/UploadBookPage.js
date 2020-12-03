@@ -61,12 +61,17 @@ const UploadBookPage = () => {
 
   useEffect(() => {
     const fetchBooks = async () => {
-      const result = await axios.get(
-        `https://www.googleapis.com/books/v1/volumes?q=${searchInput}&key=${apiKey}&maxResults=40`,
-      );
-      setBooks(result.data.items);
+      try {
+        const result = await axios.get(
+          `https://www.googleapis.com/books/v1/volumes?q=${searchInput}&key=${apiKey}&maxResults=40`,
+        );
+        setBooks(result.data.items);
+      } catch (err) {
+        console.error(err);
+      }
     };
-    fetchBooks();
+    if (apiKey && searchInput.trim())
+      fetchBooks().catch((err) => console.error(err));
   }, [apiKey, searchInput]);
 
   // Get currently displayed books - for pagination
