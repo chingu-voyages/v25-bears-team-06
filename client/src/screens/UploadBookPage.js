@@ -50,6 +50,11 @@ const UploadBookPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const booksPerPage = 8;
 
+  const [hasError, setHasError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(
+    "Something went wrong. Please try again later",
+  );
+
   const apiKey = process.env.REACT_APP_API_KEY;
 
   const numberofbooks = books.length;
@@ -65,13 +70,22 @@ const UploadBookPage = () => {
         const result = await axios.get(
           `https://www.googleapis.com/books/v1/volumes?q=${searchInput}&key=${apiKey}&maxResults=40`,
         );
+        if (result.status !== 200) {
+          setHasError(true);
+          if (result.statusText) setErrorMessage(result.statusText);
+          return;
+        }
         setBooks(result.data.items);
       } catch (err) {
-        console.error(err);
+        setHasError(true);
+        setErrorMessage(err.message);
       }
     };
     if (apiKey && searchInput.trim())
-      fetchBooks().catch((err) => console.error(err));
+      fetchBooks().catch((err) => {
+        setHasError(true);
+        setErrorMessage(err.message);
+      });
   }, [apiKey, searchInput]);
 
   // Get currently displayed books - for pagination
@@ -115,7 +129,7 @@ const UploadBookPage = () => {
     const formattedAuthors = authorsToString(authors);
 
     try {
-      const { addBook, message } = await uploadBookRequest(
+      const { message } = await uploadBookRequest(
         {
           googleId,
           title,
@@ -129,8 +143,15 @@ const UploadBookPage = () => {
         auth.user.token,
       );
 
+      if (message) {
+        setHasError(true);
+        setErrorMessage(message);
+      }
+
       // redirect to user's inventory page
     } catch (err) {
+      setHasError(true);
+      setErrorMessage(err.message);
       return false;
     }
     return true;
@@ -138,6 +159,7 @@ const UploadBookPage = () => {
 
   return (
     <div className={classes.root}>
+      {hasError && <div className={classes.errorDiv}>{errorMessage}</div>}
       <Grid
         className={classes.pageContainer}
         container
