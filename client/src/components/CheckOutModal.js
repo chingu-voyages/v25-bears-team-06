@@ -13,6 +13,7 @@ import AccordionSummary from "@material-ui/core/AccordionSummary";
 import IconButton from "@material-ui/core/IconButton";
 import CancelIcon from "@material-ui/icons/Cancel";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
+import { addDays, format } from "date-fns";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -58,13 +59,15 @@ const useStyles = makeStyles((theme) => ({
   availItem: {
     backgroundColor: "lime",
     marginBottom: "0.3rem",
+    borderRadius: 5,
   },
   notAvailItem: {
     backgroundColor: "red",
     marginBottom: "0.3rem",
+    borderRadius: 5,
   },
-  accordionSummary: {
-    padding: 1,
+  ownerName: {
+    paddingLeft: "0.7rem",
   },
   iconBtn: {
     fontSize: "2rem",
@@ -86,6 +89,11 @@ export default function CheckOutModal({
   owners,
 }) {
   const classes = useStyles();
+
+  // book due by date
+  const date = new Date();
+  const dueByDate = addDays(date, 14);
+  const formattedDate = format(dueByDate, "PPPP");
 
   return (
     <DialogContent>
@@ -117,7 +125,7 @@ export default function CheckOutModal({
               <Grid item>
                 <Typography variant="body1">Available Copies</Typography>
               </Grid>
-              {/* start accordion here  */}
+              {/* start accordion below */}
               {owners.map((owner) => (
                 <Grid
                   key={owner._id}
@@ -140,9 +148,12 @@ export default function CheckOutModal({
                             ? classes.availItem
                             : classes.notAvailItem
                         }
+                        alignItems="center"
                       >
                         <Grid item xs={9}>
-                          <Typography>{owner.owner.displayName}</Typography>
+                          <Typography className={classes.ownerName}>
+                            {owner.owner.displayName}
+                          </Typography>
                         </Grid>
                         <Grid item xs={3}>
                           <Button
@@ -158,27 +169,27 @@ export default function CheckOutModal({
                     </AccordionSummary>
                     {/* accordion expanded details below  */}
                     <AccordionDetails>
-                      <Grid item container xs={12}>
-                        <Grid item xs={8}>
-                          <Typography variant="h6">Confirm Checkout</Typography>
-                          <Typography variant="body2">
-                            Book will be due by
-                          </Typography>
-                        </Grid>
+                      {owner.isAvailable && (
+                        <Grid item container xs={12}>
+                          <Grid item xs={9}>
+                            <Typography variant="h6">
+                              Confirm Checkout
+                            </Typography>
+                            <Typography variant="body2">
+                              Book will be due by {formattedDate}
+                            </Typography>
+                          </Grid>
 
-                        <Grid item container xs={4}>
-                          <IconButton>
-                            <CancelIcon
-                              className={[classes.iconBtn, classes.cancel]}
-                            />
-                          </IconButton>
-                          <IconButton>
-                            <CheckCircleIcon
-                              className={[classes.iconBtn, classes.confirm]}
-                            />
-                          </IconButton>
+                          <Grid item container xs={3}>
+                            <IconButton className={classes.cancel}>
+                              <CancelIcon className={classes.iconBtn} />
+                            </IconButton>
+                            <IconButton className={classes.confirm}>
+                              <CheckCircleIcon className={classes.iconBtn} />
+                            </IconButton>
+                          </Grid>
                         </Grid>
-                      </Grid>
+                      )}
                     </AccordionDetails>
                   </Accordion>
                 </Grid>
