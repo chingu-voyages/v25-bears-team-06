@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import DialogContent from "@material-ui/core/DialogContent";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
@@ -95,6 +95,13 @@ export default function CheckOutModal({
   const dueByDate = addDays(date, 14);
   const formattedDate = format(dueByDate, "PPPP");
 
+  // set expanded
+  const [expanded, setExpanded] = useState(false);
+
+  const toggleExpanded = (currentAccordion) => (event, isExpanded) => {
+    setExpanded(isExpanded ? currentAccordion : false);
+  };
+
   return (
     <DialogContent>
       <Paper className={classes.paper}>
@@ -133,7 +140,10 @@ export default function CheckOutModal({
                   xs={12}
                   className={classes.userContainer}
                 >
-                  <Accordion>
+                  <Accordion
+                    expanded={expanded === owner._id}
+                    onChange={toggleExpanded(owner._id)}
+                  >
                     <AccordionSummary
                       aria-controls="panel1c-content"
                       id="panel1c-header"
@@ -181,7 +191,10 @@ export default function CheckOutModal({
                           </Grid>
 
                           <Grid item container xs={3}>
-                            <IconButton className={classes.cancel}>
+                            <IconButton
+                              className={classes.cancel}
+                              onClick={toggleExpanded(owner._id)}
+                            >
                               <CancelIcon className={classes.iconBtn} />
                             </IconButton>
                             <IconButton className={classes.confirm}>
