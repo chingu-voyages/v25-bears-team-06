@@ -1,24 +1,40 @@
 import baseRequest from "./baseRequest";
 
-export default async function checkoutRequest(
-  { ownershipId, checkoutDate, dueDate },
+export default async function checkoutRequest({
+  ownershipId,
+  checkoutDate,
+  dueDate,
   token,
-) {
+}) {
   const reqBody = {
     query: `
       mutation CheckoutBook(
-      $ownershipId: ID!,
-      $checkoutDate: String!,
-      $dueDate: String!
-    ) {
+        $ownershipId: ID!,
+        $checkoutDate: String!,
+        $dueDate: String!
+      ) {
         checkoutBook(
-          ownershipId: $owner._id,
+          ownershipId: $ownershipId,
           checkoutDate: $checkoutDate,
           dueDate: $dueDate
-          ) {         
-          ownershipId
-          checkoutDate
-          dueDate
+        ) {         
+          _id
+          owner {
+            displayName
+          }
+          isAvailable
+          checkoutData {
+            user {
+              displayName
+            }
+            checkoutDate
+            dueDate
+            returnDate
+            condition
+          }
+          book {
+            _id
+          }
         }
       }
     `,

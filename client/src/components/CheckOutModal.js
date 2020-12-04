@@ -13,7 +13,7 @@ import AccordionSummary from "@material-ui/core/AccordionSummary";
 import IconButton from "@material-ui/core/IconButton";
 import CancelIcon from "@material-ui/icons/Cancel";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
-import { addDays, format } from "date-fns";
+import { addDays, format, getTime } from "date-fns";
 // checkout request
 import checkoutRequest from "../dataservice/checkoutRequest";
 import { AuthContext } from "../Context";
@@ -90,15 +90,20 @@ export default function CheckOutModal({
   authors,
   loggedIn,
   owners,
+  bookResults,
+  setBookResults,
 }) {
   const classes = useStyles();
 
   // book due by date
   const date = new Date();
-  const checkoutDate = date.toISOString();
-  console.log(typeof checkoutDate);
-  const setDueDate = addDays(date, 14);
-  const dueDate = format(setDueDate, "PPPP");
+  // const checkoutDate = date.toISOString();
+  const checkoutDate = getTime(date);
+  // console.log(typeof checkoutDate);
+  // const setDueDate = addDays(date, 14);
+  // const dueDate = format(setDueDate, "PPPP");
+  const dueDate = getTime(addDays(date, 14));
+  const formattedDueDate = format(dueDate, "PPPP");
 
   // set expanded
   const [expanded, setExpanded] = useState(false);
@@ -110,9 +115,28 @@ export default function CheckOutModal({
   // checkout book function
   const auth = useContext(AuthContext);
 
-  const handleCheckout = async () => {
+  const handleCheckout = async ({ ownershipId }) => {
     // todo
-    // await checkoutRequest
+    const token = localStorage.getItem("token");
+    const { checkoutBook, message } = await checkoutRequest({
+      ownershipId,
+      checkoutDate: checkoutDate.toString(),
+      dueDate: dueDate.toString(),
+      token,
+    });
+    setBookResults(() =>
+      bookResults.map((bookResult) => ({
+        ...bookResult,
+        owners: bookResult.owners.map((ownership) =>
+          ownership._id === checkoutBook._id
+            ? {
+                ...ownership,
+                isAvailable: checkoutBook.isAvailable,
+              }
+            : ownership,
+        ),
+      })),
+    );
   };
 
   return (
@@ -199,7 +223,7 @@ export default function CheckOutModal({
                               Confirm Checkout
                             </Typography>
                             <Typography variant="body2">
-                              Book will be due by {dueDate}
+                              Book will be due by {formattedDueDate}
                             </Typography>
                           </Grid>
 
@@ -212,7 +236,9 @@ export default function CheckOutModal({
                             </IconButton>
                             <IconButton
                               className={classes.confirm}
-                              onClick={handleCheckout}
+                              onClick={() =>
+                                handleCheckout({ ownershipId: owner._id })
+                              }
                             >
                               <CheckCircleIcon className={classes.iconBtn} />
                             </IconButton>

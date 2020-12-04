@@ -122,6 +122,8 @@ const SearchResultsPage = () => {
               googleId={book.googleId}
               publishedDate={book.publishedDate}
               owners={book.owners}
+              bookResults={bookResults}
+              setBookResults={setBookResults}
             />
           ))
         )}

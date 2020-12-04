@@ -56,7 +56,16 @@ const useStyles = makeStyles((theme) => ({
 const SingleBookCard = (props) => {
   const classes = useStyles();
 
-  const { id, title, authors, googleId, publishedDate, owners } = props;
+  const {
+    id,
+    title,
+    authors,
+    googleId,
+    publishedDate,
+    owners,
+    bookResults,
+    setBookResults,
+  } = props;
 
   // Modal actions
   const [open, setOpen] = useState(false);
@@ -130,6 +139,8 @@ const SingleBookCard = (props) => {
               authors={authors}
               loggedIn={loggedIn}
               owners={owners}
+              bookResults={bookResults}
+              setBookResults={setBookResults}
             />
           </Dialog>
         </Grid>
