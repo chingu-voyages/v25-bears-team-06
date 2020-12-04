@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import DialogContent from "@material-ui/core/DialogContent";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
@@ -16,6 +16,7 @@ import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import { addDays, format } from "date-fns";
 // checkout request
 import checkoutRequest from "../dataservice/checkoutRequest";
+import { AuthContext } from "../Context";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -107,8 +108,11 @@ export default function CheckOutModal({
   };
 
   // checkout book function
-  const handleCheckout = () => {
+  const auth = useContext(AuthContext);
+
+  const handleCheckout = async () => {
     // todo
+    // await checkoutRequest
   };
 
   return (

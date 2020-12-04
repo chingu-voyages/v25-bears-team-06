@@ -1,14 +1,21 @@
 import baseRequest from "./baseRequest";
 
-export default async function checkoutRequest({
-  ownershipId,
-  checkoutDate,
-  dueDate,
-}) {
+export default async function checkoutRequest(
+  { ownershipId, checkoutDate, dueDate },
+  token,
+) {
   const reqBody = {
     query: `
-      mutation Checkout($ownershipId: String!, $checkoutDate: String!, $dueDate: String!) {
-        checkoutBook(ownershipId: ID!, checkoutDate: String!, dueDate: String!): Ownership! {         
+      mutation CheckoutBook(
+      $ownershipId: ID!,
+      $checkoutDate: String!,
+      $dueDate: String!
+    ) {
+        checkoutBook(
+          ownershipId: $owner._id,
+          checkoutDate: $checkoutDate,
+          dueDate: $dueDate
+          ) {         
           ownershipId
           checkoutDate
           dueDate
@@ -26,6 +33,7 @@ export default async function checkoutRequest({
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(reqBody),
   };
