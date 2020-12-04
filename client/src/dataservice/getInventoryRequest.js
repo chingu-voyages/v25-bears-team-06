@@ -16,18 +16,15 @@ export default async function getInventoryRequest({ token }) {
             pageCount
             publishedDate
             publisher
-            owners {
-              _id
-              checkoutData {
-                user {
-                  displayName
-                }
-                checkoutDate
-                dueDate
-                returnDate
-                condition
-              }
+          }
+          checkoutData {
+            user {
+              displayName
             }
+            checkoutDate
+            dueDate
+            returnDate
+            condition
           }
           isAvailable
         }
