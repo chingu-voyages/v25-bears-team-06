@@ -1,6 +1,19 @@
+/* eslint-disable no-unused-vars */
 import { createContext } from "react";
 
-// eslint-disable-next-line import/prefer-default-export
-export const SearchContext = createContext(null);
+const AuthContext = createContext({
+  user: {
+    token: null,
+    userId: null,
+    email: null,
+    displayName: null,
+  },
+  setUser: (user) => {},
+});
 
-export const AuthContext = createContext(null);
+const SearchContext = createContext({
+  query: "",
+  setQuery: (query) => {},
+});
+
+export { AuthContext, SearchContext };
