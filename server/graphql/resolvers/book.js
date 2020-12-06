@@ -41,9 +41,6 @@ module.exports = {
     req
   ) => {
     if (!req.isAuth) {
-      if (req.error) {
-        throw new Error(req.error);
-      }
       throw new Error("Authentication required!");
     }
 
@@ -89,9 +86,6 @@ module.exports = {
   },
   getInventory: async (args, req) => {
     if (!req.isAuth) {
-      if (req.error) {
-        throw new Error(req.error);
-      }
       throw new Error("Authentication required!");
     }
 
