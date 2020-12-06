@@ -60,12 +60,12 @@ const useStyles = makeStyles((theme) => ({
     fontSize: "0.8rem",
   },
   availItem: {
-    backgroundColor: "lime",
+    backgroundColor: theme.palette.success.main,
     marginBottom: "0.3rem",
     borderRadius: 5,
   },
   notAvailItem: {
-    backgroundColor: "red",
+    backgroundColor: theme.palette.error.main,
     marginBottom: "0.3rem",
     borderRadius: 5,
   },
@@ -76,10 +76,10 @@ const useStyles = makeStyles((theme) => ({
     fontSize: "2rem",
   },
   cancel: {
-    color: "red",
+    color: theme.palette.error.main,
   },
   confirm: {
-    color: "lime",
+    color: theme.palette.success.main,
   },
 }));
 
@@ -97,11 +97,7 @@ export default function CheckOutModal({
 
   // book due by date
   const date = new Date();
-  // const checkoutDate = date.toISOString();
   const checkoutDate = getTime(date);
-  // console.log(typeof checkoutDate);
-  // const setDueDate = addDays(date, 14);
-  // const dueDate = format(setDueDate, "PPPP");
   const dueDate = getTime(addDays(date, 14));
   const formattedDueDate = format(dueDate, "PPPP");
 
@@ -116,8 +112,7 @@ export default function CheckOutModal({
   const auth = useContext(AuthContext);
 
   const handleCheckout = async ({ ownershipId }) => {
-    // todo
-    const token = localStorage.getItem("token");
+    const { token } = auth.user;
     const { checkoutBook, message } = await checkoutRequest({
       ownershipId,
       checkoutDate: checkoutDate.toString(),

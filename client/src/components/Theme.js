@@ -15,6 +15,24 @@ export default createMuiTheme({
       dark: "#7ecb20",
       contrastText: "#000",
     },
+    success: {
+      light: "#81c784",
+      main: "#4caf50",
+      dark: "#388e3c",
+      contrastText: "rgba(0, 0, 0, 0.87)",
+    },
+    error: {
+      light: "#e57373",
+      main: "#f44336",
+      dark: "#d32f2f",
+      contrastText: "#fff",
+    },
+    warning: {
+      light: "#ffb74d",
+      main: "#ff9800",
+      dark: "#f57c00",
+      contrastText: "rgba(0, 0, 0, 0.87)",
+    },
   },
   typography: {
     tab: {

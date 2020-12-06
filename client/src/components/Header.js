@@ -30,15 +30,17 @@ const useStyles = makeStyles((theme) => ({
       marginBottom: "2em",
       [theme.breakpoints.down("xs")]: {
         marginBottom: "1.25em",
+        paddingLeft: 0,
       },
     },
   },
   logoContainer: {
-    padding: 0,
-    [theme.breakpoints.down("md")]: {
-      height: "2rem",
-    },
     marginRight: "auto",
+    [theme.breakpoints.down("xs")]: {
+      margin: 0,
+      padding: 0,
+      minWidth: 30,
+    },
   },
   logoIcon: {
     marginRight: 5,
@@ -128,10 +130,12 @@ const Header = () => {
   // responsiveness variables
   const theme = useTheme();
   const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent);
-  const matches = useMediaQuery(theme.breakpoints.down("md"));
+  const lessSmScreenSize = useMediaQuery(theme.breakpoints.down("sm"));
+  const lessXsScreenSize = useMediaQuery(theme.breakpoints.up("sm"));
   const [openDrawer, setOpenDrawer] = useState(false);
 
   // responsiveness menu items
+  // desktop menu tabs
   const tabs = (
     <>
       <Tabs
@@ -348,10 +352,10 @@ const Header = () => {
   );
 
   return (
-    <div>
-      <header>
-        <AppBar position="fixed" className={classes.appbar}>
-          <Toolbar>
+    <header>
+      <AppBar position="fixed" className={classes.appbar}>
+        <Toolbar>
+          {lessXsScreenSize && (
             <Button
               component={Link}
               to="/"
@@ -363,16 +367,17 @@ const Header = () => {
                 CommunityBooks
               </Typography>
             </Button>
-            <Route
-              render={() => <HeaderSearchBox className={classes.searchBox} />}
-            />
-            {/* check if screensize below md to display tabs or burger */}
-            {matches ? drawer : tabs}
-          </Toolbar>
-        </AppBar>
-        <div className={classes.toolbarMargin} />
-      </header>
-    </div>
+          )}
+
+          <Route
+            render={() => <HeaderSearchBox className={classes.searchBox} />}
+          />
+          {/* check if screensize below md to display tabs or burger */}
+          {lessSmScreenSize ? drawer : tabs}
+        </Toolbar>
+      </AppBar>
+      <div className={classes.toolbarMargin} />
+    </header>
   );
 };
 
