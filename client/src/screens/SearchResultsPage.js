@@ -46,6 +46,7 @@ const SearchResultsPage = () => {
 
   const booksPerPage = 8;
   const numberofbooks = bookResults.length;
+  const booksPerPage = bookResults.length > 7 ? 8 : bookResults.length;
 
   // Get currently displayed books - for pagination
   const indexOfLastBook = currentPage * booksPerPage;
@@ -93,25 +94,27 @@ const SearchResultsPage = () => {
 
               <Typography variant="body2">
                 If you still don&apos;t see results after modifying your search,
-                it could be that none of our members have added this title to
-                our database yet.
+                it could be that none of our members have added this title to our
+                database yet.
                 <br />
                 You can be the first to share this title. Just{" "}
                 <Link to="/signup"> sign up</Link> and click on{" "}
                 <strong>Upload Book</strong>.
               </Typography>
             </>
-          ) : (
-            currentBooks.map((book) => (
-              <SingleBookCard
-                key={book._id}
-                title={book.title}
-                author={book.authors}
-                googleId={book.googleId}
-                publishedDate={book.publishedDate}
-              />
-            ))
-          ))}
+            ) : (
+              currentBooks.map((book) => (
+                <SingleBookCard
+                  key={book._id}
+                  id={book._id}
+                  title={book.title}
+                  authors={book.authors}
+                  googleId={book.googleId}
+                  publishedDate={book.publishedDate}
+                  owners={book.owners}
+                />
+              ))
+            ))}
 
         {/* Display pagination  */}
         <Grid

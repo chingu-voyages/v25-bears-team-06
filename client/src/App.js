@@ -42,7 +42,7 @@ function App() {
                 path="/searchresults"
                 component={SearchResultsPage}
               />
-              <Route exact path="/bookinfo" component={BookInfoPage} />
+              <Route path="/bookinfo/:id" component={BookInfoPage} />
               <Route path="/uploadbook" component={UploadBookPage} />
               <Route exact path="/" component={HomePage} />
               <Route exact path="/myinventory" component={MyInventoryPage} />
