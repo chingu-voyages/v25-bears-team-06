@@ -5,7 +5,7 @@ import { useHistory } from "react-router-dom";
 const useQuery = ({ query, variables, token }) => {
   const history = useHistory();
   const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -52,7 +52,11 @@ const useQuery = ({ query, variables, token }) => {
           const {
             errors: [message],
           } = result;
-          setError(message);
+
+          const errorMessage =
+            typeof message === "string" ? message : message.message;
+
+          setError(errorMessage);
         } else if (result.data) {
           setData(result.data);
         }
@@ -60,7 +64,7 @@ const useQuery = ({ query, variables, token }) => {
         setLoading(false);
       } catch (err) {
         setLoading(false);
-        setError(`Something went wrong. Please try again late ${err}`);
+        setError(`Something went wrong. Please try again later. ${err}`);
       }
     };
     doQuery();
