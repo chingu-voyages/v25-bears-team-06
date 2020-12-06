@@ -23,11 +23,11 @@ module.exports = buildSchema(`
     googleId: String!
     title: String!
     authors: String
-    description: String!
+    description: String
     categories: [String!]
-    pageCount: Int!
-    publishedDate: String!
-    publisher: String!
+    pageCount: Int
+    publishedDate: String
+    publisher: String
     owners: [Ownership!]!
   }
 
@@ -59,11 +59,11 @@ module.exports = buildSchema(`
     googleId: String!
     title: String!
     authors: String
-    description: String!
+    description: String
     categories: [String!]
-    pageCount: Int!
-    publishedDate: String!
-    publisher: String!
+    pageCount: Int
+    publishedDate: String
+    publisher: String
   }
 
   type RootQuery {
