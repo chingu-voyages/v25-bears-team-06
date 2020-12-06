@@ -9,6 +9,7 @@ const AuthContext = createContext({
     displayName: null,
   },
   setUser: (user) => {},
+  logout: () => {},
 });
 
 const SearchContext = createContext({
