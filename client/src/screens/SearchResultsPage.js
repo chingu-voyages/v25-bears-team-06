@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
@@ -31,51 +31,19 @@ const SearchResultsPage = () => {
 
   const { query } = useContext(SearchContext);
 
-  // CODE BEFORE CHANGED TO USEQUERY - CheckoutModal.js uses setBookResults from this useState function
-
-  // const [bookResults, setBookResults] = useState([]);
-  // const [hasError, setHasError] = useState(false);
-  // const [errorMessage, setErrorMessage] = useState(
-  //   "Something went wrong. Please try again later.",
-  // );
-  // const { query } = useContext(SearchContext);
-
-  // useEffect(
-  //   function handleEffect() {
-  //     async function searchEffect() {
-  //       try {
-  //         const { books, message } = await searchRequest({ query });
-  //         if (books && Array.isArray(books)) {
-  //           setBookResults(books);
-  //         } else if (message) {
-  //           setHasError(true);
-  //           setErrorMessage(message);
-  //         }
-  //       } catch (err) {
-  //         setHasError(true);
-  //         setErrorMessage(err.message);
-  //       }
-  //     }
-  //     searchEffect().catch((err) => {
-  //       setHasError(true);
-  //       setErrorMessage(err.message);
-  //     });
-  //   },
-  //   [query],
-  // );
-
   const { data, loading, error } = useQuery({
     query: SEARCH_BOOKS.query,
     variables: SEARCH_BOOKS.variables({ query }),
   });
 
   const [currentPage, setCurrentPage] = useState(1);
+  const [bookResults, setBookResults] = useState([]);
 
-  // get books from data
-  let bookResults = [];
-  if (data) {
-    bookResults = data.books;
-  }
+  useEffect(() => {
+    if (data) {
+      setBookResults(data.books);
+    }
+  }, [data]);
 
   const numberofbooks = bookResults.length;
   const booksPerPage = bookResults.length > 7 ? 8 : bookResults.length;
@@ -144,8 +112,8 @@ const SearchResultsPage = () => {
                 googleId={book.googleId}
                 publishedDate={book.publishedDate}
                 owners={book.owners}
-                // bookResults={bookResults}
-                // setBookResults={setBookResults}
+                bookResults={bookResults}
+                setBookResults={setBookResults}
               />
             ))
           ))}
