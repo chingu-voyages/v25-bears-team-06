@@ -70,12 +70,13 @@ const SearchResultsPage = () => {
   });
 
   const [currentPage, setCurrentPage] = useState(1);
+  const [bookResults, setBookResults] = useState([]);
 
-  // get books from data
-  let bookResults = [];
-  if (data) {
-    bookResults = data.books;
-  }
+  useEffect(() => {
+    if (data) {
+      setBookResults(data.books);
+    }
+  }, [data]);
 
   const numberofbooks = bookResults.length;
   const booksPerPage = bookResults.length > 7 ? 8 : bookResults.length;
