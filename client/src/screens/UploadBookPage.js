@@ -173,7 +173,7 @@ const UploadBookPage = () => {
               ),
             }}
             variant="filled"
-            label="Start typing to find the book you wish to upload"
+            label="Start typing ..."
             value={searchInput}
             onChange={handleChange}
           />
