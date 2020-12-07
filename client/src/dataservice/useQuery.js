@@ -22,17 +22,13 @@ const useQuery = ({ query, variables, token }) => {
       const url =
         process.env.REACT_APP_API_URL || "http://localhost:5000/graphql";
 
-      const authorization = token
-        ? {
-            Authorization: `Bearer ${token}`,
-          }
-        : null;
+      const authorization = token ? `Bearer ${token}` : null;
 
       const opts = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          authorization,
+          Authorization: authorization,
         },
         body: JSON.stringify(reqBody),
       };
