@@ -7,18 +7,20 @@ import { useHistory } from "react-router-dom";
 import { SearchContext } from "../Context";
 
 // searchbar styling
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   searchContainer: {
     display: "flex",
     paddingLeft: "1rem",
     marginTop: "0.4rem",
     marginBottom: "0.4rem",
-    marginLeft: "1rem",
   },
   searchBtn: {
     height: "3.4rem",
     padding: "0.3rem",
-    marginTop: "0.4rem",
+    [theme.breakpoints.down("xs")]: {
+      height: "3rem",
+      padding: "0.1rem",
+    },
     marginLeft: "-0.5rem",
     borderTopLeftRadius: 0,
     borderBottomLeftRadius: 0,
@@ -31,7 +33,9 @@ const useStyles = makeStyles(() => ({
   searchInput: {
     width: "12rem",
     height: "3.4rem",
-    margin: "0.4rem",
+    [theme.breakpoints.down("xs")]: {
+      height: "3rem",
+    },
     backgroundColor: "white",
     borderTopLeftRadius: 5,
   },

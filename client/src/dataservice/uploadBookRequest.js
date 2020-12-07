@@ -19,11 +19,11 @@ export default async function uploadBookRequest(
       $googleId: String!,
       $title: String!,
       $authors: String,
-      $description: String!,
+      $description: String,
       $categories: [String!],
-      $pageCount: Int!,
-      $publishedDate: String!,
-      $publisher: String!
+      $pageCount: Int,
+      $publishedDate: String,
+      $publisher: String
     ) {
       addBook(bookInput: {
         googleId: $googleId,

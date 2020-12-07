@@ -7,9 +7,6 @@ const { renderGraphiQL } = require("express-graphql/renderGraphiQL");
 module.exports = {
   checkoutBook: async ({ ownershipId, checkoutDate, dueDate }, req) => {
     if (!req.isAuth) {
-      if (req.error) {
-        throw new Error(req.error);
-      }
       throw new Error("Authentication required!");
     }
 
@@ -57,9 +54,6 @@ module.exports = {
   },
   returnBook: async ({ ownershipId, returnDate, condition }, req) => {
     if (!req.isAuth) {
-      if (req.error) {
-        throw new Error(req.error);
-      }
       throw new Error("Authentication required!");
     }
 
@@ -98,6 +92,70 @@ module.exports = {
       const updatedOwnership = await ownership.save();
 
       return transformOwner(updatedOwnership);
+    } catch (err) {
+      throw err;
+    }
+  },
+  removeBook: async ({ ownershipId }, req) => {
+    if (!req.isAuth) {
+      throw new Error("Authentication required!");
+    }
+
+    try {
+      const ownership = await Ownership.findById(ownershipId);
+      if (!ownership) {
+        throw new Error("Cannot find an Ownership with the given ID");
+      }
+
+      if (!ownership.isAvailable) {
+        throw new Error("Cannot remove a book that is checked out!");
+      }
+
+      if (!ownership.owner.equals(req.userId)) {
+        throw new Error(
+          "A book removal may only be conducted by the book's owner"
+        );
+      }
+
+      // Verify book and user tied to ownership object exist before removal
+      const book = await Book.findById(ownership.book);
+      if (!book) {
+        throw new Error("Book Remove Failed: Ownership.book is not valid");
+      }
+
+      const user = await User.findById(req.userId);
+      if (!user) {
+        throw new Error("Book Remove Failed: Ownership.user is not valid");
+      }
+
+      // Check if the book tied with this Ownership object has other owners
+      if (book.owners.length > 1) {
+        // If there are other owners,
+        // delete book's reference to that specific ownership object
+        const ownerIndex = book.owners.findIndex((owner) =>
+          owner.equals(ownership._id)
+        );
+        book.owners.splice(ownerIndex, 1);
+        await book.save();
+      } else if (
+        book.owners.length === 1 &&
+        book.owners[0].equals(ownership._id)
+      ) {
+        // if there is only one owner of the book,
+        // remove the book from db
+        await book.remove();
+      }
+
+      // Delete reference to ownership object from user
+      const userOwnerIndex = user.owns.findIndex((own) =>
+        own.equals(ownershipId)
+      );
+      user.owns.splice(userOwnerIndex, 1);
+      await user.save();
+
+      await ownership.remove();
+
+      return true;
     } catch (err) {
       throw err;
     }

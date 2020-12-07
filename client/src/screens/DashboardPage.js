@@ -1,9 +1,9 @@
 import React from "react";
 
-const HomePage = () => {
+const DashboardPage = () => {
   return (
     <div>
-      <h1>the home page</h1>
+      <h1>the Dashboard page</h1>
       <p>
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae, eaque!
       </p>
@@ -11,4 +11,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default DashboardPage;

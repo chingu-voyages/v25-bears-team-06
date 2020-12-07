@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useContext } from "react";
 import DialogContent from "@material-ui/core/DialogContent";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
@@ -6,6 +6,17 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
+// Expansion imports
+import Accordion from "@material-ui/core/Accordion";
+import AccordionDetails from "@material-ui/core/AccordionDetails";
+import AccordionSummary from "@material-ui/core/AccordionSummary";
+import IconButton from "@material-ui/core/IconButton";
+import CancelIcon from "@material-ui/icons/Cancel";
+import CheckCircleIcon from "@material-ui/icons/CheckCircle";
+import { addDays, format, getTime } from "date-fns";
+// checkout request
+import checkoutRequest from "../dataservice/checkoutRequest";
+import { AuthContext } from "../Context";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -49,12 +60,26 @@ const useStyles = makeStyles((theme) => ({
     fontSize: "0.8rem",
   },
   availItem: {
-    backgroundColor: "lime",
+    backgroundColor: theme.palette.success.main,
     marginBottom: "0.3rem",
+    borderRadius: 5,
   },
   notAvailItem: {
-    backgroundColor: "red",
+    backgroundColor: theme.palette.error.main,
     marginBottom: "0.3rem",
+    borderRadius: 5,
+  },
+  ownerName: {
+    paddingLeft: "0.7rem",
+  },
+  iconBtn: {
+    fontSize: "2rem",
+  },
+  cancel: {
+    color: theme.palette.error.main,
+  },
+  confirm: {
+    color: theme.palette.success.main,
   },
 }));
 
@@ -65,8 +90,50 @@ export default function CheckOutModal({
   authors,
   loggedIn,
   owners,
+  bookResults,
+  setBookResults,
 }) {
   const classes = useStyles();
+
+  // book due by date
+  const date = new Date();
+  const checkoutDate = getTime(date);
+  const dueDate = getTime(addDays(date, 14));
+  const formattedDueDate = format(dueDate, "PPPP");
+
+  // set expanded
+  const [expanded, setExpanded] = useState(false);
+
+  const toggleExpanded = (currentAccordion) => (event, isExpanded) => {
+    setExpanded(isExpanded ? currentAccordion : false);
+  };
+
+  // checkout book function
+  const auth = useContext(AuthContext);
+
+  const handleCheckout = async ({ ownershipId }) => {
+    const { token } = auth.user;
+    const { checkoutBook, message } = await checkoutRequest({
+      ownershipId,
+      checkoutDate: checkoutDate.toString(),
+      dueDate: dueDate.toString(),
+      token,
+    });
+    setBookResults(() =>
+      bookResults.map((bookResult) => ({
+        ...bookResult,
+        owners: bookResult.owners.map((ownership) =>
+          ownership._id === checkoutBook._id
+            ? {
+                ...ownership,
+                isAvailable: checkoutBook.isAvailable,
+              }
+            : ownership,
+        ),
+      })),
+    );
+  };
+
   return (
     <DialogContent>
       <Paper className={classes.paper}>
@@ -93,38 +160,91 @@ export default function CheckOutModal({
           </Grid>
           {/* check auth state for modal options */}
           {loggedIn ? (
-            <Grid item container spacing={2}>
+            <Grid item container spacing={1}>
               <Grid item>
                 <Typography variant="body1">Available Copies</Typography>
               </Grid>
+              {/* start accordion below */}
               {owners.map((owner) => (
-                <Grid key={owner._id} item container>
-                  <Grid
-                    item
-                    container
-                    xs={12}
-                    className={
-                      owner.isAvailable
-                        ? classes.availItem
-                        : classes.notAvailItem
-                    }
+                <Grid
+                  key={owner._id}
+                  item
+                  xs={12}
+                  className={classes.userContainer}
+                >
+                  <Accordion
+                    expanded={expanded === owner._id}
+                    onChange={toggleExpanded(owner._id)}
                   >
-                    <Grid item xs={9}>
-                      <Typography>{owner.owner.displayName}</Typography>
-                    </Grid>
-                    <Grid item xs={3}>
-                      <Button
-                        className={classes.availBtn}
-                        variant="contained"
-                        color="primary"
-                        disableElevation
+                    <AccordionSummary
+                      aria-controls="panel1c-content"
+                      id="panel1c-header"
+                      className={classes.accordionSummary}
+                    >
+                      <Grid
+                        item
+                        container
+                        xs={12}
+                        className={
+                          owner.isAvailable
+                            ? classes.availItem
+                            : classes.notAvailItem
+                        }
+                        alignItems="center"
                       >
-                        {owner.isAvailable ? "Checkout" : "Join Waitlist"}
-                      </Button>
-                    </Grid>
-                  </Grid>
+                        <Grid item xs={8} sm={9}>
+                          <Typography className={classes.ownerName}>
+                            {owner.owner.displayName}
+                          </Typography>
+                        </Grid>
+                        <Grid item xs={4} sm={3}>
+                          <Button
+                            className={classes.availBtn}
+                            variant="contained"
+                            color="primary"
+                            disableElevation
+                          >
+                            {owner.isAvailable ? "Checkout" : "Join Waitlist"}
+                          </Button>
+                        </Grid>
+                      </Grid>
+                    </AccordionSummary>
+                    {/* accordion expanded details below  */}
+                    <AccordionDetails>
+                      {owner.isAvailable && (
+                        <Grid item container xs={12}>
+                          <Grid item xs={9}>
+                            <Typography variant="h6">
+                              Confirm Checkout
+                            </Typography>
+                            <Typography variant="body2">
+                              Book will be due by {formattedDueDate}
+                            </Typography>
+                          </Grid>
+
+                          <Grid item container xs={3}>
+                            <IconButton
+                              className={classes.cancel}
+                              onClick={toggleExpanded(owner._id)}
+                            >
+                              <CancelIcon className={classes.iconBtn} />
+                            </IconButton>
+                            <IconButton
+                              className={classes.confirm}
+                              onClick={() =>
+                                handleCheckout({ ownershipId: owner._id })
+                              }
+                            >
+                              <CheckCircleIcon className={classes.iconBtn} />
+                            </IconButton>
+                          </Grid>
+                        </Grid>
+                      )}
+                    </AccordionDetails>
+                  </Accordion>
                 </Grid>
               ))}
+              {/* end Accordion above the last grid close  */}
             </Grid>
           ) : (
             <Grid item container>

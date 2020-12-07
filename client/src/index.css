@@ -1,0 +1,4 @@
+/* min page heights to push footer down */
+main {
+  min-height: calc(80vh);
+}
