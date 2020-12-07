@@ -78,6 +78,7 @@ module.exports = buildSchema(`
     addBook(bookInput: BookInput!): Book!
     checkoutBook(ownershipId: ID!, checkoutDate: String!, dueDate: String!): Ownership!
     returnBook(ownershipId: ID!, returnDate: String!, condition: String): Ownership!
+    removeBook(ownershipId: ID!): Boolean!
   }
 
   schema {
