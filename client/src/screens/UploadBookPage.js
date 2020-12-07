@@ -9,8 +9,9 @@ import TextField from "@material-ui/core/TextField";
 import Snackbar from "@material-ui/core/Snackbar";
 import Pagination from "../components/Pagination";
 import UploadBookCard from "../components/UploadBookCard";
-import uploadBookRequest from "../dataservice/uploadBookRequest";
 import { AuthContext } from "../Context";
+import { UPLOAD_BOOK } from "../dataservice/mutations";
+import useMutation from "../dataservice/useMutation";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -42,8 +43,12 @@ const useStyles = makeStyles((theme) => ({
 
 const UploadBookPage = () => {
   const classes = useStyles();
-  // auth state - assuming user is logged in
   const auth = useContext(AuthContext);
+
+  const [uploadBook, { data, error, loading }] = useMutation(
+    UPLOAD_BOOK.mutation,
+    auth.user.token,
+  );
 
   const [searchInput, setSearchInput] = useState("");
   const [books, setBooks] = useState([]);
@@ -51,24 +56,50 @@ const UploadBookPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const booksPerPage = 8;
 
-  const apiKey = process.env.REACT_APP_API_KEY;
-
   const numberofbooks = books.length;
+
+  // meant for showing loading only on given listing
+  const [selectedBookIndex, setSelectedBookIndex] = useState(null);
+
+  // show success msg
+  const [alert, setAlert] = useState({
+    open: false,
+    message: "",
+    backgroundColor: "",
+  });
+
+  useEffect(() => {
+    const fetchBooks = async () => {
+      if (searchInput !== "") {
+        const result = await axios.get(
+          `https://www.googleapis.com/books/v1/volumes?q=${searchInput}&key=${process.env.REACT_APP_API_KEY}&maxResults=40`,
+        );
+        setBooks(result.data.items);
+      }
+    };
+
+    if (data) {
+      setAlert({
+        open: true,
+        message: "Book uploaded successfully!",
+        backgroundColor: "#4caf50",
+      });
+    } else if (error) {
+      setAlert({
+        open: true,
+        message: error,
+        backgroundColor: "red",
+      });
+    } else {
+      fetchBooks();
+    }
+  }, [searchInput, data, error]);
+
   // set user input
   const handleChange = (event) => {
     const newValue = event.target.value;
     setSearchInput(newValue);
   };
-
-  useEffect(() => {
-    const fetchBooks = async () => {
-      const result = await axios.get(
-        `https://www.googleapis.com/books/v1/volumes?q=${searchInput}&key=${apiKey}&maxResults=40`,
-      );
-      setBooks(result.data.items);
-    };
-    fetchBooks();
-  }, [apiKey, searchInput]);
 
   // Get currently displayed books - for pagination
   const indexOfLastBook = currentPage * booksPerPage;
@@ -94,15 +125,9 @@ const UploadBookPage = () => {
     return authors;
   };
 
-  // show success msg
-  const [alert, setAlert] = useState({
-    open: false,
-    message: "",
-    backgroundColor: "",
-  });
-
-  const uploadBook = async (bookIndex) => {
+  const onUpload = async (bookIndex) => {
     const selectedBook = currentBooks[bookIndex];
+    setSelectedBookIndex(bookIndex);
 
     const googleId = selectedBook.id;
     const {
@@ -117,32 +142,18 @@ const UploadBookPage = () => {
 
     const formattedAuthors = authorsToString(authors);
 
-    try {
-      const { addBook, message } = await uploadBookRequest(
-        {
-          googleId,
-          title,
-          authors: formattedAuthors,
-          description,
-          categories,
-          pageCount,
-          publishedDate,
-          publisher,
-        },
-        auth.user.token,
-      ).then((res) =>
-        setAlert({
-          open: true,
-          message: "Book uploaded successfully!",
-          backgroundColor: "#4caf50",
-        }),
-      );
-
-      // redirect to user's inventory page
-    } catch (err) {
-      return false;
-    }
-    return true;
+    uploadBook(
+      UPLOAD_BOOK.variables({
+        googleId,
+        title,
+        authors: formattedAuthors,
+        description,
+        categories,
+        pageCount,
+        publishedDate,
+        publisher,
+      }),
+    );
   };
 
   return (
@@ -207,7 +218,8 @@ const UploadBookPage = () => {
                 title={book.volumeInfo.title}
                 author={authorsToString(book.volumeInfo.authors)}
                 publishedDate={book.volumeInfo.publishedDate}
-                uploadBook={() => uploadBook(index)}
+                uploadBook={() => onUpload(index)}
+                isLoading={loading && selectedBookIndex === index}
               />
             );
           })}
