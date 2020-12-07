@@ -1,46 +1,58 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Link, Redirect } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   TextField,
   Button,
   Typography,
   CircularProgress,
+  Paper,
+  Link,
+  Avatar,
 } from "@material-ui/core";
+import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import { AuthContext } from "../Context";
 import { LOGIN } from "../dataservice/mutations";
 import useMutation from "../dataservice/useMutation";
 
 const useStyles = makeStyles((theme) => ({
-  pageHeader: {
-    textAlign: "center",
-    marginTop: theme.spacing(4),
-  },
-  pageContentContainer: {
+  loginContentContainer: {
     display: "flex",
-    flexFlow: "column nowrap",
-    width: "100%",
-    [theme.breakpoints.up("md")]: {
+    flexFlow: "column-reverse nowrap",
+    maxWidth: 1200,
+    margin: "auto",
+    padding: "1rem",
+    [theme.breakpoints.up("sm")]: {
       flexFlow: "row nowrap",
     },
   },
   formContainer: {
-    width: "100%",
-    maxWidth: "500px",
-    margin: "0 auto",
+    width: "40%",
+    [theme.breakpoints.down("xs")]: {
+      width: "100%",
+    },
+  },
+  avatar: {
+    margin: "0.5rem auto",
+    backgroundColor: theme.palette.secondary.main,
+    color: theme.palette.text.primary,
+  },
+  formHeader: {
+    textAlign: "center",
+    marginBottom: 0,
   },
   form: {
     display: "flex",
+    margin: "0 auto",
     flexFlow: "column nowrap",
     width: "100%",
-    margin: `${theme.spacing(4)}px auto`,
   },
   formTextField: {
     margin: `${theme.spacing(4)}px auto 0 auto`,
     width: "80%",
   },
   formButtonContainer: {
-    margin: `${theme.spacing(4)}px auto 0 auto`,
+    margin: `${theme.spacing(4)}px auto`,
     width: "80%",
     textAlign: "center",
   },
@@ -49,18 +61,28 @@ const useStyles = makeStyles((theme) => ({
   },
   formButtonHelperText: {
     textAlign: "center",
-    marginBottom: "0.2rem",
   },
   errorDiv: {
     height: "50px",
   },
   loginImageContainer: {
-    maxWidth: "500px",
     margin: `${theme.spacing(4)}px auto`,
-    width: "80%",
+    minHeight: "20vh",
+    background: `linear-gradient(to top right, rgba(255, 255, 255, 0.3), rgba(255, 230, 240, 0.2)), url("/images/library-image.png") no-repeat center center/cover`,
+    width: "60%",
+    [theme.breakpoints.down("xs")]: {
+      width: "100%",
+      marginBottom: "1rem",
+    },
   },
-  loginImage: {
-    width: "100%",
+  imgTextContainer: {
+    width: "80%",
+    margin: "auto",
+  },
+  imgText: {
+    textAlign: "center",
+    marginTop: theme.spacing(4),
+    padding: "2rem",
   },
 }));
 
@@ -106,14 +128,17 @@ export default function LoginPage() {
   const classes = useStyles();
 
   return (
-    <>
+    <div className={classes.page}>
       {homeRedirect && <Redirect to="/" />}
-      <Typography className={classes.pageHeader} variant="h3" component="h1">
-        Login
-      </Typography>
-      <div className={classes.pageContentContainer}>
+      <Paper className={classes.loginContentContainer}>
         <div className={classes.formContainer}>
           {error && <div className={classes.errorDiv}>{error}</div>}
+          <Avatar className={classes.avatar}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography className={classes.formHeader} variant="h5">
+            Log In
+          </Typography>
           <form className={classes.form} onSubmit={handleSubmit}>
             <TextField
               id="login-email"
@@ -147,6 +172,8 @@ export default function LoginPage() {
                   disabled={loginPassword.length < 1}
                   type="submit"
                   variant="contained"
+                  color="primary"
+                  disableElevation
                 >
                   Log In
                 </Button>
@@ -157,27 +184,22 @@ export default function LoginPage() {
                 className={classes.formButtonHelperText}
                 variant="body2"
               >
-                Not a member?
+                Not a member?{" "}
+                <Link href="/signup" underline="none">
+                  Sign Up
+                </Link>
               </Typography>
-              <Button
-                className={classes.formButton}
-                variant="contained"
-                component={Link}
-                to="/signup"
-              >
-                Sign Up
-              </Button>
             </div>
           </form>
         </div>
         <div className={classes.loginImageContainer}>
-          <img
-            className={classes.loginImage}
-            src="/images/library-image.png"
-            alt="library"
-          />
+          <div className={classes.imgTextContainer}>
+            <Typography variant="h6" className={classes.imgText}>
+              {/* Text placeholder  */}
+            </Typography>
+          </div>
         </div>
-      </div>
-    </>
+      </Paper>
+    </div>
   );
 }

@@ -3,7 +3,8 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { ThemeProvider } from "@material-ui/styles";
 import theme from "./components/Theme";
 import Header from "./components/Header";
-import HomePage from "./screens/HomePage";
+import Footer from "./components/Footer";
+import DashboardPage from "./screens/DashboardPage";
 import SearchResultsPage from "./screens/SearchResultsPage";
 import BookInfoPage from "./screens/BookInfoPage";
 import AboutPage from "./screens/AboutPage";
@@ -48,20 +49,23 @@ function App() {
         >
           <SearchContext.Provider value={{ query, setQuery }}>
             <Header />
-            <Switch>
-              <Route
-                exact
-                path="/searchresults"
-                component={SearchResultsPage}
-              />
-              <Route path="/bookinfo/:id" component={BookInfoPage} />
-              <Route path="/uploadbook" component={UploadBookPage} />
-              <Route exact path="/" component={HomePage} />
-              <Route exact path="/myinventory" component={MyInventoryPage} />
-              <Route exact path="/about" component={AboutPage} />
-              <Route exact path="/signup" component={SignupPage} />
-              <Route exact path="/login" component={LoginPage} />
-            </Switch>
+            <main>
+              <Switch>
+                <Route exact path="/" component={AboutPage} />
+                <Route
+                  exact
+                  path="/searchresults"
+                  component={SearchResultsPage}
+                />
+                <Route exact path="/dashboard" component={DashboardPage} />
+                <Route exact path="/signup" component={SignupPage} />
+                <Route exact path="/login" component={LoginPage} />
+                <Route path="/bookinfo/:id" component={BookInfoPage} />
+                <Route path="/uploadbook" component={UploadBookPage} />
+                <Route exact path="/myinventory" component={MyInventoryPage} />
+              </Switch>
+            </main>
+            <Footer />
           </SearchContext.Provider>
         </AuthContext.Provider>
       </ThemeProvider>

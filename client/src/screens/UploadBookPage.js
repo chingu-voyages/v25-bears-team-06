@@ -6,6 +6,7 @@ import Grid from "@material-ui/core/Grid";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import SearchIcon from "@material-ui/icons/Search";
 import TextField from "@material-ui/core/TextField";
+import Snackbar from "@material-ui/core/Snackbar";
 import Pagination from "../components/Pagination";
 import UploadBookCard from "../components/UploadBookCard";
 import uploadBookRequest from "../dataservice/uploadBookRequest";
@@ -93,6 +94,13 @@ const UploadBookPage = () => {
     return authors;
   };
 
+  // show success msg
+  const [alert, setAlert] = useState({
+    open: false,
+    message: "",
+    backgroundColor: "",
+  });
+
   const uploadBook = async (bookIndex) => {
     const selectedBook = currentBooks[bookIndex];
 
@@ -122,6 +130,12 @@ const UploadBookPage = () => {
           publisher,
         },
         auth.user.token,
+      ).then((res) =>
+        setAlert({
+          open: true,
+          message: "Book uploaded successfully!",
+          backgroundColor: "#4caf50",
+        }),
       );
 
       // redirect to user's inventory page
@@ -159,7 +173,7 @@ const UploadBookPage = () => {
               ),
             }}
             variant="filled"
-            label="Start typing to find the book you wish to upload"
+            label="Start typing ..."
             value={searchInput}
             onChange={handleChange}
           />
@@ -171,6 +185,17 @@ const UploadBookPage = () => {
             results
           </Typography>
         </Grid>
+
+        {/* //success msg  */}
+        <Snackbar
+          open={alert.open}
+          message={alert.message}
+          ContentProps={{ style: { backgroundColor: alert.backgroundColor } }}
+          anchorOrigin={{ vertical: "top", horizontal: "right" }}
+          onClose={() => setAlert({ ...alert, open: false })}
+          autoHideDuration={5000}
+        />
+        {/* end of success msg  */}
 
         {/* Display search results  */}
         <Grid>

@@ -17,15 +17,15 @@ const bookSchema = new Schema({
   },
   description: {
     type: String,
-    required: true,
+    required: false,
   },
   categories: {
     type: [String],
-    required: true,
+    required: false,
   },
   pageCount: {
     type: Number,
-    required: true,
+    required: false,
   },
   publishedDate: {
     type: String,

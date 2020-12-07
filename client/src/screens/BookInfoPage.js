@@ -26,7 +26,6 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
     position: "relative",
     display: "inline-flex",
-    // backgroundColor: "lime",
   },
   img: {
     margin: "auto",
@@ -34,17 +33,9 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: "100%",
     maxHeight: "100%",
   },
-  infoContainer: {
-    // backgroundColor: "yellow",
-  },
-  btnContainer: {
-    // backgroundColor: "blue",
-  },
   btn: {
-    // backgroundColor: "orange",
     margin: 2,
     [theme.breakpoints.down("xl")]: {
-      // backgroundColor: "black",
       width: "100%",
       height: "3rem",
     },

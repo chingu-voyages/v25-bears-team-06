@@ -1,23 +1,23 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, Route } from "react-router-dom";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
-import LocalLibraryIcon from "@material-ui/icons/LocalLibrary";
-import AddBoxIcon from "@material-ui/icons/AddBox";
+import {
+  AppBar,
+  Toolbar,
+  Button,
+  Typography,
+  Tabs,
+  Tab,
+  useMediaQuery,
+  SwipeableDrawer,
+  IconButton,
+  List,
+  ListItem,
+  ListItemText,
+} from "@material-ui/core/";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-import useMediaQuery from "@material-ui/core/useMediaQuery";
-import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
-import IconButton from "@material-ui/core/IconButton";
+import LocalLibraryIcon from "@material-ui/icons/LocalLibrary";
 import MenuIcon from "@material-ui/icons/Menu";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
-// import search box component
 import HeaderSearchBox from "./HeaderSearchBox";
 import { AuthContext } from "../Context";
 
@@ -30,15 +30,17 @@ const useStyles = makeStyles((theme) => ({
       marginBottom: "2em",
       [theme.breakpoints.down("xs")]: {
         marginBottom: "1.25em",
+        paddingLeft: 0,
       },
     },
   },
   logoContainer: {
-    padding: 0,
-    [theme.breakpoints.down("md")]: {
-      height: "2rem",
-    },
     marginRight: "auto",
+    [theme.breakpoints.down("xs")]: {
+      margin: 0,
+      padding: 0,
+      minWidth: 30,
+    },
   },
   logoIcon: {
     marginRight: 5,
@@ -54,9 +56,6 @@ const useStyles = makeStyles((theme) => ({
     ...theme.typography.tab,
     minWidth: 10,
     marginLeft: "25px",
-  },
-  hideHome: {
-    display: "none",
   },
   drawerIconContainer: {
     marginLeft: "auto",
@@ -93,23 +92,15 @@ const Header = () => {
   // keep active tab highlighted on refresh
 
   useEffect(() => {
-    if (
-      (window.location.pathname === "/" && value !== 0) ||
-      (window.location.pathname === "/searchresults" && value !== 0)
-    ) {
+    if (window.location.pathname === "/" && value !== 0) {
       setValue(0);
-    } else if (window.location.pathname === "/about" && value !== 1) {
+    } else if (
+      (window.location.pathname === "/signup" && value !== 1) ||
+      (window.location.pathname === "/dashboard" && value !== 1)
+    ) {
       setValue(1);
-    } else if (
-      (window.location.pathname === "/signup" && value !== 2) ||
-      (window.location.pathname === "/uploadbook" && value !== 2)
-    ) {
+    } else if (window.location.pathname === "/login" && value !== 2) {
       setValue(2);
-    } else if (
-      (window.location.pathname === "/login" && value !== 3) ||
-      (window.location.pathname === "/myinventory" && value !== 3)
-    ) {
-      setValue(3);
     }
   }, [value]);
 
@@ -119,10 +110,11 @@ const Header = () => {
   // responsiveness variables
   const theme = useTheme();
   const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent);
-  const matches = useMediaQuery(theme.breakpoints.down("md"));
+  const lessSmScreenSize = useMediaQuery(theme.breakpoints.down("sm"));
+  const largerSmScreenSize = useMediaQuery(theme.breakpoints.up("sm"));
   const [openDrawer, setOpenDrawer] = useState(false);
 
-  // responsiveness menu items
+  // desktop menu tabs
   const tabs = (
     <>
       <Tabs
@@ -131,29 +123,14 @@ const Header = () => {
         className={classes.tabContainer}
         indicatorColor="primary"
       >
-        <Tab
-          className={(classes.tab, classes.hideHome)}
-          component={Link}
-          to="/"
-          label="Home"
-        />
-        <Tab
-          className={classes.tab}
-          component={Link}
-          to="/about"
-          label="About"
-        />
+        <Tab className={classes.tab} component={Link} to="/" label="About" />
         {loggedIn ? (
           <Tab
             className={classes.tab}
             component={Link}
-            to="/uploadbook"
+            to="/dashboard"
             display="inline"
-            label={
-              <div>
-                <AddBoxIcon style={{ verticalAlign: "middle" }} /> Upload Book{" "}
-              </div>
-            }
+            label="Dashboard"
           />
         ) : (
           <Tab
@@ -161,15 +138,6 @@ const Header = () => {
             component={Link}
             to="/signup"
             label="Sign Up"
-          />
-        )}
-
-        {loggedIn && (
-          <Tab
-            className={classes.tab}
-            component={Link}
-            to="/myinventory"
-            label="My Inventory"
           />
         )}
 
@@ -197,7 +165,7 @@ const Header = () => {
     </>
   );
 
-  // responsiveness mobile drawer
+  // mobile drawer tabs
   const drawer = (
     <>
       <SwipeableDrawer
@@ -223,21 +191,6 @@ const Header = () => {
             selected={value === 0}
           >
             <ListItemText className={classes.drawerItem} disableTypography>
-              Home
-            </ListItemText>{" "}
-          </ListItem>
-          <ListItem
-            onClick={() => {
-              setOpenDrawer(false);
-              setValue(1);
-            }}
-            divider
-            button
-            component={Link}
-            to="/about"
-            selected={value === 1}
-          >
-            <ListItemText className={classes.drawerItem} disableTypography>
               About
             </ListItemText>{" "}
           </ListItem>
@@ -245,53 +198,35 @@ const Header = () => {
             <ListItem
               onClick={() => {
                 setOpenDrawer(false);
-                setValue(2);
+                setValue(1);
               }}
               divider
               button
               component={Link}
-              to="/uploadbook"
-              selected={value === 2}
+              to="/dashboard"
+              selected={value === 1}
             >
               <ListItemText className={classes.drawerItem} disableTypography>
-                Upload a book
+                Dashboard
               </ListItemText>{" "}
             </ListItem>
           ) : (
             <ListItem
               onClick={() => {
                 setOpenDrawer(false);
-                setValue(2);
+                setValue(1);
               }}
               divider
               button
               component={Link}
               to="/signup"
-              selected={value === 2}
+              selected={value === 1}
             >
               <ListItemText className={classes.drawerItem} disableTypography>
                 SignUp
               </ListItemText>{" "}
             </ListItem>
           )}
-          {loggedIn && (
-            <ListItem
-              onClick={() => {
-                setOpenDrawer(false);
-                setValue(3);
-              }}
-              divider
-              button
-              component={Link}
-              to="/myinventory"
-              selected={value === 3}
-            >
-              <ListItemText className={classes.drawerItem} disableTypography>
-                My Inventory{" "}
-              </ListItemText>{" "}
-            </ListItem>
-          )}
-
           {loggedIn ? (
             <ListItem
               onClick={() => {
@@ -312,12 +247,12 @@ const Header = () => {
             <ListItem
               onClick={() => {
                 setOpenDrawer(false);
-                setValue(3);
+                setValue(2);
               }}
               button
               component={Link}
               to="/login"
-              selected={value === 3}
+              selected={value === 2}
             >
               <ListItemText className={classes.drawerItem} disableTypography>
                 Login
@@ -337,13 +272,13 @@ const Header = () => {
   );
 
   return (
-    <div>
-      <header>
-        <AppBar position="fixed" className={classes.appbar}>
-          <Toolbar>
+    <header>
+      <AppBar position="fixed" className={classes.appbar}>
+        <Toolbar>
+          {largerSmScreenSize && (
             <Button
               component={Link}
-              to="/"
+              to={loggedIn ? "/dashboard" : "/"}
               className={classes.logoContainer}
               onClick={() => setValue(0)}
             >
@@ -352,16 +287,17 @@ const Header = () => {
                 CommunityBooks
               </Typography>
             </Button>
-            <Route
-              render={() => <HeaderSearchBox className={classes.searchBox} />}
-            />
-            {/* check if screensize below md to display tabs or burger */}
-            {matches ? drawer : tabs}
-          </Toolbar>
-        </AppBar>
-        <div className={classes.toolbarMargin} />
-      </header>
-    </div>
+          )}
+
+          <Route
+            render={() => <HeaderSearchBox className={classes.searchBox} />}
+          />
+          {/* check if screensize below md to display tabs or burger */}
+          {lessSmScreenSize ? drawer : tabs}
+        </Toolbar>
+      </AppBar>
+      <div className={classes.toolbarMargin} />
+    </header>
   );
 };
 

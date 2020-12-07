@@ -4,7 +4,7 @@ import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
-import { useHistory, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 // Modal imports
 import Dialog from "@material-ui/core/Dialog";
@@ -55,9 +55,17 @@ const useStyles = makeStyles((theme) => ({
 // card template for book output
 const SingleBookCard = (props) => {
   const classes = useStyles();
-  const history = useHistory();
 
-  const { id, title, authors, googleId, publishedDate, owners } = props;
+  const {
+    id,
+    title,
+    authors,
+    googleId,
+    publishedDate,
+    owners,
+    bookResults,
+    setBookResults,
+  } = props;
 
   // Modal actions
   const [open, setOpen] = useState(false);
@@ -131,6 +139,8 @@ const SingleBookCard = (props) => {
               authors={authors}
               loggedIn={loggedIn}
               owners={owners}
+              bookResults={bookResults}
+              setBookResults={setBookResults}
             />
           </Dialog>
         </Grid>

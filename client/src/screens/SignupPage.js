@@ -1,40 +1,56 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Link, Redirect } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
-import { TextField, Button, Typography } from "@material-ui/core";
+import {
+  TextField,
+  Link,
+  Button,
+  Typography,
+  Paper,
+  Avatar,
+} from "@material-ui/core";
+import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import signupRequest from "../dataservice/signupRequest";
 import { AuthContext } from "../Context";
 
 const useStyles = makeStyles((theme) => ({
-  pageHeader: {
-    textAlign: "center",
-    marginTop: theme.spacing(4),
-  },
-  pageContentContainer: {
+  loginContentContainer: {
     display: "flex",
-    flexFlow: "column nowrap",
-    width: "100%",
-    [theme.breakpoints.up("md")]: {
-      flexFlow: "row nowrap",
+    flexFlow: "column-reverse nowrap",
+    maxWidth: 1200,
+    margin: "auto",
+    padding: "1rem",
+    [theme.breakpoints.up("sm")]: {
+      flexFlow: "row-reverse nowrap",
     },
   },
   formContainer: {
-    width: "100%",
-    maxWidth: "500px",
-    margin: "0 auto",
+    width: "40%",
+    [theme.breakpoints.down("xs")]: {
+      width: "100%",
+    },
+  },
+  avatar: {
+    margin: "0.5rem auto",
+    backgroundColor: theme.palette.secondary.main,
+    color: theme.palette.text.primary,
+  },
+  formHeader: {
+    textAlign: "center",
+    marginBottom: 0,
   },
   form: {
     display: "flex",
+    margin: "0 auto",
     flexFlow: "column nowrap",
     width: "100%",
-    margin: `${theme.spacing(4)}px auto`,
   },
   formTextField: {
     margin: `${theme.spacing(4)}px auto 0 auto`,
     width: "80%",
   },
   formButtonContainer: {
-    margin: `${theme.spacing(4)}px auto 0 auto`,
+    margin: `${theme.spacing(4)}px auto`,
     width: "80%",
   },
   formButton: {
@@ -47,12 +63,30 @@ const useStyles = makeStyles((theme) => ({
     height: "50px",
   },
   loginImageContainer: {
-    maxWidth: "500px",
     margin: `${theme.spacing(4)}px auto`,
-    width: "80%",
+    minHeight: "20vh",
+    background: `linear-gradient(to bottom, rgba(255, 255, 255, 0.8), rgba(255, 230, 240, 0.5)), url("/images/holding-books.jpg") no-repeat center center/cover`,
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    width: "60%",
+    [theme.breakpoints.down("xs")]: {
+      width: "100%",
+      marginBottom: "1rem",
+    },
+    display: "flex",
+    flexFlow: "column nowrap",
+    alignItems: "center",
+    justifyContent: "center",
   },
-  loginImage: {
-    width: "100%",
+  imgTextContainer: {
+    width: "80%",
+    margin: "auto",
+    padding: "2rem",
+    textAlign: "center",
+  },
+  imgText: {
+    // textAlign: "center",
+    // marginTop: "theme.spacing(4)",
   },
 }));
 
@@ -144,12 +178,15 @@ export default function SignupPage() {
   return (
     <>
       {homeRedirect && <Redirect to="/" />}
-      <Typography className={classes.pageHeader} variant="h3" component="h1">
-        Sign Up
-      </Typography>
-      <div className={classes.pageContentContainer}>
+      <Paper className={classes.loginContentContainer}>
         <div className={classes.formContainer}>
           {hasError && <div className={classes.errorDiv}>{errorMessage}</div>}
+          <Avatar className={classes.avatar}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography className={classes.formHeader} variant="h5">
+            Sign Up
+          </Typography>
           <form className={classes.form} onSubmit={handleSubmit}>
             <TextField
               id="signup-email"
@@ -209,6 +246,8 @@ export default function SignupPage() {
                 }
                 type="submit"
                 variant="contained"
+                color="primary"
+                disableElevation
               >
                 Submit
               </Button>
@@ -216,18 +255,32 @@ export default function SignupPage() {
             <div className={classes.formButtonContainer}>
               <Typography
                 className={classes.formButtonHelperText}
-                component="p"
-                variant="p"
+                variant="body2"
               >
-                Already a member?
+                Already a member?{" "}
+                <Link href="/login" underline="none">
+                  Log In
+                </Link>
               </Typography>
-              <Button className={classes.formButton} variant="contained">
-                <Link to="/login">Log In</Link>
-              </Button>
             </div>
           </form>
         </div>
-      </div>
+        <div className={classes.loginImageContainer}>
+          <div className={classes.imgTextContainer}>
+            <Typography variant="h3" gutterBottom className={classes.imgText}>
+              Start sharing.
+            </Typography>
+            <Typography variant="h6" gutterBottom className={classes.imgText}>
+              Create an account to borrow or loan books.
+            </Typography>
+            <Typography variant="body2" className={classes.imgText}>
+              <Link href="/about" underline="none">
+                Learn more
+              </Link>
+            </Typography>
+          </div>
+        </div>
+      </Paper>
     </>
   );
 }
