@@ -4,6 +4,7 @@ import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
+import { CircularProgress } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -51,7 +52,14 @@ const useStyles = makeStyles((theme) => ({
 // card template for book output
 const UploadBookCard = (props) => {
   const classes = useStyles();
-  const { title, author, publishedDate, uploadBook, thumbnail } = props;
+  const {
+    title,
+    author,
+    publishedDate,
+    uploadBook,
+    thumbnail,
+    isLoading,
+  } = props;
 
   return (
     <div className={classes.root}>
@@ -76,15 +84,19 @@ const UploadBookCard = (props) => {
             </Grid>
           </Grid>
           <Grid item xs={12} container className={classes.btnContainer} sm={3}>
-            <Button
-              onClick={uploadBook}
-              className={classes.btn}
-              variant="contained"
-              color="primary"
-              disableElevation
-            >
-              Upload
-            </Button>
+            {!isLoading ? (
+              <Button
+                onClick={uploadBook}
+                className={classes.btn}
+                variant="contained"
+                color="primary"
+                disableElevation
+              >
+                Upload
+              </Button>
+            ) : (
+              <CircularProgress color="primary" />
+            )}
           </Grid>
         </Grid>
       </Paper>
