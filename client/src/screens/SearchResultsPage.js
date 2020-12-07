@@ -1,12 +1,14 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
+import { CircularProgress } from "@material-ui/core";
 import SingleBookCard from "../components/SingleBookCard";
 import { SearchContext } from "../Context";
-import searchRequest from "../dataservice/searchRequest";
+import SEARCH_BOOKS from "../dataservice/queries/searchBooks";
 import Pagination from "../components/Pagination";
+import useQuery from "../dataservice/useQuery";
 
 const useStyles = makeStyles({
   pageContainer: {
@@ -27,38 +29,22 @@ const useStyles = makeStyles({
 const SearchResultsPage = () => {
   const classes = useStyles();
 
-  const [bookResults, setBookResults] = useState([]);
-  const [hasError, setHasError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(
-    "Something went wrong. Please try again later.",
-  );
+  // const [bookResults, setBookResults] = useState([]);
   const { query } = useContext(SearchContext);
 
-  useEffect(
-    function handleEffect() {
-      async function searchEffect() {
-        try {
-          const { books, message } = await searchRequest({ query });
-          if (books && Array.isArray(books)) {
-            setBookResults(books);
-          } else if (message) {
-            setHasError(true);
-            setErrorMessage(message);
-          }
-        } catch (err) {
-          setHasError(true);
-          setErrorMessage(err.message);
-        }
-      }
-      searchEffect().catch((err) => {
-        setHasError(true);
-        setErrorMessage(err.message);
-      });
-    },
-    [query],
-  );
+  const { data, loading, error } = useQuery({
+    query: SEARCH_BOOKS.query,
+    variables: SEARCH_BOOKS.variables({ query }),
+  });
 
   const [currentPage, setCurrentPage] = useState(1);
+
+  // get books from data
+  let bookResults = [];
+  if (data) {
+    bookResults = data.books;
+  }
+
   const numberofbooks = bookResults.length;
   const booksPerPage = bookResults.length > 7 ? 8 : bookResults.length;
 
@@ -73,7 +59,7 @@ const SearchResultsPage = () => {
   return (
     <div>
       <Grid className={classes.pageContainer} container direction="column">
-        {hasError && <div className={classes.errorDiv}>{errorMessage}</div>}
+        {error && <div className={classes.errorDiv}>{error}</div>}
         <Typography variant="h4" gutterBottom>
           Search Results{" "}
         </Typography>
@@ -96,37 +82,41 @@ const SearchResultsPage = () => {
         </Grid>
 
         {/* Display Search Results  */}
-        {bookResults.length === 0 ? (
-          <>
-            <Typography variant="subtitle1" gutterBottom>
-              No results found. Please try a different search term. <br />
-            </Typography>
-
-            <Typography variant="body2">
-              If you still don&apos;t see results after modifying your search,
-              it could be that none of our members have added this title to our
-              database yet.
-              <br />
-              You can be the first to share this title. Just{" "}
-              <Link to="/signup"> sign up</Link> and click on{" "}
-              <strong>Upload Book</strong>.
-            </Typography>
-          </>
-        ) : (
-          currentBooks.map((book) => (
-            <SingleBookCard
-              key={book._id}
-              id={book._id}
-              title={book.title}
-              authors={book.authors}
-              googleId={book.googleId}
-              publishedDate={book.publishedDate}
-              owners={book.owners}
-              bookResults={bookResults}
-              setBookResults={setBookResults}
-            />
-          ))
+        {loading && (
+          <CircularProgress color="primary" style={{ padding: "2.5rem" }} />
         )}
+        {!loading &&
+          (bookResults.length === 0 ? (
+            <>
+              <Typography variant="subtitle1" gutterBottom>
+                No results found. Please try a different search term. <br />
+              </Typography>
+
+              <Typography variant="body2">
+                If you still don&apos;t see results after modifying your search,
+                it could be that none of our members have added this title to
+                our database yet.
+                <br />
+                You can be the first to share this title. Just{" "}
+                <Link to="/signup"> sign up</Link> and click on{" "}
+                <strong>Upload Book</strong>.
+              </Typography>
+            </>
+          ) : (
+            currentBooks.map((book) => (
+              <SingleBookCard
+                key={book._id}
+                id={book._id}
+                title={book.title}
+                authors={book.authors}
+                googleId={book.googleId}
+                publishedDate={book.publishedDate}
+                owners={book.owners}
+                bookResults={bookResults}
+                // setBookResults={setBookResults}
+              />
+            ))
+          ))}
 
         {/* Display pagination  */}
         <Grid

@@ -5,13 +5,15 @@ import {
   TextField,
   Button,
   Typography,
+  CircularProgress,
   Paper,
   Link,
   Avatar,
 } from "@material-ui/core";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import loginRequest from "../dataservice/loginRequest";
 import { AuthContext } from "../Context";
+import { LOGIN } from "../dataservice/mutations";
+import useMutation from "../dataservice/useMutation";
 
 const useStyles = makeStyles((theme) => ({
   loginContentContainer: {
@@ -52,6 +54,7 @@ const useStyles = makeStyles((theme) => ({
   formButtonContainer: {
     margin: `${theme.spacing(4)}px auto`,
     width: "80%",
+    textAlign: "center",
   },
   formButton: {
     width: "100%",
@@ -86,51 +89,22 @@ const useStyles = makeStyles((theme) => ({
 export default function LoginPage() {
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
-  const [shouldSubmit, setShouldSubmit] = useState(false);
-  const [hasError, setHasError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(
-    "Something went wrong. Please try again later.",
-  );
   const [homeRedirect, setHomeRedirect] = useState(false);
   const auth = useContext(AuthContext);
 
-  useEffect(
-    function handleEffect() {
-      async function loginEffect() {
-        try {
-          const { login, message } = await loginRequest({
-            email: loginEmail,
-            password: loginPassword,
-          });
-          if (login) {
-            const { email, displayName, token, userId } = login;
-            window.localStorage.setItem("email", email);
-            window.localStorage.setItem("displayName", displayName);
-            window.localStorage.setItem("token", token);
-            window.localStorage.setItem("userId", userId);
-            auth.setUser({ email, token, displayName, userId });
-            setShouldSubmit(false);
-            setHomeRedirect(true);
-          } else if (message) {
-            setHasError(true);
-            setErrorMessage(message);
-            setShouldSubmit(false);
-          }
-        } catch (err) {
-          setHasError(true);
-          setErrorMessage(err.message);
-          setShouldSubmit(false);
-        }
-      }
-      if (shouldSubmit) {
-        loginEffect().catch((err) => {
-          setHasError(true);
-          setErrorMessage(err.message);
-        });
-      }
-    },
-    [shouldSubmit, auth, loginEmail, loginPassword],
-  );
+  const [login, { data, loading, error }] = useMutation(LOGIN.mutation);
+
+  useEffect(() => {
+    if (data) {
+      const { email, displayName, token, userId } = data.login;
+      window.localStorage.setItem("email", email);
+      window.localStorage.setItem("displayName", displayName);
+      window.localStorage.setItem("token", token);
+      window.localStorage.setItem("userId", userId);
+      auth.setUser({ email, token, displayName, userId });
+      setHomeRedirect(true);
+    }
+  }, [data, auth]);
 
   function handleChange({ target: { name, value } }) {
     switch (name) {
@@ -146,7 +120,9 @@ export default function LoginPage() {
 
   function handleSubmit(event) {
     event.preventDefault();
-    setShouldSubmit(true);
+    login(LOGIN.variables({ email: loginEmail, password: loginPassword }));
+
+    // setShouldSubmit(true);
   }
 
   const classes = useStyles();
@@ -156,7 +132,7 @@ export default function LoginPage() {
       {homeRedirect && <Redirect to="/" />}
       <Paper className={classes.loginContentContainer}>
         <div className={classes.formContainer}>
-          {hasError && <div className={classes.errorDiv}>{errorMessage}</div>}
+          {error && <div className={classes.errorDiv}>{error}</div>}
           <Avatar className={classes.avatar}>
             <LockOutlinedIcon />
           </Avatar>
@@ -190,16 +166,18 @@ export default function LoginPage() {
               className={classes.formTextField}
             />
             <div className={classes.formButtonContainer}>
-              <Button
-                className={classes.formButton}
-                disabled={loginPassword.length < 1}
-                type="submit"
-                variant="contained"
-                color="primary"
-                disableElevation
-              >
-                Log In
-              </Button>
+              {(!loading && (
+                <Button
+                  className={classes.formButton}
+                  disabled={loginPassword.length < 1}
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  disableElevation
+                >
+                  Log In
+                </Button>
+              )) || <CircularProgress color="primary" />}
             </div>
             <div className={classes.formButtonContainer}>
               <Typography

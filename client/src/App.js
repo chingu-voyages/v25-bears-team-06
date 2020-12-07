@@ -34,7 +34,19 @@ function App() {
   return (
     <Router>
       <ThemeProvider theme={theme}>
-        <AuthContext.Provider value={{ user, setUser }}>
+        <AuthContext.Provider
+          value={{
+            user,
+            setUser,
+            logout: () => {
+              localStorage.removeItem("email");
+              localStorage.removeItem("token");
+              localStorage.removeItem("displayName");
+              localStorage.removeItem("userId");
+              setUser(null);
+            },
+          }}
+        >
           <SearchContext.Provider value={{ query, setQuery }}>
             <Header />
             <main>
