@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
+import { Link, Route } from "react-router-dom";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -9,7 +10,6 @@ import AddBoxIcon from "@material-ui/icons/AddBox";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
-import { Link, Route } from "react-router-dom";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
 import IconButton from "@material-ui/core/IconButton";
@@ -82,11 +82,12 @@ const useStyles = makeStyles((theme) => ({
 const Header = () => {
   const classes = useStyles();
 
+  const auth = useContext(AuthContext);
+
   const [value, setValue] = useState(0);
 
-  // eslint-disable-next-line no-shadow
-  const handleChange = (event, value) => {
-    setValue(value);
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
   };
 
   // keep active tab highlighted on refresh
@@ -113,17 +114,7 @@ const Header = () => {
   }, [value]);
 
   // is user logged in?
-  const auth = useContext(AuthContext);
   const loggedIn = auth && auth.user && auth.user.token;
-
-  // clear local storage on logout
-  const clearLocalStorage = () => {
-    localStorage.removeItem("email");
-    localStorage.removeItem("token");
-    localStorage.removeItem("displayName");
-    localStorage.removeItem("userId");
-    auth.setUser(null);
-  };
 
   // responsiveness variables
   const theme = useTheme();
@@ -187,9 +178,7 @@ const Header = () => {
             className={classes.tab}
             component={Link}
             to="/"
-            onClick={() => {
-              clearLocalStorage();
-            }}
+            onClick={() => auth.logout()}
             label={
               <div>
                 <ExitToAppIcon style={{ verticalAlign: "middle" }} /> Logout{" "}
@@ -308,7 +297,7 @@ const Header = () => {
               onClick={() => {
                 setOpenDrawer(false);
                 setValue(0);
-                clearLocalStorage();
+                auth.logout();
               }}
               button
               component={Link}

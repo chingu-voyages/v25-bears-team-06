@@ -7,9 +7,6 @@ const { renderGraphiQL } = require("express-graphql/renderGraphiQL");
 module.exports = {
   checkoutBook: async ({ ownershipId, checkoutDate, dueDate }, req) => {
     if (!req.isAuth) {
-      if (req.error) {
-        throw new Error(req.error);
-      }
       throw new Error("Authentication required!");
     }
 
@@ -57,9 +54,6 @@ module.exports = {
   },
   returnBook: async ({ ownershipId, returnDate, condition }, req) => {
     if (!req.isAuth) {
-      if (req.error) {
-        throw new Error(req.error);
-      }
       throw new Error("Authentication required!");
     }
 
