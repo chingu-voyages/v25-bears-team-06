@@ -11,6 +11,8 @@ const useQuery = ({ query, variables, token }) => {
   useEffect(() => {
     const doQuery = async () => {
       setLoading(true);
+      setError(null);
+      setData(null);
 
       const reqBody = {
         query,
