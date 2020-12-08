@@ -17,11 +17,6 @@ const PORT = process.env.PORT || 5000;
 //process.env.PORT
 //process.env.NODE_ENV => production or undefined
 
-// if (process.env.NODE_ENV === "production") {
-//   //gets static content route for heroku once npm build is run
-//   app.use(express.static(path.join(__dirname, "client/build")));
-// }
-
 // Middleware
 app.use(cors());
 app.use(express.json());
