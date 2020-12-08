@@ -91,7 +91,11 @@ export default function MyInventoryPage() {
               googleId={item.book.googleId}
               title={item.book.title}
               authors={item.book.authors}
-              checkoutData={item.checkoutData}
+              checkoutData={
+                item.checkoutData.length > 0
+                  ? item.checkoutData[item.checkoutData.length - 1]
+                  : null
+              }
               isAvailable={item.isAvailable}
             />
           ))}
