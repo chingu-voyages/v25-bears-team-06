@@ -72,7 +72,7 @@ const UploadBookPage = () => {
     const fetchBooks = async () => {
       if (searchInput !== "") {
         const result = await axios.get(
-          `https://www.googleapis.com/books/v1/volumes?q=${searchInput}&key=${process.env.GOOGLE_API_KEY}&maxResults=40`,
+          `https://www.googleapis.com/books/v1/volumes?q=${searchInput}&key=${process.env.REACT_APP_API_KEY}&maxResults=40`,
         );
         setBooks(result.data.items);
       }
