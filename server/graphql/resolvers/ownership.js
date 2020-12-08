@@ -153,9 +153,121 @@ module.exports = {
       user.owns.splice(userOwnerIndex, 1);
       await user.save();
 
+      // If this ownership object has a waitlist,
+      // update user.waitlisted references to this ownership
+      if (ownership.waitlist.length > 0) {
+        ownership.waitlist.forEach(async (waitlistedUser) => {
+          const user = await User.findById(waitlistedUser);
+          const waitlistIndex = user.waitlisted.findIndex((item) =>
+            item.equals(ownership._id)
+          );
+          if (waitlistIndex !== -1) {
+            user.waitlisted.splice(waitlistIndex, 1);
+            await user.save();
+          }
+        });
+      }
       await ownership.remove();
 
       return true;
+    } catch (err) {
+      throw err;
+    }
+  },
+  joinWaitlist: async ({ ownershipId }, req) => {
+    if (!req.isAuth) {
+      throw new Error("Authentication required!");
+    }
+
+    try {
+      const ownership = await Ownership.findById(ownershipId);
+      if (!ownership) {
+        throw new Error("Cannot find an Ownership with the given ID");
+      }
+
+      if (ownership.isAvailable) {
+        throw new Error("The selected book is available and not waitlisted!");
+      }
+
+      if (ownership.owner.equals(req.userId)) {
+        throw new Error(
+          "A book owner cannot join or leave a waitlist for their own book"
+        );
+      }
+
+      const user = await User.findById(req.userId);
+      if (!user) {
+        throw new Error("Could not find a user with the requester's userId");
+      }
+
+      // Check if the ownership object exists in user.waitlisted
+      // & check if the user object exists in ownership.waitlist
+      const waitListItemIndex = user.waitlisted.findIndex((item) =>
+        item.equals(ownership._id)
+      );
+      const waitlistedUserIndex = ownership.waitlist.findIndex((item) =>
+        item.equals(user._id)
+      );
+      if (waitListItemIndex === -1 && waitlistedUserIndex === -1) {
+        user.waitlisted.push(ownership);
+        await user.save();
+
+        ownership.waitlist.push(user);
+        await ownership.save();
+      } else {
+        throw new Error("You are already on the waitlist");
+      }
+
+      return transformOwner(ownership);
+    } catch (err) {
+      throw err;
+    }
+  },
+  leaveWaitlist: async ({ ownershipId }, req) => {
+    if (!req.isAuth) {
+      throw new Error("Authentication required!");
+    }
+
+    try {
+      const ownership = await Ownership.findById(ownershipId);
+      if (!ownership) {
+        throw new Error("Cannot find an Ownership with the given ID");
+      }
+
+      if (ownership.isAvailable) {
+        throw new Error("The selected book is available and not waitlisted!");
+      }
+
+      if (ownership.owner.equals(req.userId)) {
+        throw new Error(
+          "A book owner cannot join or leave a waitlist for their own book"
+        );
+      }
+
+      const user = await User.findById(req.userId);
+      if (!user) {
+        throw new Error("Could not find a user with the requester's userId");
+      }
+
+      // Check if the ownership object exists in user.waitlisted
+      // & check if the user object exists in ownership.waitlist
+      const waitListItemIndex = user.waitlisted.findIndex((item) =>
+        item.equals(ownership._id)
+      );
+      const waitlistedUserIndex = ownership.waitlist.findIndex((item) =>
+        item.equals(user._id)
+      );
+      if (waitListItemIndex !== -1 && waitlistedUserIndex !== -1) {
+        user.waitlisted.splice(waitListItemIndex, 1);
+        await user.save();
+
+        ownership.waitlist.splice(waitlistedUserIndex, 1);
+        await ownership.save();
+      } else {
+        throw new Error("You are not on the waitlist!");
+      }
+
+      return transformOwner(ownership);
     } catch (err) {
       throw err;
     }

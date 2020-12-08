@@ -15,6 +15,10 @@ const userLoader = new DataLoader((userIds) => {
   );
 });
 
+const usersLoader = new DataLoader((userIds) => {
+  return users(userIds);
+});
+
 const bookLoader = new DataLoader((bookIds) => {
   // Sort batched data returned by mongo in order of IDs passed to function
   return Book.find({ _id: { $in: bookIds } }).then((result) =>
@@ -38,6 +42,8 @@ const user = async (userId) => {
       ...user._doc,
       password: null,
       owns: () => ownershipLoader.loadMany(user._doc.owns),
+      checkedOut: () => ownershipLoader.loadMany(user._doc.checkedOut),
+      waitlisted: () => ownershipLoader.loadMany(user._doc.waitlisted),
     };
   } catch (err) {
     throw err;
@@ -51,6 +57,25 @@ const book = async (bookId) => {
       ...book._doc,
       owners: () => ownershipLoader.loadMany(book._doc.owners),
     };
+  } catch (err) {
+    throw err;
+  }
+};
+
+const users = async (userIds) => {
+  try {
+    const users = await User.find({ _id: { $in: userIds } });
+
+    // Sort batched data returned by mongo in order of IDs passed to function
+    const userIdStrings = userIds.map((userId) => userId.toString());
+    users.sort((a, b) => {
+      return (
+        userIdStrings.indexOf(a._id.toString()) -
+        userIdStrings.indexOf(b._id.toString())
+      );
+    });
+
+    return users.map(transformUser);
   } catch (err) {
     throw err;
   }
@@ -75,6 +100,16 @@ const owners = async (ownerIds) => {
   }
 };
 
+const transformUser = (user) => {
+  return {
+    ...user._doc,
+    password: null,
+    owns: () => ownershipLoader.loadMany(user._doc.owns),
+    checkedOut: () => ownershipLoader.loadMany(user._doc.checkedOut),
+    waitlisted: () => ownershipLoader.loadMany(user._doc.waitlisted),
+  };
+};
+
 const transformOwner = (ownership) => {
   return {
     ...ownership._doc,
@@ -87,6 +122,7 @@ const transformOwner = (ownership) => {
           user: () => user(checkout.user),
         };
       }),
+    waitlist: () => usersLoader.loadMany(ownership.waitlist),
   };
 };
 
@@ -97,5 +133,6 @@ const transformBook = (book) => {
   };
 };
 
+exports.transformUser = transformUser;
 exports.transformBook = transformBook;
 exports.transformOwner = transformOwner;
