@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import { makeStyles } from "@material-ui/styles";
 import Button from "@material-ui/core/Button";
 import { Paper, Typography } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { format } from "date-fns";
+import { AuthContext } from "../Context";
+import { RETURN_BOOK } from "../dataservice/mutations";
+import useMutation from "../dataservice/useMutation";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -56,12 +59,30 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function InventoryCard({
+  id,
   title,
   googleId,
   authors,
   checkoutData,
   isAvailable,
 }) {
+  const auth = useContext(AuthContext);
+
+  const [returnBook, { data, error, loading }] = useMutation(
+    RETURN_BOOK.mutation,
+    auth.user.token,
+  );
+
+  const handleReturn = async () => {
+    await returnBook(
+      RETURN_BOOK.variables({
+        ownershipId: id,
+        returnDate: checkoutData.returnDate || "",
+        condition: checkoutData.condition || "",
+      }),
+    );
+  };
+
   const classes = useStyles();
   return (
     <Paper className={classes.root}>
@@ -121,6 +142,7 @@ export default function InventoryCard({
             </div>
             <div className={classes.inventoryUnavailableButtonContainer}>
               <Button
+                onClick={handleReturn}
                 className={classes.inventoryUnavailableButton}
                 variant="contained"
               >
