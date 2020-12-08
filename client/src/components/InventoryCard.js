@@ -3,6 +3,7 @@ import { makeStyles } from "@material-ui/styles";
 import Button from "@material-ui/core/Button";
 import { Paper, Typography } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
+import { format } from "date-fns";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -39,6 +40,19 @@ const useStyles = makeStyles((theme) => ({
   inventoryItemStatusBtn: {
     margin: theme.spacing(2),
   },
+  inventoryUnavailableText: {
+    display: "flex",
+    flexFlow: "row nowrap",
+    justifyContent: "space-between",
+  },
+  inventoryUnavailableButtonContainer: {
+    display: "flex",
+    justifyContent: "center",
+    padding: theme.spacing(2),
+  },
+  inventoryUnavailableButton: {
+    width: "100%",
+  },
 }));
 
 export default function InventoryCard({
@@ -69,7 +83,7 @@ export default function InventoryCard({
           )}
         </div>
       </div>
-      <div className={classes.inventoryItemStatus}>
+      <div>
         {isAvailable ? (
           <div className={classes.inventoryItemStatusAvailable}>
             <Typography
@@ -88,7 +102,32 @@ export default function InventoryCard({
             </Button>
           </div>
         ) : (
-          <div>{checkoutData.user.displayName}</div>
+          <div>
+            <div className={classes.inventoryUnavailableText}>
+              <Typography variant="body1" component="p">
+                Checked out by:
+              </Typography>
+              <Typography variant="body1" component="p">
+                {checkoutData.user.displayName}
+              </Typography>
+            </div>
+            <div className={classes.inventoryUnavailableText}>
+              <Typography variant="body1" component="p">
+                Due by:
+              </Typography>
+              <Typography variant="body1" component="p">
+                {format(+checkoutData.dueDate, "PPPP")}
+              </Typography>
+            </div>
+            <div className={classes.inventoryUnavailableButtonContainer}>
+              <Button
+                className={classes.inventoryUnavailableButton}
+                variant="contained"
+              >
+                Mark as Returned
+              </Button>
+            </div>
+          </div>
         )}
       </div>
     </Paper>
