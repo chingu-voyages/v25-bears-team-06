@@ -34,9 +34,7 @@ export default function MyInventoryPage() {
           const { getInventory, message } = await getInventoryRequest({
             token,
           });
-          console.log(getInventory, message);
           if (getInventory) {
-            console.log(getInventory);
             setInventory(getInventory);
           } else if (
             message.includes("expired") ||
@@ -97,6 +95,8 @@ export default function MyInventoryPage() {
                   : null
               }
               isAvailable={item.isAvailable}
+              inventory={inventory}
+              setInventory={setInventory}
             />
           ))}
         </section>
