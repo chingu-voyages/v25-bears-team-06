@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Redirect } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";
-import Button from "@material-ui/core/Button";
 import InventoryCard from "../components/InventoryCard";
 import getInventoryRequest from "../dataservice/getInventoryRequest";
 
@@ -88,6 +87,7 @@ export default function MyInventoryPage() {
           {inventory.map((item) => (
             <InventoryCard
               key={item._id}
+              id={item._id}
               googleId={item.book.googleId}
               title={item.book.title}
               authors={item.book.authors}
