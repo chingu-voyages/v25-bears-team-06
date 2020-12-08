@@ -10,7 +10,7 @@
   },
   "scripts": {
     "client": "npm start --prefix client",
-    "start": "node server/index",
+    "start": "node server",
     "server": "nodemon server/index",
     "dev": "concurrently \"npm run client\" \"npm run server\" "
   },

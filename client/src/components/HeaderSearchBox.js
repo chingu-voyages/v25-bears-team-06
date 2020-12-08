@@ -15,6 +15,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: "0.4rem",
   },
   searchBtn: {
+    backgroundColor: theme.palette.primary.dark,
     height: "3.4rem",
     padding: "0.3rem",
     [theme.breakpoints.down("xs")]: {
@@ -29,6 +30,7 @@ const useStyles = makeStyles((theme) => ({
   searchIcon: {
     alignSelf: "flex-end",
     marginBottom: "5px",
+    color: "#fff",
   },
   searchInput: {
     width: "12rem",
@@ -85,7 +87,7 @@ const HeaderSearchBox = () => {
           onClick={handleClick}
           variant="contained"
           className={classes.searchBtn}
-          color="secondary"
+          // color="secondary"
           disableElevation
         >
           <SearchIcon className={classes.searchIcon} />
