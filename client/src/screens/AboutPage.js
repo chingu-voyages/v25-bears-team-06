@@ -101,7 +101,7 @@ const AboutPage = () => {
             {" "}
             Sharing Books Made Easy
           </Typography>
-          <Typography variant="h4" className={classes.heroTextMd} gutterBottom>
+          <Typography variant="h5" className={classes.heroTextMd} gutterBottom>
             Borrow or share books with members of your community.
           </Typography>
           <div className={classes.ctaContainer}>

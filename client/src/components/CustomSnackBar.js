@@ -9,24 +9,24 @@ import { makeStyles } from "@material-ui/styles";
 // });
 
 const CustomSnackBar = (props) => {
+  const { error } = props;
   // const classes = useStyles();
 
-  const success = setAlert({
-    open: true,
-    message: "Book uploaded successfully!",
-    backgroundColor: "#4caf50",
-  });
-
-  const loginIssue = setAlert({
-    open: true,
-    message: "The email or password entered is incorrect",
-    backgroundColor: "#f44336",
-  });
-
+  // const success = setAlert({
+  //   open: true,
+  //   message: "Book uploaded successfully!",
+  //   backgroundColor: "#4caf50",
+  // });
   const [alert, setAlert] = useState({
     open: false,
     message: "",
     backgroundColor: "",
+  });
+
+  setAlert({
+    open: true,
+    message: { error },
+    backgroundColor: "#f44336",
   });
 
   return (
