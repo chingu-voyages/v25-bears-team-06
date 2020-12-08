@@ -9,7 +9,7 @@
     "nodemon": "^2.0.6"
   },
   "scripts": {
-    "client": "npm start --prefix client",
+    "client": "npm run dev --prefix client",
     "start": "node server",
     "server": "nodemon server/index",
     "dev": "concurrently \"npm run client\" \"npm run server\" "
