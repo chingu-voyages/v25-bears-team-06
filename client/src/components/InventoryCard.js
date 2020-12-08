@@ -5,7 +5,7 @@ import { Paper, Typography } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { format } from "date-fns";
 import { AuthContext } from "../Context";
-import { RETURN_BOOK } from "../dataservice/mutations";
+import { RETURN_BOOK, REMOVE_BOOK } from "../dataservice/mutations";
 import useMutation from "../dataservice/useMutation";
 
 const useStyles = makeStyles((theme) => ({
@@ -68,10 +68,10 @@ export default function InventoryCard({
 }) {
   const auth = useContext(AuthContext);
 
-  const [returnBook, { data, error, loading }] = useMutation(
-    RETURN_BOOK.mutation,
-    auth.user.token,
-  );
+  const [
+    returnBook,
+    // { data: returnData, error: returnError, loading: returnLoading },
+  ] = useMutation(RETURN_BOOK.mutation, auth.user.token);
 
   const handleReturn = async () => {
     await returnBook(
@@ -81,6 +81,15 @@ export default function InventoryCard({
         condition: checkoutData.condition || "",
       }),
     );
+  };
+
+  const [
+    removeBook,
+    // { data: removeData, error: removeError, loading: removeLoading },
+  ] = useMutation(REMOVE_BOOK.mutation, auth.user.token);
+
+  const handleRemove = async () => {
+    await removeBook(REMOVE_BOOK.variables({ ownershipId: id }));
   };
 
   const classes = useStyles();
@@ -115,6 +124,7 @@ export default function InventoryCard({
               Available
             </Typography>
             <Button
+              onClick={handleRemove}
               className={classes.inventoryItemStatusBtn}
               variant="contained"
               startIcon={<DeleteIcon />}
