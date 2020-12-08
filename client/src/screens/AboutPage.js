@@ -7,7 +7,7 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
-} from "@material-ui/core/";
+} from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import FAQs from "../faqs";
 
