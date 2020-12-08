@@ -9,6 +9,7 @@ import {
   Paper,
   Link,
   Avatar,
+  Snackbar,
 } from "@material-ui/core";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import { AuthContext } from "../Context";
@@ -68,7 +69,7 @@ const useStyles = makeStyles((theme) => ({
   loginImageContainer: {
     margin: `${theme.spacing(4)}px auto`,
     minHeight: "20vh",
-    background: `linear-gradient(to top right, rgba(255, 255, 255, 0.3), rgba(255, 230, 240, 0.2)), url("/images/library-image.png") no-repeat center center/cover`,
+    background: `linear-gradient(to top right, rgba(255, 255, 255, 0.3), rgba(255, 230, 240, 0.2)), url("/images/library-image.jpg") no-repeat center center/cover`,
     width: "60%",
     [theme.breakpoints.down("xs")]: {
       width: "100%",
@@ -87,12 +88,21 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function LoginPage() {
+  const classes = useStyles();
+
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
   const [homeRedirect, setHomeRedirect] = useState(false);
   const auth = useContext(AuthContext);
 
   const [login, { data, loading, error }] = useMutation(LOGIN.mutation);
+
+  // Snackbar function
+  const [alert, setAlert] = useState({
+    open: false,
+    message: "",
+    backgroundColor: "",
+  });
 
   useEffect(() => {
     if (data) {
@@ -103,8 +113,14 @@ export default function LoginPage() {
       window.localStorage.setItem("userId", userId);
       auth.setUser({ email, token, displayName, userId });
       setHomeRedirect(true);
+    } else if (error) {
+      setAlert({
+        open: true,
+        message: error,
+        backgroundColor: "orange",
+      });
     }
-  }, [data, auth]);
+  }, [data, auth, error]);
 
   function handleChange({ target: { name, value } }) {
     switch (name) {
@@ -125,14 +141,19 @@ export default function LoginPage() {
     // setShouldSubmit(true);
   }
 
-  const classes = useStyles();
-
   return (
     <div className={classes.page}>
       {homeRedirect && <Redirect to="/" />}
       <Paper className={classes.loginContentContainer}>
         <div className={classes.formContainer}>
-          {error && <div className={classes.errorDiv}>{error}</div>}
+          <Snackbar
+            open={alert.open}
+            message={alert.message}
+            ContentProps={{ style: { backgroundColor: alert.backgroundColor } }}
+            anchorOrigin={{ vertical: "top", horizontal: "left" }}
+            onClose={() => setAlert({ ...alert, open: false })}
+            autoHideDuration={5000}
+          />
           <Avatar className={classes.avatar}>
             <LockOutlinedIcon />
           </Avatar>

@@ -61,7 +61,7 @@ function App() {
                 <Route exact path="/signup" component={SignupPage} />
                 <Route exact path="/login" component={LoginPage} />
                 <Route path="/bookinfo/:id" component={BookInfoPage} />
-                <Route path="/uploadbook" component={UploadBookPage} />
+                <Route path="/uploadbook/" component={UploadBookPage} />
                 <Route exact path="/myinventory" component={MyInventoryPage} />
               </Switch>
             </main>
