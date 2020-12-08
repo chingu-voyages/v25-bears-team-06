@@ -88,7 +88,7 @@ export default function InventoryCard({
             </Button>
           </div>
         ) : (
-          <div>{checkoutData.user.displayName}</div>
+          <div>{checkoutData[0].user.displayName}</div>
         )}
       </div>
     </Paper>

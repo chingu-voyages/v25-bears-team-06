@@ -28,42 +28,70 @@ const useStyles = makeStyles((theme) => ({
     padding: "2rem",
     display: "flex",
     flexFlow: "column",
-    // backgroundColor: "yellow",
     textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
   },
   heroTextLg: {
-    color: "#fff",
+    [theme.breakpoints.down("xl")]: {
+      fontSize: theme.typography.h1.fontSize,
+      color: "#fff",
+    },
+    [theme.breakpoints.down("md")]: {
+      fontSize: theme.typography.h2.fontSize,
+    },
+    [theme.breakpoints.down("xs")]: {
+      fontSize: theme.typography.h3.fontSize,
+      fontWeight: theme.typography.fontWeightMedium,
+    },
   },
-  heroTextMd: { color: "#fff" },
-  questionInfoContainer: {
-    display: "flex",
-    flexFlow: "column-reverse nowrap",
-    maxWidth: 1200,
-    margin: "auto",
-    padding: "1rem",
-    [theme.breakpoints.up("sm")]: {
-      flexFlow: "row nowrap",
+  heroTextMd: {
+    [theme.breakpoints.down("xl")]: {
+      fontSize: theme.typography.h5.fontSize,
+      color: "#fff",
+    },
+    [theme.breakpoints.down("xs")]: {
+      fontSize: theme.typography.body2.fontSize,
     },
   },
   ctaContainer: {
-    // backgroundColor: "orange",
-    margin: "1.5rem auto",
+    marginTop: "1.5rem",
+    [theme.breakpoints.down("xs")]: {
+      marginTop: "0.8rem",
+      display: "flex",
+      flexFlow: "column",
+      alignItems: "center",
+    },
   },
   btnOne: {
     marginRight: "1rem",
+    [theme.breakpoints.down("xs")]: {
+      marginTop: "0.8rem",
+      marginRight: 0,
+    },
   },
   btnTwo: {
-    // backgroundColor: "#222",
     marginLeft: "1rem",
+    [theme.breakpoints.down("xs")]: {
+      marginTop: "0.8rem",
+      marginLeft: 0,
+    },
+  },
+  questionInfoContainer: {
+    display: "flex",
+    flexFlow: "row nowrap",
+    maxWidth: 1440,
+    margin: "auto",
+    padding: "1rem",
+    [theme.breakpoints.down("sm")]: {
+      flexFlow: "column nowrap",
+    },
   },
   questionSection: {
-    margin: "0 auto",
+    marginleft: 10,
     padding: "1rem",
-    backgroundColor: theme.palette.primary.dark,
-    width: "50%",
-    [theme.breakpoints.down("xs")]: {
+    width: "40%",
+    [theme.breakpoints.down("sm")]: {
       width: "100%",
     },
   },
@@ -73,10 +101,11 @@ const useStyles = makeStyles((theme) => ({
   infoSection: {
     margin: "0 auto",
     padding: "1rem",
-    backgroundColor: theme.palette.primary.light,
-    width: "50%",
-    [theme.breakpoints.down("xs")]: {
+    marginLeft: "0.5rem",
+    width: "60%",
+    [theme.breakpoints.down("sm")]: {
       width: "100%",
+      marginLeft: 0,
     },
   },
 }));
@@ -97,11 +126,11 @@ const AboutPage = () => {
     <div>
       <section className={classes.heroContainer}>
         <div className={classes.heroTextContainer}>
-          <Typography variant="h1" gutterBottom className={classes.heroTextLg}>
+          <Typography gutterBottom className={classes.heroTextLg}>
             {" "}
             Sharing Books Made Easy
           </Typography>
-          <Typography variant="h5" className={classes.heroTextMd} gutterBottom>
+          <Typography className={classes.heroTextMd} gutterBottom>
             Borrow or share books with members of your community.
           </Typography>
           <div className={classes.ctaContainer}>
@@ -125,9 +154,6 @@ const AboutPage = () => {
         </div>
       </section>
       <section className={classes.questionInfoContainer}>
-        <Paper className={classes.infoSection}>
-          <Typography>Info Section</Typography>
-        </Paper>
         <Paper className={classes.questionSection}>
           <Typography variant="h6" gutterBottom>
             Frequently Asked Questions (FAQs)
@@ -154,6 +180,15 @@ const AboutPage = () => {
               </Accordion>
             );
           })}
+        </Paper>
+        <Paper className={classes.infoSection}>
+          <Typography variant="h6" gutterBottom>
+            About
+          </Typography>
+          <Typography variant="body1">
+            OpenShelf is a site for readers of all ages to share books with one
+            another. This project was created as part of a Chingu Voyage.
+          </Typography>
         </Paper>
       </section>
     </div>
