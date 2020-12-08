@@ -10,7 +10,8 @@
   },
   "scripts": {
     "client": "npm start --prefix client",
-    "start": "node server/index",
+    "start": "cd server && npm install && node index.js",
+    "build": "cd client && npm install && npm run build",
     "server": "nodemon server/index",
     "dev": "concurrently \"npm run client\" \"npm run server\" "
   },
