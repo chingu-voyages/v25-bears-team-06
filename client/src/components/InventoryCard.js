@@ -81,6 +81,8 @@ export default function InventoryCard({
   authors,
   checkoutData,
   isAvailable,
+  inventory,
+  setInventory,
 }) {
   const auth = useContext(AuthContext);
   const [expanded, setExpanded] = useState(false);
@@ -92,13 +94,23 @@ export default function InventoryCard({
 
   useEffect(() => {
     if (returnData) {
-      console.log(returnData);
-    } else if (returnError) {
-      console.log(returnError);
-    } else {
-      console.log("wtf");
+      return setInventory(() =>
+        inventory.map((item) => {
+          if (item._id === returnData.returnBook._id) {
+            return {
+              ...item,
+              isAvailable: returnData.returnBook.isAvailable,
+            };
+          }
+          return { ...item };
+        }),
+      );
     }
-  }, [returnData, returnError]);
+    if (returnLoading) {
+      return console.log(returnLoading);
+    }
+    return console.log(returnError);
+  }, [returnData, returnError, returnLoading, inventory, setInventory]);
 
   const handleReturn = async () => {
     await returnBook(
@@ -112,8 +124,18 @@ export default function InventoryCard({
 
   const [
     removeBook,
-    // { data: removeData, error: removeError, loading: removeLoading },
+    { data: removeData, error: removeError, loading: removeLoading },
   ] = useMutation(REMOVE_BOOK.mutation, auth.user.token);
+
+  useEffect(() => {
+    if (removeData) {
+      return setInventory(() => inventory.filter((item) => item._id !== id));
+    }
+    if (removeLoading) {
+      console.log(removeLoading);
+    }
+    return console.log(removeError);
+  }, [removeData, removeError, removeLoading, inventory, setInventory]);
 
   const handleRemove = async () => {
     await removeBook(REMOVE_BOOK.variables({ ownershipId: id }));
