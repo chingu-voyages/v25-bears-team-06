@@ -9,6 +9,7 @@ module.exports = buildSchema(`
     location: Location
     owns: [Ownership!]
     checkedOut: [Ownership!]
+    waitlisted: [Ownership!]
   }
 
   type Location {
@@ -37,6 +38,7 @@ module.exports = buildSchema(`
     book: Book!
     isAvailable: Boolean!
     checkoutData: [Checkout!]
+    waitlist: [User!]
   }
 
   type Checkout {
@@ -79,6 +81,8 @@ module.exports = buildSchema(`
     checkoutBook(ownershipId: ID!, checkoutDate: String!, dueDate: String!): Ownership!
     returnBook(ownershipId: ID!, returnDate: String!, condition: String): Ownership!
     removeBook(ownershipId: ID!): Boolean!
+    joinWaitlist(ownershipId: ID!): Ownership!
+    leaveWaitlist(ownershipId: ID!): Ownership!
   }
 
   schema {

@@ -27,6 +27,12 @@ const userSchema = new Schema({
     validate: (v) => Array.isArray(v),
     required: false,
   },
+  waitlisted: {
+    type: [Schema.Types.ObjectId],
+    ref: "Ownership",
+    validate: (v) => Array.isArray(v),
+    required: false,
+  },
   location: {
     country: {
       type: String,
