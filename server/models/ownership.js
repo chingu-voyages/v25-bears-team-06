@@ -46,6 +46,12 @@ const ownershipSchema = new Schema({
     validate: (v) => Array.isArray(v),
     required: false,
   },
+  waitlist: {
+    type: [Schema.Types.ObjectId],
+    ref: "User",
+    validate: (v) => Array.isArray(v),
+    required: false,
+  },
 });
 
 module.exports = mongoose.model("Ownership", ownershipSchema);
