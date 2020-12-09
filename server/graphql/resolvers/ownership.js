@@ -73,10 +73,18 @@ module.exports = {
 
       const { length } = ownership.checkoutData;
 
+      // Check if the book has already been returned
+      if (ownership.checkoutData[length - 1].returnDate) {
+        throw new Error("This book has already been returned!");
+      }
+
       // Update current checkout with return data
       ownership.checkoutData[length - 1].returnDate = returnDate;
       ownership.checkoutData[length - 1].condition = condition;
-      ownership.isAvailable = true;
+
+      if (ownership.waitlist.length === 0) {
+        ownership.isAvailable = true;
+      }
 
       // Update user who checked out the book
       const user = await User.findById(ownership.checkoutData[length - 1].user);
@@ -107,7 +115,10 @@ module.exports = {
         throw new Error("Cannot find an Ownership with the given ID");
       }
 
-      if (!ownership.isAvailable) {
+      if (
+        !ownership.isAvailable &&
+        !ownership.checkoutData[ownership.checkoutData.length - 1].returnDate
+      ) {
         throw new Error("Cannot remove a book that is checked out!");
       }
 
@@ -243,7 +254,8 @@ module.exports = {
           "A book owner cannot join or leave a waitlist for their own book"
         );
       }
-
+      // If the book isnt checked out & you are the only one on the waitlist
+      // make the book available again!
       const user = await User.findById(req.userId);
       if (!user) {
         throw new Error("Could not find a user with the requester's userId");
@@ -262,6 +274,17 @@ module.exports = {
         await user.save();
 
         ownership.waitlist.splice(waitlistedUserIndex, 1);
+
+        // If this book is in "waiting" phase where it's not checked out
+        // but is unavailable because there is a waitlist,
+        // Set this book to available when the waitlist becomes empty
+        if (
+          ownership.waitlist.length === 0 &&
+          ownership.checkoutData[ownership.checkoutData.length - 1].returnDate
+        ) {
+          ownership.isAvailable = true;
+        }
+
         await ownership.save();
       } else {
         throw new Error("You are not on the waitlist!");
