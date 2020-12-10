@@ -72,6 +72,7 @@ module.exports = buildSchema(`
     books(query: String): [Book!]
     getInventory: [Ownership!]
     getBookById(bookId: ID!): Book!
+    getUser: User!
   }
 
   type RootMutation {

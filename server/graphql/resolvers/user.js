@@ -2,6 +2,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const User = require("../../models/user");
+const { transformUser } = require("./merge");
 
 module.exports = {
   login: async ({ email, password }) => {
@@ -77,6 +78,25 @@ module.exports = {
           displayName,
         };
       }
+    } catch (err) {
+      throw err;
+    }
+  },
+  getUser: async (args, req) => {
+    if (!req.isAuth) {
+      if (req.error) {
+        throw new Error(req.error);
+      }
+      throw new Error("Authentication required!");
+    }
+
+    try {
+      const user = await User.findById(req.userId);
+      if (!user) {
+        throw new Error("Cannot find a user with hte requester's userId");
+      }
+
+      return transformUser(user);
     } catch (err) {
       throw err;
     }
