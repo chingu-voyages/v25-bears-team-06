@@ -78,6 +78,8 @@ const UploadBookPage = () => {
     message: "",
   });
 
+  const [pressedEnter, setPressedEnter] = useState(false);
+
   // to redirect upon success
   const [successRedirect, setSuccessRedirect] = useState(false);
 
@@ -107,12 +109,13 @@ const UploadBookPage = () => {
     } else {
       fetchBooks();
     }
-  }, [searchInput, data, error]);
+  }, [searchInput, data, error, pressedEnter]);
 
   // set user input
   const handleChange = (event) => {
     const newValue = event.target.value;
     setSearchInput(newValue);
+    setPressedEnter(false);
   };
 
   // Get currently displayed books - for pagination
@@ -172,7 +175,7 @@ const UploadBookPage = () => {
 
   const onEnter = (event) => {
     if (event.charCode === 13) {
-      setSearchInput(searchInput);
+      setPressedEnter(true);
     }
   };
 
@@ -209,7 +212,7 @@ const UploadBookPage = () => {
               label="Start typing ..."
               value={searchInput}
               onChange={handleChange}
-              onKeyDown={onEnter}
+              onKeyPress={onEnter}
             />
           </Grid>
 
