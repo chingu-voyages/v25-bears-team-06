@@ -91,6 +91,7 @@ export default function MyInventoryPage() {
               isAvailable={item.isAvailable}
               inventory={inventory}
               setInventory={setInventory}
+              setAlert={setAlert}
             />
           ))}
         </section>
