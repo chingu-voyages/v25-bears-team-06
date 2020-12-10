@@ -113,10 +113,10 @@ export default function SignupPage() {
   const auth = useContext(AuthContext);
   const [signup, { data, loading, error }] = useMutation(SIGNUP.mutation);
 
-  const [signupEmail, setSignupEmail] = useState("bob@bob.com");
-  const [signupDisplayName, setSignupDisplayName] = useState("bob");
-  const [signupPassword, setSignupPassword] = useState("bob");
-  const [signupConfirmPassword, setSignupConfirmPassword] = useState("bob");
+  const [signupEmail, setSignupEmail] = useState("");
+  const [signupDisplayName, setSignupDisplayName] = useState("");
+  const [signupPassword, setSignupPassword] = useState("");
+  const [signupConfirmPassword, setSignupConfirmPassword] = useState("");
   const [homeRedirect, setHomeRedirect] = useState(false);
 
   const [alert, setAlert] = useState({
