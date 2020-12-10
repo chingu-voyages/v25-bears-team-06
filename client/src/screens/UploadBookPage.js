@@ -1,12 +1,17 @@
 import React, { useState, useEffect, useContext } from "react";
+import { Redirect } from "react-router-dom";
 import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
-import Grid from "@material-ui/core/Grid";
-import InputAdornment from "@material-ui/core/InputAdornment";
+import {
+  Typography,
+  Grid,
+  InputAdornment,
+  TextField,
+  Snackbar,
+} from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
-import TextField from "@material-ui/core/TextField";
-import Snackbar from "@material-ui/core/Snackbar";
+import Alert from "@material-ui/lab/Alert";
+import { set } from "date-fns";
 import Pagination from "../components/Pagination";
 import UploadBookCard from "../components/UploadBookCard";
 import { AuthContext } from "../Context";
@@ -21,6 +26,7 @@ const useStyles = makeStyles((theme) => ({
   pageContainer: {
     maxWidth: 1200,
     margin: "auto",
+    position: "relative",
   },
   searchContainer: {
     [theme.breakpoints.down("xl")]: {
@@ -38,6 +44,11 @@ const useStyles = makeStyles((theme) => ({
   },
   resultsCount: {
     color: "gray",
+  },
+  snackbar: {
+    position: "absolute",
+    top: 0,
+    width: "100%",
   },
 }));
 
@@ -65,8 +76,10 @@ const UploadBookPage = () => {
   const [alert, setAlert] = useState({
     open: false,
     message: "",
-    backgroundColor: "",
   });
+
+  // to redirect upon success
+  const [successRedirect, setSuccessRedirect] = useState(false);
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -82,13 +95,14 @@ const UploadBookPage = () => {
       setAlert({
         open: true,
         message: "Book uploaded successfully!",
-        backgroundColor: "#4caf50",
       });
+      window.setTimeout(() => {
+        setSuccessRedirect(true);
+      }, 1000);
     } else if (error) {
       setAlert({
         open: true,
         message: error,
-        backgroundColor: "red",
       });
     } else {
       fetchBooks();
@@ -156,83 +170,99 @@ const UploadBookPage = () => {
     );
   };
 
-  return (
-    <div className={classes.root}>
-      <Grid
-        className={classes.pageContainer}
-        container
-        direction="column"
-        alignItems="center"
-      >
-        <Typography variant="h3" gutterBottom>
-          Upload New Book
-        </Typography>
-        <Typography variant="body1" gutterBottom>
-          To upload a book to your inventory, enter the title below to search
-          for a book that matches.
-        </Typography>
+  const onEnter = (event) => {
+    if (event.charCode === 13) {
+      setSearchInput(searchInput);
+    }
+  };
 
-        {/* Search input area  */}
-        <Grid item className={classes.searchContainer}>
-          <TextField
-            className={classes.searchInput}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <SearchIcon color="primary" />
-                </InputAdornment>
-              ),
+  return (
+    <>
+      {successRedirect && <Redirect to="/dashboard/myinventory" />}
+      <div className={classes.root}>
+        <Grid
+          className={classes.pageContainer}
+          container
+          direction="column"
+          alignItems="center"
+        >
+          <Typography variant="h3" gutterBottom>
+            Upload New Book
+          </Typography>
+          <Typography variant="body1" gutterBottom>
+            To upload a book to your inventory, enter the title below to search
+            for a book that matches.
+          </Typography>
+
+          {/* Search input area  */}
+          <Grid item className={classes.searchContainer}>
+            <TextField
+              className={classes.searchInput}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <SearchIcon color="primary" />
+                  </InputAdornment>
+                ),
+              }}
+              variant="filled"
+              label="Start typing ..."
+              value={searchInput}
+              onChange={handleChange}
+              onKeyDown={onEnter}
+            />
+          </Grid>
+
+          <Grid item>
+            <Typography variant="subtitle2" className={classes.resultsCount}>
+              Showing {indexOfFirstBook}-{indexOfLastBook} of {numberofbooks}{" "}
+              results
+            </Typography>
+          </Grid>
+
+          {/* Success/Error Message */}
+          <Snackbar
+            classes={{
+              root: classes.snackbar,
             }}
-            variant="filled"
-            label="Start typing ..."
-            value={searchInput}
-            onChange={handleChange}
+            open={alert.open}
+            message={alert.message}
+            anchorOrigin={{ vertical: "top", horizontal: "right" }}
+            onClose={() => setAlert({ ...alert, open: false })}
+            autoHideDuration={5000}
+          >
+            <Alert variant="filled" severity={data ? "success" : "error"}>
+              {alert.message}
+            </Alert>
+          </Snackbar>
+          {/* end of success msg  */}
+
+          {/* Display search results  */}
+          <Grid>
+            {currentBooks.map((book, index) => {
+              return (
+                <UploadBookCard
+                  key={book.id}
+                  thumbnail={`http://books.google.com/books/content?id=${book.id}&printsec=frontcover&img=1&zoom=1&source=gbs_api`}
+                  title={book.volumeInfo.title}
+                  author={authorsToString(book.volumeInfo.authors)}
+                  publishedDate={book.volumeInfo.publishedDate}
+                  uploadBook={() => onUpload(index)}
+                  isLoading={loading && selectedBookIndex === index}
+                />
+              );
+            })}
+          </Grid>
+
+          {/* Display pagination  */}
+          <Pagination
+            booksPerPage={booksPerPage}
+            totalBooks={books.length}
+            paginate={paginate}
           />
         </Grid>
-
-        <Grid item>
-          <Typography variant="subtitle2" className={classes.resultsCount}>
-            Showing {indexOfFirstBook}-{indexOfLastBook} of {numberofbooks}{" "}
-            results
-          </Typography>
-        </Grid>
-
-        {/* //success msg  */}
-        <Snackbar
-          open={alert.open}
-          message={alert.message}
-          ContentProps={{ style: { backgroundColor: alert.backgroundColor } }}
-          anchorOrigin={{ vertical: "top", horizontal: "right" }}
-          onClose={() => setAlert({ ...alert, open: false })}
-          autoHideDuration={5000}
-        />
-        {/* end of success msg  */}
-
-        {/* Display search results  */}
-        <Grid>
-          {currentBooks.map((book, index) => {
-            return (
-              <UploadBookCard
-                key={book.id}
-                thumbnail={`http://books.google.com/books/content?id=${book.id}&printsec=frontcover&img=1&zoom=1&source=gbs_api`}
-                title={book.volumeInfo.title}
-                author={authorsToString(book.volumeInfo.authors)}
-                publishedDate={book.volumeInfo.publishedDate}
-                uploadBook={() => onUpload(index)}
-                isLoading={loading && selectedBookIndex === index}
-              />
-            );
-          })}
-        </Grid>
-
-        {/* Display pagination  */}
-        <Pagination
-          booksPerPage={booksPerPage}
-          totalBooks={books.length}
-          paginate={paginate}
-        />
-      </Grid>
-    </div>
+      </div>
+    </>
   );
 };
 
