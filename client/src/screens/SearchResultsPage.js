@@ -3,7 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
-import { CircularProgress } from "@material-ui/core";
+import { CircularProgress, Snackbar } from "@material-ui/core";
 import SingleBookCard from "../components/SingleBookCard";
 import { SearchContext } from "../Context";
 import SEARCH_BOOKS from "../dataservice/queries/searchBooks";
@@ -38,6 +38,11 @@ const SearchResultsPage = () => {
 
   const [currentPage, setCurrentPage] = useState(1);
   const [bookResults, setBookResults] = useState([]);
+  const [alert, setAlert] = useState({
+    open: false,
+    message: "",
+    backgroundColor: "",
+  });
 
   useEffect(() => {
     if (data) {
@@ -58,6 +63,14 @@ const SearchResultsPage = () => {
 
   return (
     <div>
+      <Snackbar
+        open={alert.open}
+        message={alert.message}
+        ContentProps={{ style: { backgroundColor: alert.backgroundColor } }}
+        anchorOrigin={{ vertical: "top", horizontal: "left" }}
+        onClose={() => setAlert({ ...alert, open: false })}
+        autoHideDuration={5000}
+      />
       <Grid className={classes.pageContainer} container direction="column">
         {error && <div className={classes.errorDiv}>{error}</div>}
         <Typography variant="h4" gutterBottom>
@@ -114,6 +127,7 @@ const SearchResultsPage = () => {
                 owners={book.owners}
                 bookResults={bookResults}
                 setBookResults={setBookResults}
+                setAlert={setAlert}
               />
             ))
           ))}

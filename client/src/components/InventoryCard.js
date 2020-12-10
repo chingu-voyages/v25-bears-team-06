@@ -5,6 +5,7 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  CircularProgress,
   Paper,
   Typography,
 } from "@material-ui/core";
@@ -26,51 +27,64 @@ const useStyles = makeStyles((theme) => ({
       maxWidth: "750px",
     },
   },
-  inventoryItemInfo: {
+  bookInfoContainer: {
     display: "flex",
     flexFlow: "row nowrap",
   },
-  inventoryItemImage: {
+  bookThumb: {
     margin: theme.spacing(1),
     border: `1px solid black`,
   },
-  inventoryItemText: {
+  bookInfo: {
     display: "flex",
     flexFlow: "column nowrap",
     justifyContent: "space-between",
     padding: theme.spacing(2),
   },
-  inventoryItemStatusAvailable: {
+  bookAvailableContainer: {
     width: "100%",
   },
-  inventoryStatusAccordion: {
+  availabilityAccordion: {
     width: "100%",
   },
-  inventoryStatusAccordionSummary: {
+  availableSummary: {
     display: "flex",
     flexFlow: "row nowrap",
     justifyContent: "space-between",
     alignItems: "baseline",
     width: "100%",
   },
-  inventoryItemStatusText: {
+  availabilitySummaryText: {
     margin: theme.spacing(2),
   },
-  inventoryItemStatusBtn: {
+  availabilitySummaryBtn: {
     margin: theme.spacing(2),
   },
-  inventoryUnavailableText: {
+  checkedOutSummary: {
+    display: "flex",
+    flexFlow: "column nowrap",
+  },
+  checkedOutSummaryText: {
     display: "flex",
     flexFlow: "row nowrap",
     justifyContent: "space-between",
   },
-  inventoryUnavailableButtonContainer: {
+  checkedOutSummaryBtnContainer: {
     display: "flex",
     justifyContent: "center",
     padding: theme.spacing(2),
   },
-  inventoryUnavailableButton: {
+  checkedOutSummaryBtn: {
     width: "100%",
+  },
+  iconBtn: {
+    fontSize: "2rem",
+  },
+  cancel: {
+    color: theme.palette.error.main,
+  },
+  confirm: {
+    color: theme.palette.success.main,
   },
 }));
 
@@ -83,6 +97,7 @@ export default function InventoryCard({
   isAvailable,
   inventory,
   setInventory,
+  setAlert,
 }) {
   const auth = useContext(AuthContext);
   const [expanded, setExpanded] = useState(false);
@@ -90,52 +105,63 @@ export default function InventoryCard({
   const [
     returnBook,
     { data: returnData, error: returnError, loading: returnLoading },
-  ] = useMutation(RETURN_BOOK.mutation, auth.user.token);
+  ] = useMutation(RETURN_BOOK.mutation, auth && auth.user && auth.user.token);
 
   useEffect(() => {
     if (returnData) {
-      return setInventory(() =>
-        inventory.map((item) => {
-          if (item._id === returnData.returnBook._id) {
-            return {
-              ...item,
-              isAvailable: returnData.returnBook.isAvailable,
-            };
-          }
-          return { ...item };
-        }),
+      setInventory(
+        () =>
+          inventory &&
+          inventory.map((item) => {
+            if (item._id === returnData.returnBook._id) {
+              return {
+                ...item,
+                isAvailable: returnData.returnBook.isAvailable,
+              };
+            }
+            return { ...item };
+          }),
       );
     }
-    if (returnLoading) {
-      return console.log(returnLoading);
+    if (returnError) {
+      setAlert({ open: true, message: returnError, backgroundColor: "red" });
     }
-    return console.log(returnError);
-  }, [returnData, returnError, returnLoading, inventory, setInventory]);
+  }, [
+    JSON.stringify(returnData),
+    JSON.stringify(returnError),
+    JSON.stringify(inventory),
+    setInventory,
+  ]);
 
   const handleReturn = async () => {
     await returnBook(
       RETURN_BOOK.variables({
         ownershipId: id,
-        returnDate: checkoutData.returnDate || "",
-        condition: checkoutData.condition || "",
+        returnDate: Date.now().toString(),
+        condition: checkoutData.condition,
       }),
     );
+    setExpanded(false);
   };
 
   const [
     removeBook,
     { data: removeData, error: removeError, loading: removeLoading },
-  ] = useMutation(REMOVE_BOOK.mutation, auth.user.token);
+  ] = useMutation(REMOVE_BOOK.mutation, auth && auth.user && auth.user.token);
 
   useEffect(() => {
     if (removeData) {
-      return setInventory(() => inventory.filter((item) => item._id !== id));
+      setInventory(() => inventory.filter((item) => item._id !== id));
     }
-    if (removeLoading) {
-      console.log(removeLoading);
+    if (removeError) {
+      setAlert({ open: true, message: removeError, backgroundColor: "red" });
     }
-    return console.log(removeError);
-  }, [removeData, removeError, removeLoading, inventory, setInventory]);
+  }, [
+    JSON.stringify(removeData),
+    JSON.stringify(removeError),
+    JSON.stringify(inventory),
+    setInventory,
+  ]);
 
   const handleRemove = async () => {
     await removeBook(REMOVE_BOOK.variables({ ownershipId: id }));
@@ -148,14 +174,14 @@ export default function InventoryCard({
   const classes = useStyles();
   return (
     <Paper className={classes.root}>
-      <div className={classes.inventoryItemInfo}>
-        <div className={classes.inventoryItemImage}>
+      <div className={classes.bookInfoContainer}>
+        <div className={classes.bookThumb}>
           <img
             src={`http://books.google.com/books/content?id=${googleId}&printsec=frontcover&img=1&zoom=1&source=gbs_api`}
             alt="book cover"
           />
         </div>
-        <div className={classes.inventoryItemText}>
+        <div className={classes.bookInfo}>
           <Typography variant="body1" component="p">
             {title}
           </Typography>
@@ -168,24 +194,22 @@ export default function InventoryCard({
       </div>
       <div>
         {isAvailable ? (
-          <div className={classes.inventoryItemStatusAvailable}>
+          <div className={classes.bookAvailableContainer}>
             <Accordion
-              className={classes.inventoryStatusAccordion}
+              className={classes.availabilityAccordion}
               expanded={expanded === id}
               onChange={toggleExpanded(id)}
             >
-              <AccordionSummary
-                classes={{ content: classes.inventoryStatusAccordionSummary }}
-              >
+              <AccordionSummary classes={{ content: classes.availableSummary }}>
                 <Typography
-                  className={classes.inventoryItemStatusText}
+                  className={classes.availabilitySummaryText}
                   variant="body1"
                   component="p"
                 >
                   Available
                 </Typography>
                 <Button
-                  className={classes.inventoryItemStatusBtn}
+                  className={classes.availabilitySummaryBtn}
                   variant="contained"
                   startIcon={<DeleteIcon />}
                   onClick={toggleExpanded(id)}
@@ -198,7 +222,6 @@ export default function InventoryCard({
                   <Grid item xs={9}>
                     <Typography variant="h6">Confirm Removal</Typography>
                   </Grid>
-
                   <Grid item container xs={3}>
                     <IconButton
                       className={classes.cancel}
@@ -206,12 +229,16 @@ export default function InventoryCard({
                     >
                       <CancelIcon className={classes.iconBtn} />
                     </IconButton>
-                    <IconButton
-                      className={classes.confirm}
-                      onClick={handleRemove}
-                    >
-                      <CheckCircleIcon className={classes.iconBtn} />
-                    </IconButton>
+                    {removeLoading ? (
+                      <CircularProgress color="primary" />
+                    ) : (
+                      <IconButton
+                        className={classes.confirm}
+                        onClick={handleRemove}
+                      >
+                        <CheckCircleIcon className={classes.iconBtn} />
+                      </IconButton>
+                    )}
                   </Grid>
                 </Grid>
               </AccordionDetails>
@@ -219,31 +246,67 @@ export default function InventoryCard({
           </div>
         ) : (
           <div>
-            <div className={classes.inventoryUnavailableText}>
-              <Typography variant="body1" component="p">
-                Checked out by:
-              </Typography>
-              <Typography variant="body1" component="p">
-                {checkoutData.user.displayName}
-              </Typography>
-            </div>
-            <div className={classes.inventoryUnavailableText}>
-              <Typography variant="body1" component="p">
-                Due by:
-              </Typography>
-              <Typography variant="body1" component="p">
-                {format(+checkoutData.dueDate, "PPPP")}
-              </Typography>
-            </div>
-            <div className={classes.inventoryUnavailableButtonContainer}>
-              <Button
-                onClick={handleReturn}
-                className={classes.inventoryUnavailableButton}
-                variant="contained"
+            <Accordion
+              className={classes.availabilityAccordion}
+              expanded={expanded === id}
+              onChange={toggleExpanded(id)}
+            >
+              <AccordionSummary
+                classes={{
+                  content: classes.checkedOutSummary,
+                }}
               >
-                Mark as Returned
-              </Button>
-            </div>
+                <div className={classes.checkedOutSummaryText}>
+                  <Typography variant="body1" component="p">
+                    Checked out by:
+                  </Typography>
+                  <Typography variant="body1" component="p">
+                    {checkoutData.user.displayName}
+                  </Typography>
+                </div>
+                <div className={classes.checkedOutSummaryText}>
+                  <Typography variant="body1" component="p">
+                    Due by:
+                  </Typography>
+                  <Typography variant="body1" component="p">
+                    {format(+checkoutData.dueDate, "PPPP")}
+                  </Typography>
+                </div>
+                <div className={classes.checkedOutSummaryBtnContainer}>
+                  <Button
+                    className={classes.checkedOutSummaryBtn}
+                    variant="contained"
+                  >
+                    Mark as Returned
+                  </Button>
+                </div>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Grid item container xs={12}>
+                  <Grid item xs={9}>
+                    <Typography variant="h6">Confirm Return</Typography>
+                  </Grid>
+                  <Grid item container xs={3}>
+                    <IconButton
+                      className={classes.cancel}
+                      onClick={toggleExpanded(id)}
+                    >
+                      <CancelIcon className={classes.iconBtn} />
+                    </IconButton>
+                    {returnLoading ? (
+                      <CircularProgress color="primary" />
+                    ) : (
+                      <IconButton
+                        className={classes.confirm}
+                        onClick={handleReturn}
+                      >
+                        <CheckCircleIcon className={classes.iconBtn} />
+                      </IconButton>
+                    )}
+                  </Grid>
+                </Grid>
+              </AccordionDetails>
+            </Accordion>
           </div>
         )}
       </div>
