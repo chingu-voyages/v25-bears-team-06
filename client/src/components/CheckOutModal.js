@@ -98,7 +98,7 @@ export default function CheckOutModal({
   // book due by date
   const date = new Date();
   const checkoutDate = getTime(date);
-  const dueDate = getTime(addDays(date, 14));
+  const dueDate = getTime(addDays(date, 21));
   const formattedDueDate = format(dueDate, "PPPP");
 
   // set expanded
@@ -119,18 +119,20 @@ export default function CheckOutModal({
       dueDate: dueDate.toString(),
       token,
     });
-    setBookResults(() =>
-      bookResults.map((bookResult) => ({
-        ...bookResult,
-        owners: bookResult.owners.map((ownership) =>
-          ownership._id === checkoutBook._id
-            ? {
-                ...ownership,
-                isAvailable: checkoutBook.isAvailable,
-              }
-            : ownership,
-        ),
-      })),
+    setBookResults(
+      () =>
+        bookResults &&
+        bookResults.map((bookResult) => ({
+          ...bookResult,
+          owners: bookResult.owners.map((ownership) =>
+            ownership._id === checkoutBook._id
+              ? {
+                  ...ownership,
+                  isAvailable: checkoutBook.isAvailable,
+                }
+              : ownership,
+          ),
+        })),
     );
   };
 
