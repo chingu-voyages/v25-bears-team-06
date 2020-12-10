@@ -6,35 +6,39 @@ const { transformUser } = require("./merge");
 
 module.exports = {
   login: async ({ email, password }) => {
-    email = email.toLowerCase();
+    try {
+      email = email.toLowerCase();
 
-    // Check if email exists
-    const user = await User.findOne({ email });
-    if (!user) {
-      throw new Error("The email or password entered is incorrect");
-    }
-
-    // Check if password matches
-    const match = await bcrypt.compare(password, user.password);
-    if (!match) {
-      throw new Error("The email or password entered is incorrect");
-    }
-
-    const token = jwt.sign(
-      { userId: user._id, email },
-      process.env.AUTH_SECRET,
-      {
-        expiresIn: "1h",
+      // Check if email exists
+      const user = await User.findOne({ email });
+      if (!user) {
+        throw new Error("The email or password entered is incorrect");
       }
-    );
 
-    return {
-      token,
-      tokenExpiration: 1,
-      userId: user._id,
-      email,
-      displayName: user.displayName,
-    };
+      // Check if password matches
+      const match = await bcrypt.compare(password, user.password);
+      if (!match) {
+        throw new Error("The email or password entered is incorrect");
+      }
+
+      const token = jwt.sign(
+        { userId: user._id, email },
+        process.env.AUTH_SECRET,
+        {
+          expiresIn: "1h",
+        }
+      );
+
+      return {
+        token,
+        tokenExpiration: 1,
+        userId: user._id,
+        email,
+        displayName: user.displayName,
+      };
+    } catch (err) {
+      throw err;
+    }
   },
   createAccount: async ({ email, displayName, password, confirmPassword }) => {
     try {

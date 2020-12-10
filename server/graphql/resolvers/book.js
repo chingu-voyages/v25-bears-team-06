@@ -19,11 +19,15 @@ module.exports = {
     }
   },
   getBookById: async ({ bookId }) => {
-    const book = await Book.findById(bookId);
-    if (!book) {
-      throw new Error("Cannot find a Book by that ID!");
+    try {
+      const book = await Book.findById(bookId);
+      if (!book) {
+        throw new Error("Cannot find a Book by that ID!");
+      }
+      return transformBook(book);
+    } catch (err) {
+      throw err;
     }
-    return transformBook(book);
   },
   addBook: async (
     {
@@ -41,6 +45,9 @@ module.exports = {
     req
   ) => {
     if (!req.isAuth) {
+      if (req.error) {
+        throw new Error(req.error);
+      }
       throw new Error("Authentication required!");
     }
 
@@ -86,6 +93,9 @@ module.exports = {
   },
   getInventory: async (args, req) => {
     if (!req.isAuth) {
+      if (req.error) {
+        throw new Error(req.error);
+      }
       throw new Error("Authentication required!");
     }
 
