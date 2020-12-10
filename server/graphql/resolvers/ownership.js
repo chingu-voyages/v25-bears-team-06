@@ -63,6 +63,9 @@ module.exports = {
     }
 
     try {
+      if (!returnDate || returnDate === "") {
+        throw new Error("A returnDate is required to return a book");
+      }
       const ownership = await Ownership.findById(ownershipId);
       if (!ownership) {
         throw new Error("Cannot find an Ownership with the given ID");
