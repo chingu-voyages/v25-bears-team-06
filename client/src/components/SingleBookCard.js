@@ -65,6 +65,7 @@ const SingleBookCard = (props) => {
     owners,
     bookResults,
     setBookResults,
+    setAlert,
   } = props;
 
   // Modal actions
@@ -141,6 +142,7 @@ const SingleBookCard = (props) => {
               owners={owners}
               bookResults={bookResults}
               setBookResults={setBookResults}
+              setAlert={setAlert}
             />
           </Dialog>
         </Grid>

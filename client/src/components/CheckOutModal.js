@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import DialogContent from "@material-ui/core/DialogContent";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
@@ -15,7 +15,8 @@ import CancelIcon from "@material-ui/icons/Cancel";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import { addDays, format, getTime } from "date-fns";
 // checkout request
-import checkoutRequest from "../dataservice/checkoutRequest";
+import { CHECKOUT_BOOK } from "../dataservice/mutations";
+import useMutation from "../dataservice/useMutation";
 import { AuthContext } from "../Context";
 
 const useStyles = makeStyles((theme) => ({
@@ -92,6 +93,7 @@ export default function CheckOutModal({
   owners,
   bookResults,
   setBookResults,
+  setAlert,
 }) {
   const classes = useStyles();
 
@@ -111,28 +113,52 @@ export default function CheckOutModal({
   // checkout book function
   const auth = useContext(AuthContext);
 
+  const [checkoutBook, { data, error, loading }] = useMutation(
+    CHECKOUT_BOOK.mutation,
+    auth && auth.user && auth.user.token,
+  );
+
+  useEffect(() => {
+    if (data) {
+      setBookResults(
+        () =>
+          bookResults &&
+          bookResults.map((bookResult) => ({
+            ...bookResult,
+            owners: bookResult.owners.map((ownership) =>
+              ownership._id === data.checkoutBook._id
+                ? {
+                    ...ownership,
+                    isAvailable: data.checkoutBook.isAvailable,
+                  }
+                : ownership,
+            ),
+          })),
+      );
+      setAlert({
+        open: true,
+        message: "Checkout Successful",
+        backgroundColor: "green",
+      });
+    }
+    if (error) {
+      setAlert({ open: true, message: error, backgroundColor: "red" });
+    }
+  }, [
+    JSON.stringify(data),
+    JSON.stringify(error),
+    bookResults,
+    setAlert,
+    setBookResults,
+  ]);
+
   const handleCheckout = async ({ ownershipId }) => {
-    const { token } = auth.user;
-    const { checkoutBook, message } = await checkoutRequest({
-      ownershipId,
-      checkoutDate: checkoutDate.toString(),
-      dueDate: dueDate.toString(),
-      token,
-    });
-    setBookResults(
-      () =>
-        bookResults &&
-        bookResults.map((bookResult) => ({
-          ...bookResult,
-          owners: bookResult.owners.map((ownership) =>
-            ownership._id === checkoutBook._id
-              ? {
-                  ...ownership,
-                  isAvailable: checkoutBook.isAvailable,
-                }
-              : ownership,
-          ),
-        })),
+    await checkoutBook(
+      CHECKOUT_BOOK.variables({
+        ownershipId,
+        checkoutDate: checkoutDate.toString(),
+        dueDate: dueDate.toString(),
+      }),
     );
   };
 
