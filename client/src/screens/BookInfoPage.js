@@ -10,17 +10,11 @@ import {
   Dialog,
   Snackbar,
 } from "@material-ui/core";
-import Alert from "@material-ui/lab/Alert";
-// import Grid from "@material-ui/core/Grid";
-// import Paper from "@material-ui/core/Paper";
-// import Typography from "@material-ui/core/Typography";
-// import Button from "@material-ui/core/Button";
-// import Dialog from "@material-ui/core/Dialog";
-// import getBookByIdRequest from "../dataservice/getBookByIdRequest";
 import CheckOutModal from "../components/CheckOutModal";
 import { AuthContext } from "../Context";
 import { GET_BOOK_BY_ID } from "../dataservice/queries";
 import useQuery from "../dataservice/useQuery";
+import Alert from "../components/Alert";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -124,9 +118,9 @@ const BookInfoPage = () => {
           onClose={() => setAlert({ ...alert, open: false })}
           autoHideDuration={5000}
         >
-          <Alert variant="filled" severity="error">
-            {alert.message}
-          </Alert>
+          <div>
+            <Alert severity="error">{alert.message}</Alert>
+          </div>
         </Snackbar>
       </div>
       <div className={classes.root}>

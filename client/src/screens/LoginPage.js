@@ -12,11 +12,11 @@ import {
   Avatar,
   Snackbar,
 } from "@material-ui/core";
-import Alert from "@material-ui/lab/Alert";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import { AuthContext } from "../Context";
 import { LOGIN } from "../dataservice/mutations";
 import useMutation from "../dataservice/useMutation";
+import Alert from "../components/Alert";
 
 const useStyles = makeStyles((theme) => ({
   loginContentContainer: {
@@ -223,12 +223,11 @@ export default function LoginPage() {
                 onClose={() => setAlert({ ...alert, open: false })}
                 autoHideDuration={5000}
               >
-                <Alert
-                  variant="filled"
-                  severity={(data && "success") || "error"}
-                >
-                  {alert.message}
-                </Alert>
+                <div>
+                  <Alert severity={(data && "success") || "error"}>
+                    {alert.message}
+                  </Alert>
+                </div>
               </Snackbar>
             </div>
             <div className={classes.formButtonContainer}>

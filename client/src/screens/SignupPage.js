@@ -12,11 +12,12 @@ import {
   CircularProgress,
   Snackbar,
 } from "@material-ui/core";
-import Alert from "@material-ui/lab/Alert";
+// import Alert from "@material-ui/lab/Alert";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import { AuthContext } from "../Context";
 import { SIGNUP } from "../dataservice/mutations";
 import useMutation from "../dataservice/useMutation";
+import Alert from "../components/Alert";
 
 const useStyles = makeStyles((theme) => ({
   loginContentContainer: {
@@ -95,9 +96,9 @@ const useStyles = makeStyles((theme) => ({
     // marginTop: "theme.spacing(4)",
   },
   snackbarContainer: {
-    width: "100%",
     position: "relative",
     padding: 0,
+    margin: "0 auto",
   },
   snackbar: {
     position: "absolute",
@@ -273,12 +274,11 @@ export default function SignupPage() {
                 onClose={() => setAlert({ ...alert, open: false })}
                 autoHideDuration={5000}
               >
-                <Alert
-                  variant="filled"
-                  severity={(data && "success") || "error"}
-                >
-                  {alert.message}
-                </Alert>
+                <div>
+                  <Alert severity={data || "success" || "error"}>
+                    {alert.message}
+                  </Alert>
+                </div>
               </Snackbar>
             </div>
             <div className={classes.formButtonContainer}>

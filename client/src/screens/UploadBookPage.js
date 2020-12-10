@@ -10,13 +10,13 @@ import {
   Snackbar,
 } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
-import Alert from "@material-ui/lab/Alert";
 import { set } from "date-fns";
 import Pagination from "../components/Pagination";
 import UploadBookCard from "../components/UploadBookCard";
 import { AuthContext } from "../Context";
 import { UPLOAD_BOOK } from "../dataservice/mutations";
 import useMutation from "../dataservice/useMutation";
+import Alert from "../components/Alert";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -234,9 +234,11 @@ const UploadBookPage = () => {
             onClose={() => setAlert({ ...alert, open: false })}
             autoHideDuration={5000}
           >
-            <Alert variant="filled" severity={data ? "success" : "error"}>
-              {alert.message}
-            </Alert>
+            <div>
+              <Alert severity={data ? "success" : "error"}>
+                {alert.message}
+              </Alert>
+            </div>
           </Snackbar>
           {/* end of success msg  */}
 
