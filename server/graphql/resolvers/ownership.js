@@ -225,6 +225,16 @@ module.exports = {
         throw new Error("Could not find a user with the requester's userId");
       }
 
+      // Catch case where user attempting to join waitlist is the one who checked out the book
+      const numCheckedOut = ownership.checkoutData.length;
+      if (numCheckedOut >= 1) {
+        if (ownership.checkoutData[numCheckedOut - 1].user.equals(req.userId)) {
+          throw new Error(
+            "You cannot join the waitlist for a book you have checked out!"
+          );
+        }
+      }
+
       // Check if the ownership object exists in user.waitlisted
       // & check if the user object exists in ownership.waitlist
       const waitListItemIndex = user.waitlisted.findIndex((item) =>
