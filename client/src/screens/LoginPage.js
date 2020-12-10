@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useContext } from "react";
 import { Redirect } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
@@ -11,6 +12,7 @@ import {
   Avatar,
   Snackbar,
 } from "@material-ui/core";
+import Alert from "@material-ui/lab/Alert";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import { AuthContext } from "../Context";
 import { LOGIN } from "../dataservice/mutations";
@@ -61,10 +63,8 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
   },
   formButtonHelperText: {
+    paddingTop: "1rem",
     textAlign: "center",
-  },
-  errorDiv: {
-    height: "50px",
   },
   loginImageContainer: {
     margin: `${theme.spacing(4)}px auto`,
@@ -84,6 +84,16 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "center",
     marginTop: theme.spacing(4),
     padding: "2rem",
+  },
+  snackbarContainer: {
+    width: "100%",
+    position: "relative",
+    padding: 0,
+  },
+  snackbar: {
+    position: "absolute",
+    top: 10,
+    width: "100%",
   },
 }));
 
@@ -112,7 +122,13 @@ export default function LoginPage() {
       window.localStorage.setItem("token", token);
       window.localStorage.setItem("userId", userId);
       auth.setUser({ email, token, displayName, userId });
-      setHomeRedirect(true);
+      setAlert({
+        open: true,
+        message: "Login Successful! Redirecting...",
+      });
+      window.setTimeout(() => {
+        setHomeRedirect(true);
+      }, 1500);
     } else if (error) {
       setAlert({
         open: true,
@@ -120,7 +136,7 @@ export default function LoginPage() {
         backgroundColor: "orange",
       });
     }
-  }, [data, auth, error]);
+  }, [data, error]);
 
   function handleChange({ target: { name, value } }) {
     switch (name) {
@@ -137,8 +153,6 @@ export default function LoginPage() {
   function handleSubmit(event) {
     event.preventDefault();
     login(LOGIN.variables({ email: loginEmail, password: loginPassword }));
-
-    // setShouldSubmit(true);
   }
 
   return (
@@ -146,14 +160,6 @@ export default function LoginPage() {
       {homeRedirect && <Redirect to="/" />}
       <Paper className={classes.loginContentContainer}>
         <div className={classes.formContainer}>
-          <Snackbar
-            open={alert.open}
-            message={alert.message}
-            ContentProps={{ style: { backgroundColor: alert.backgroundColor } }}
-            anchorOrigin={{ vertical: "top", horizontal: "left" }}
-            onClose={() => setAlert({ ...alert, open: false })}
-            autoHideDuration={5000}
-          />
           <Avatar className={classes.avatar}>
             <LockOutlinedIcon />
           </Avatar>
@@ -187,18 +193,45 @@ export default function LoginPage() {
               className={classes.formTextField}
             />
             <div className={classes.formButtonContainer}>
-              {(!loading && (
-                <Button
-                  className={classes.formButton}
-                  disabled={loginPassword.length < 1}
-                  type="submit"
-                  variant="contained"
+              <Button
+                className={classes.formButton}
+                disabled={loginPassword.length < 1}
+                type="submit"
+                variant="contained"
+                color="primary"
+                disableElevation
+              >
+                Log In
+              </Button>
+            </div>
+            <div className={classes.snackbarContainer}>
+              {loading && (
+                <CircularProgress
                   color="primary"
-                  disableElevation
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    left: "calc(50% - 20px)",
+                    marginTop: "-20px",
+                  }}
+                />
+              )}
+              <Snackbar
+                classes={{
+                  root: classes.snackbar,
+                }}
+                open={alert.open}
+                message={alert.message}
+                onClose={() => setAlert({ ...alert, open: false })}
+                autoHideDuration={5000}
+              >
+                <Alert
+                  variant="filled"
+                  severity={(data && "success") || "error"}
                 >
-                  Log In
-                </Button>
-              )) || <CircularProgress color="primary" />}
+                  {alert.message}
+                </Alert>
+              </Snackbar>
             </div>
             <div className={classes.formButtonContainer}>
               <Typography
