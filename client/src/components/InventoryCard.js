@@ -137,8 +137,8 @@ export default function InventoryCard({
     await returnBook(
       RETURN_BOOK.variables({
         ownershipId: id,
-        returnDate: checkoutData.returnDate || "",
-        condition: checkoutData.condition || "",
+        returnDate: Date.now().toString(),
+        condition: checkoutData.condition,
       }),
     );
     setExpanded(false);
