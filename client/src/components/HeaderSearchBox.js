@@ -61,14 +61,18 @@ const HeaderSearchBox = () => {
   // HANDLE SEARCH BUTTON CLICK FUNCTION
   const handleClick = () => {
     setQuery(input);
-    // clear the text in the inputfield after clicking search btn
-    setInput("");
+
     // redirect to search results page. Must push onto history stack for "back" to work correctly
     if (input.length > 0) {
-      history.push("/searchresults");
-    } else {
-      // eslint-disable-next-line no-alert
-      alert("Please specify what book you are looking for!");
+      if (history.location.pathname !== "/searchresults") {
+        history.push("/searchresults");
+      }
+    }
+  };
+
+  const onEnter = (event) => {
+    if (event.charCode === 13) {
+      handleClick();
     }
   };
 
@@ -82,6 +86,7 @@ const HeaderSearchBox = () => {
           onChange={handleSearchChange}
           value={input}
           color="primary"
+          onKeyPress={onEnter}
         />
         <Button
           onClick={handleClick}
