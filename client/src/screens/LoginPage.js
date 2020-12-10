@@ -155,7 +155,7 @@ export default function LoginPage() {
 
   return (
     <div className={classes.page}>
-      {homeRedirect && <Redirect to="/" />}
+      {homeRedirect && <Redirect to="/dashboard" />}
       <Paper className={classes.loginContentContainer}>
         <div className={classes.formContainer}>
           <Avatar className={classes.avatar}>
