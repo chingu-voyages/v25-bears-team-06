@@ -12,6 +12,7 @@ import SignupPage from "./screens/SignupPage";
 import LoginPage from "./screens/LoginPage";
 import UploadBookPage from "./screens/UploadBookPage";
 import MyInventoryPage from "./screens/MyInventoryPage";
+import PageNotFound from "./screens/PageNotFound";
 import { SearchContext, AuthContext } from "./Context";
 import ProtectedRoute from "./ProtectedRoute";
 
@@ -75,6 +76,7 @@ function App() {
                   path="/myinventory"
                   component={MyInventoryPage}
                 />
+                <Route path="*" component={PageNotFound} />
               </Switch>
             </main>
             <Footer />

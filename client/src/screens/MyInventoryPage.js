@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Redirect } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import { Snackbar, Typography } from "@material-ui/core";
 import InventoryCard from "../components/InventoryCard";
@@ -43,12 +42,9 @@ export default function MyInventoryPage() {
     }
   }, [JSON.stringify(data), JSON.stringify(error)]);
 
-  // const [shouldRedirect, setShouldRedirect] = useState(false);
-
   const classes = useStyles();
   return (
     <main className={classes.root}>
-      {/* {shouldRedirect && <Redirect to="/login" />} */}
       <Snackbar
         open={alert.open}
         message={alert.message}

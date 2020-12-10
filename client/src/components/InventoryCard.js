@@ -21,19 +21,31 @@ import { AuthContext } from "../Context";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    margin: `${theme.spacing(4)}px auto`,
-    maxWidth: "375px",
-    [theme.breakpoints.up("md")]: {
-      maxWidth: "750px",
-    },
+    flexGrow: 1,
+    margin: "1rem",
+  },
+  paper: {
+    padding: theme.spacing(2),
+    margin: "auto",
+    maxWidth: 900,
   },
   bookInfoContainer: {
     display: "flex",
     flexFlow: "row nowrap",
   },
+  bookThumbContainer: {
+    width: 128,
+    height: 128,
+    alignItems: "center",
+    verticalAlign: "middle",
+    justifyContent: "center",
+    position: "relative",
+    display: "inline-flex",
+  },
   bookThumb: {
-    margin: theme.spacing(1),
-    border: `1px solid black`,
+    display: "block",
+    maxWidth: "100%",
+    maxHeight: "100%",
   },
   bookInfo: {
     display: "flex",
@@ -173,143 +185,151 @@ export default function InventoryCard({
 
   const classes = useStyles();
   return (
-    <Paper className={classes.root}>
-      <div className={classes.bookInfoContainer}>
-        <div className={classes.bookThumb}>
-          <img
-            src={`http://books.google.com/books/content?id=${googleId}&printsec=frontcover&img=1&zoom=1&source=gbs_api`}
-            alt="book cover"
-          />
-        </div>
-        <div className={classes.bookInfo}>
-          <Typography variant="body1" component="p">
-            {title}
-          </Typography>
-          {authors && (
-            <Typography variant="body2" component="p">
-              by {authors}
+    <div className={classes.root}>
+      <Paper className={classes.paper}>
+        <div className={classes.bookInfoContainer}>
+          <div className={classes.bookThumbContainer}>
+            <img
+              src={`http://books.google.com/books/content?id=${googleId}&printsec=frontcover&img=1&zoom=1&source=gbs_api`}
+              alt="book cover"
+              className={classes.bookThumb}
+            />
+          </div>
+          <div className={classes.bookInfo}>
+            <Typography variant="body1" component="p">
+              {title}
             </Typography>
+            {authors && (
+              <Typography variant="body2" component="p">
+                by {authors}
+              </Typography>
+            )}
+          </div>
+        </div>
+        <div>
+          {isAvailable ? (
+            <div className={classes.bookAvailableContainer}>
+              <Accordion
+                className={classes.availabilityAccordion}
+                expanded={expanded === id}
+                onChange={toggleExpanded(id)}
+              >
+                <AccordionSummary
+                  classes={{ content: classes.availableSummary }}
+                >
+                  <Typography
+                    className={classes.availabilitySummaryText}
+                    variant="body1"
+                    component="p"
+                  >
+                    Available
+                  </Typography>
+                  <Button
+                    className={classes.availabilitySummaryBtn}
+                    variant="contained"
+                    startIcon={<DeleteIcon />}
+                    onClick={toggleExpanded(id)}
+                    disableElevation
+                  >
+                    Remove
+                  </Button>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Grid item container xs={12}>
+                    <Grid item xs={9}>
+                      <Typography variant="h6">Confirm Removal</Typography>
+                    </Grid>
+                    <Grid item container xs={3}>
+                      <IconButton
+                        className={classes.cancel}
+                        onClick={toggleExpanded(id)}
+                      >
+                        <CancelIcon className={classes.iconBtn} />
+                      </IconButton>
+                      {removeLoading ? (
+                        <CircularProgress color="primary" />
+                      ) : (
+                        <IconButton
+                          className={classes.confirm}
+                          onClick={handleRemove}
+                        >
+                          <CheckCircleIcon className={classes.iconBtn} />
+                        </IconButton>
+                      )}
+                    </Grid>
+                  </Grid>
+                </AccordionDetails>
+              </Accordion>
+            </div>
+          ) : (
+            <div>
+              <Accordion
+                className={classes.availabilityAccordion}
+                expanded={expanded === id}
+                onChange={toggleExpanded(id)}
+              >
+                <AccordionSummary
+                  classes={{
+                    content: classes.checkedOutSummary,
+                  }}
+                >
+                  <div className={classes.checkedOutSummaryText}>
+                    <Typography variant="body1" component="p">
+                      Checked out by:
+                    </Typography>
+                    <Typography variant="body1" component="p">
+                      {checkoutData.user.displayName}
+                    </Typography>
+                  </div>
+                  <div className={classes.checkedOutSummaryText}>
+                    <Typography variant="body1" component="p">
+                      Due by:
+                    </Typography>
+                    <Typography variant="body1" component="p">
+                      {format(+checkoutData.dueDate, "PPPP")}
+                    </Typography>
+                  </div>
+                  <div className={classes.checkedOutSummaryBtnContainer}>
+                    <Button
+                      className={classes.checkedOutSummaryBtn}
+                      variant="contained"
+                      disableElevation
+                      color="primary"
+                    >
+                      Mark as Returned
+                    </Button>
+                  </div>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Grid item container xs={12}>
+                    <Grid item xs={9}>
+                      <Typography variant="h6">Confirm Return</Typography>
+                    </Grid>
+                    <Grid item container xs={3}>
+                      <IconButton
+                        className={classes.cancel}
+                        onClick={toggleExpanded(id)}
+                      >
+                        <CancelIcon className={classes.iconBtn} />
+                      </IconButton>
+                      {returnLoading ? (
+                        <CircularProgress color="primary" />
+                      ) : (
+                        <IconButton
+                          className={classes.confirm}
+                          onClick={handleReturn}
+                        >
+                          <CheckCircleIcon className={classes.iconBtn} />
+                        </IconButton>
+                      )}
+                    </Grid>
+                  </Grid>
+                </AccordionDetails>
+              </Accordion>
+            </div>
           )}
         </div>
-      </div>
-      <div>
-        {isAvailable ? (
-          <div className={classes.bookAvailableContainer}>
-            <Accordion
-              className={classes.availabilityAccordion}
-              expanded={expanded === id}
-              onChange={toggleExpanded(id)}
-            >
-              <AccordionSummary classes={{ content: classes.availableSummary }}>
-                <Typography
-                  className={classes.availabilitySummaryText}
-                  variant="body1"
-                  component="p"
-                >
-                  Available
-                </Typography>
-                <Button
-                  className={classes.availabilitySummaryBtn}
-                  variant="contained"
-                  startIcon={<DeleteIcon />}
-                  onClick={toggleExpanded(id)}
-                >
-                  Remove
-                </Button>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Grid item container xs={12}>
-                  <Grid item xs={9}>
-                    <Typography variant="h6">Confirm Removal</Typography>
-                  </Grid>
-                  <Grid item container xs={3}>
-                    <IconButton
-                      className={classes.cancel}
-                      onClick={toggleExpanded(id)}
-                    >
-                      <CancelIcon className={classes.iconBtn} />
-                    </IconButton>
-                    {removeLoading ? (
-                      <CircularProgress color="primary" />
-                    ) : (
-                      <IconButton
-                        className={classes.confirm}
-                        onClick={handleRemove}
-                      >
-                        <CheckCircleIcon className={classes.iconBtn} />
-                      </IconButton>
-                    )}
-                  </Grid>
-                </Grid>
-              </AccordionDetails>
-            </Accordion>
-          </div>
-        ) : (
-          <div>
-            <Accordion
-              className={classes.availabilityAccordion}
-              expanded={expanded === id}
-              onChange={toggleExpanded(id)}
-            >
-              <AccordionSummary
-                classes={{
-                  content: classes.checkedOutSummary,
-                }}
-              >
-                <div className={classes.checkedOutSummaryText}>
-                  <Typography variant="body1" component="p">
-                    Checked out by:
-                  </Typography>
-                  <Typography variant="body1" component="p">
-                    {checkoutData.user.displayName}
-                  </Typography>
-                </div>
-                <div className={classes.checkedOutSummaryText}>
-                  <Typography variant="body1" component="p">
-                    Due by:
-                  </Typography>
-                  <Typography variant="body1" component="p">
-                    {format(+checkoutData.dueDate, "PPPP")}
-                  </Typography>
-                </div>
-                <div className={classes.checkedOutSummaryBtnContainer}>
-                  <Button
-                    className={classes.checkedOutSummaryBtn}
-                    variant="contained"
-                  >
-                    Mark as Returned
-                  </Button>
-                </div>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Grid item container xs={12}>
-                  <Grid item xs={9}>
-                    <Typography variant="h6">Confirm Return</Typography>
-                  </Grid>
-                  <Grid item container xs={3}>
-                    <IconButton
-                      className={classes.cancel}
-                      onClick={toggleExpanded(id)}
-                    >
-                      <CancelIcon className={classes.iconBtn} />
-                    </IconButton>
-                    {returnLoading ? (
-                      <CircularProgress color="primary" />
-                    ) : (
-                      <IconButton
-                        className={classes.confirm}
-                        onClick={handleReturn}
-                      >
-                        <CheckCircleIcon className={classes.iconBtn} />
-                      </IconButton>
-                    )}
-                  </Grid>
-                </Grid>
-              </AccordionDetails>
-            </Accordion>
-          </div>
-        )}
-      </div>
-    </Paper>
+      </Paper>
+    </div>
   );
 }
