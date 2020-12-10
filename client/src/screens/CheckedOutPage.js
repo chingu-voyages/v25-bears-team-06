@@ -15,41 +15,41 @@ const useStyles = makeStyles({
   },
 });
 
-const WaitlistedPage = () => {
+const CheckedOutPage = () => {
   const classes = useStyles();
 
-  const [waitlistedBooks, setWaitlistedBooks] = useState([]);
+  const [checkedOutBooks, setCheckedOutBooks] = useState([]);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const booksPerPage = waitlistedBooks.length > 7 ? 8 : waitlistedBooks.length;
+  const booksPerPage = checkedOutBooks.length > 7 ? 8 : checkedOutBooks.length;
   // Get currently displayed books - for pagination
   const indexOfLastBook = currentPage * booksPerPage;
   const indexOfFirstBook = indexOfLastBook - booksPerPage;
-  const currentBooks = waitlistedBooks.slice(indexOfFirstBook, indexOfLastBook);
+  const currentBooks = checkedOutBooks.slice(indexOfFirstBook, indexOfLastBook);
   // change page
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
     <div>
       <Grid className={classes.pageContainer} container direction="column">
-        <Typography variant="h4">Books you have waitlisted for</Typography>
+        <Typography variant="h4">Books you have checked out</Typography>
         <Typography variant="h5">Total: #</Typography>
 
-        {/* Display waitlisted books  */}
+        {/* Display checkedOut books  */}
 
         {/* {loading && (
           <CircularProgress color="primary" style={{ padding: "2.5rem" }} />
         )}
 
         {!loading &&
-          (waitlistedBooks.length === 0 ? (
+          (checkedOutBooks.length === 0 ? (
             <>
               <Typography variant="subtitle1" gutterBottom>
                 You are not currently on a waitlist for any books. <br />
               </Typography>
             </>
           ) : (
-            waitlistedBooks.map((book) => (
+            checkedOutBooks.map((book) => (
               <SingleBookCard
                 key={book._id}
                 id={book._id}
@@ -71,7 +71,7 @@ const WaitlistedPage = () => {
         >
           <Pagination
             booksPerPage={booksPerPage}
-            totalBooks={waitlistedBooks.length}
+            totalBooks={checkedOutBooks.length}
             paginate={paginate}
             className={classes.pagination}
           />
@@ -81,4 +81,4 @@ const WaitlistedPage = () => {
   );
 };
 
-export default WaitlistedPage;
+export default CheckedOutPage;

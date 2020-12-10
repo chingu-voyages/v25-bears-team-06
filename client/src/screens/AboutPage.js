@@ -9,6 +9,7 @@ import {
   AccordionSummary,
   Grid,
 } from "@material-ui/core";
+import { Link } from "react-router-dom";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import PersonPinCircleIcon from "@material-ui/icons/PersonPinCircle";
 import LocalLibraryIcon from "@material-ui/icons/LocalLibrary";
@@ -90,7 +91,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexFlow: "row nowrap",
     maxWidth: 1440,
-    margin: "auto",
+    margin: "1rem auto",
     paddingTop: "1rem",
     textAlign: "center",
     [theme.breakpoints.down("sm")]: {
@@ -180,6 +181,8 @@ const AboutPage = () => {
               color="secondary"
               size="large"
               className={classes.btnOne}
+              component={Link}
+              to="/signup"
             >
               Become a Member
             </Button>
@@ -188,13 +191,17 @@ const AboutPage = () => {
               color="secondary"
               size="large"
               className={classes.btnTwo}
+              href="#questionInfoContainer"
             >
               Learn More
             </Button>
           </div>
         </div>
       </section>
-      <section className={classes.questionInfoContainer}>
+      <section
+        className={classes.questionInfoContainer}
+        id="questionInfoContainer"
+      >
         <Paper className={classes.questionSection}>
           <Typography variant="h6" gutterBottom>
             Frequently Asked Questions (FAQs)
@@ -213,10 +220,10 @@ const AboutPage = () => {
                   id="panel1c-header"
                   className={classes.accordionSummary}
                 >
-                  <Typography color="primary">Q: {questionText}</Typography>
+                  <Typography color="primary">{questionText}</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
-                  <Typography>A: {details}</Typography>
+                  <Typography>{details}</Typography>
                 </AccordionDetails>
               </Accordion>
             );
@@ -226,7 +233,7 @@ const AboutPage = () => {
           <Typography variant="h6" gutterBottom>
             About
           </Typography>
-          <Typography variant="body1" gutterBottom>
+          <Typography variant="body2" gutterBottom>
             OpenShelf is a site for readers of all ages to share books with one
             another. This project was created as part of a Chingu Voyage.
             <br />

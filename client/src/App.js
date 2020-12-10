@@ -13,6 +13,7 @@ import LoginPage from "./screens/LoginPage";
 import UploadBookPage from "./screens/UploadBookPage";
 import MyInventoryPage from "./screens/MyInventoryPage";
 import { SearchContext, AuthContext } from "./Context";
+import ProtectedRoute from "./ProtectedRoute";
 
 function App() {
   // sharing searchbox user input value across pages with context
@@ -57,12 +58,23 @@ function App() {
                   path="/searchresults"
                   component={SearchResultsPage}
                 />
-                <Route exact path="/dashboard" component={DashboardPage} />
+                <ProtectedRoute
+                  exact
+                  path="/dashboard"
+                  component={DashboardPage}
+                />
                 <Route exact path="/signup" component={SignupPage} />
                 <Route exact path="/login" component={LoginPage} />
                 <Route path="/bookinfo/:id" component={BookInfoPage} />
-                <Route path="/uploadbook/" component={UploadBookPage} />
-                <Route exact path="/myinventory" component={MyInventoryPage} />
+                <ProtectedRoute
+                  path="/uploadbook/"
+                  component={UploadBookPage}
+                />
+                <ProtectedRoute
+                  exact
+                  path="/myinventory"
+                  component={MyInventoryPage}
+                />
               </Switch>
             </main>
             <Footer />
