@@ -57,6 +57,7 @@ const useStyles = makeStyles((theme) => ({
 
 const DashboardPage = () => {
   const classes = useStyles();
+
   return (
     <Router>
       <Paper className={classes.pageContainer}>
@@ -112,7 +113,7 @@ const DashboardPage = () => {
                       View Inventory (#)
                     </ListItemText>{" "}
                   </ListItem>
-                  <ListItem button component={Link} to="/uploadbook">
+                  <ListItem button component={Link} to="/dashboard/uploadbook">
                     <ListItemText
                       className={classes.menuItem}
                       disableTypography
@@ -129,7 +130,7 @@ const DashboardPage = () => {
 
           <Grid xs={12} md={9} className={classes.pagesSection}>
             <Switch>
-              <Route path="/uploadbook" component={UploadBookPage} />
+              <Route path="/dashboard/uploadbook" component={UploadBookPage} />
             </Switch>
           </Grid>
         </Grid>
