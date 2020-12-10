@@ -137,7 +137,7 @@ export default function SignupPage() {
       });
       window.setTimeout(() => {
         setHomeRedirect(true);
-      }, 1500);
+      }, 1000);
     } else if (error) {
       setAlert({
         open: true,

@@ -111,7 +111,6 @@ export default function LoginPage() {
   const [alert, setAlert] = useState({
     open: false,
     message: "",
-    backgroundColor: "",
   });
 
   useEffect(() => {
@@ -128,12 +127,11 @@ export default function LoginPage() {
       });
       window.setTimeout(() => {
         setHomeRedirect(true);
-      }, 1500);
+      }, 1000);
     } else if (error) {
       setAlert({
         open: true,
         message: error,
-        backgroundColor: "orange",
       });
     }
   }, [data, error]);
