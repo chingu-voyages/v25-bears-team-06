@@ -1,14 +1,20 @@
 import React, { useState, useEffect, useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { useHistory, useParams } from "react-router-dom";
-import Grid from "@material-ui/core/Grid";
-import Paper from "@material-ui/core/Paper";
-import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
-import Dialog from "@material-ui/core/Dialog";
-import getBookByIdRequest from "../dataservice/getBookByIdRequest";
+import {
+  CircularProgress,
+  Grid,
+  Paper,
+  Typography,
+  Button,
+  Dialog,
+  Snackbar,
+} from "@material-ui/core";
 import CheckOutModal from "../components/CheckOutModal";
 import { AuthContext } from "../Context";
+import { GET_BOOK_BY_ID } from "../dataservice/queries";
+import useQuery from "../dataservice/useQuery";
+import Alert from "../components/Alert";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -40,6 +46,17 @@ const useStyles = makeStyles((theme) => ({
       height: "3rem",
     },
   },
+  snackbarContainer: {
+    width: "100%",
+    position: "relative",
+    margin: "0 auto",
+    padding: 0,
+  },
+  snackbar: {
+    position: "absolute",
+    top: 0,
+    margin: "0 0 0",
+  },
 }));
 
 // Template for book info page
@@ -50,36 +67,28 @@ const BookInfoPage = () => {
   const auth = useContext(AuthContext);
   const loggedIn = auth && auth.user && auth.user.token;
 
+  const { data, loading, error } = useQuery({
+    query: GET_BOOK_BY_ID.query,
+    variables: GET_BOOK_BY_ID.variables({ id }),
+  });
+
   const [open, setOpen] = useState(false);
   const [bookResult, setBookResult] = useState([]);
-  const [hasError, setHasError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(
-    "Something went wrong. Please try again later",
-  );
+  const [alert, setAlert] = useState({
+    open: false,
+    message: "",
+  });
 
-  useEffect(
-    function handleEffect() {
-      async function getBookByIdEffect() {
-        try {
-          const { getBookById, message } = await getBookByIdRequest({ id });
-          if (getBookById) {
-            setBookResult(getBookById);
-          } else if (message) {
-            setHasError(true);
-            setErrorMessage(message);
-          }
-        } catch (err) {
-          setHasError(true);
-          setErrorMessage(err.message);
-        }
-      }
-      getBookByIdEffect().catch((err) => {
-        setHasError(true);
-        setErrorMessage(err.message);
+  useEffect(() => {
+    if (data) {
+      setBookResult(data.getBookById);
+    } else if (error) {
+      setAlert({
+        open: true,
+        message: error,
       });
-    },
-    [id],
-  );
+    }
+  }, [data, error]);
 
   // back to search results
   const handleGoBack = () => {
@@ -98,7 +107,22 @@ const BookInfoPage = () => {
 
   return (
     <>
-      {hasError && <div className={classes.errorDiv}>{errorMessage}</div>}
+      <div className={classes.snackbarContainer}>
+        <Snackbar
+          classes={{
+            root: classes.snackbar,
+          }}
+          open={alert.open}
+          message={alert.message}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+          onClose={() => setAlert({ ...alert, open: false })}
+          autoHideDuration={5000}
+        >
+          <div>
+            <Alert severity="error">{alert.message}</Alert>
+          </div>
+        </Snackbar>
+      </div>
       <div className={classes.root}>
         <Button onClick={handleGoBack}> Back to search results</Button>
         <Paper className={classes.paper}>
@@ -148,22 +172,24 @@ const BookInfoPage = () => {
                 </Grid>
               </Grid>
             </Grid>
-            <Grid
-              item
-              xs={12}
-              container
-              className={classes.btnContainer}
-              sm={3}
-            >
-              <Button
-                className={classes.btn}
-                variant="contained"
-                color="primary"
-                disableElevation
-                onClick={handleOpen}
-              >
-                Checkout
-              </Button>
+            <Grid item xs={12} container sm={3}>
+              {!loading ? (
+                <Button
+                  className={classes.btn}
+                  variant="contained"
+                  color="primary"
+                  disableElevation
+                  onClick={handleOpen}
+                  disabled={!!error}
+                >
+                  Checkout
+                </Button>
+              ) : (
+                <CircularProgress
+                  color="primary"
+                  style={{ margin: "0 auto" }}
+                />
+              )}
             </Grid>
             <Dialog open={open} onClose={handleClose}>
               <CheckOutModal

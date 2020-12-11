@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect, useState } from "react";
 import { Redirect } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
@@ -8,10 +9,15 @@ import {
   Typography,
   Paper,
   Avatar,
+  CircularProgress,
+  Snackbar,
 } from "@material-ui/core";
+// import Alert from "@material-ui/lab/Alert";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import signupRequest from "../dataservice/signupRequest";
 import { AuthContext } from "../Context";
+import { SIGNUP } from "../dataservice/mutations";
+import useMutation from "../dataservice/useMutation";
+import Alert from "../components/Alert";
 
 const useStyles = makeStyles((theme) => ({
   loginContentContainer: {
@@ -25,6 +31,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   formContainer: {
+    position: "relative",
     width: "40%",
     [theme.breakpoints.down("xs")]: {
       width: "100%",
@@ -40,6 +47,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: 0,
   },
   form: {
+    position: "relative",
     display: "flex",
     margin: "0 auto",
     flexFlow: "column nowrap",
@@ -52,15 +60,14 @@ const useStyles = makeStyles((theme) => ({
   formButtonContainer: {
     margin: `${theme.spacing(4)}px auto`,
     width: "80%",
+    textAlign: "center",
   },
   formButton: {
     width: "100%",
   },
   formButtonHelperText: {
+    paddingTop: "1rem",
     textAlign: "center",
-  },
-  errorDiv: {
-    height: "50px",
   },
   loginImageContainer: {
     margin: `${theme.spacing(4)}px auto`,
@@ -87,67 +94,52 @@ const useStyles = makeStyles((theme) => ({
   imgText: {
     fontWeight: 500,
   },
+  snackbarContainer: {
+    position: "relative",
+    padding: 0,
+    margin: "0 auto",
+  },
+  snackbar: {
+    position: "absolute",
+    top: 10,
+    width: "100%",
+  },
 }));
 
 export default function SignupPage() {
+  const classes = useStyles();
+
+  const auth = useContext(AuthContext);
+  const [signup, { data, loading, error }] = useMutation(SIGNUP.mutation);
+
   const [signupEmail, setSignupEmail] = useState("");
   const [signupDisplayName, setSignupDisplayName] = useState("");
   const [signupPassword, setSignupPassword] = useState("");
   const [signupConfirmPassword, setSignupConfirmPassword] = useState("");
-  const [shouldSubmit, setShouldSubmit] = useState(false);
-  const [hasError, setHasError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(
-    "Something went wrong. Please try again later.",
-  );
   const [homeRedirect, setHomeRedirect] = useState(false);
-  const auth = useContext(AuthContext);
 
-  useEffect(
-    function handleEffect() {
-      async function signupEffect() {
-        try {
-          const { createAccount, message } = await signupRequest({
-            email: signupEmail,
-            displayName: signupDisplayName,
-            password: signupPassword,
-            confirmPassword: signupConfirmPassword,
-          });
-          if (createAccount) {
-            const { email, displayName, token, userId } = createAccount;
-            window.localStorage.setItem("email", email);
-            window.localStorage.setItem("displayName", displayName);
-            window.localStorage.setItem("token", token);
-            window.localStorage.setItem("userId", userId);
-            auth.setUser({ email, token, displayName, userId });
-            setShouldSubmit(false);
-            setHomeRedirect(true);
-          } else if (message) {
-            setHasError(true);
-            setErrorMessage(message);
-            setShouldSubmit(false);
-          }
-        } catch (err) {
-          setHasError(true);
-          setErrorMessage(err.message);
-          setShouldSubmit(false);
-        }
-      }
-      if (shouldSubmit) {
-        signupEffect().catch((err) => {
-          setHasError(true);
-          setErrorMessage(err.message);
-        });
-      }
-    },
-    [
-      shouldSubmit,
-      signupEmail,
-      signupDisplayName,
-      signupPassword,
-      signupConfirmPassword,
-      auth,
-    ],
-  );
+  const [alert, setAlert] = useState({
+    open: false,
+    message: "",
+  });
+
+  useEffect(() => {
+    if (data) {
+      auth.login({ ...data.createAccount });
+      setAlert({
+        open: true,
+        message: "Signup Successful! Redirecting...",
+      });
+      window.setTimeout(() => {
+        setHomeRedirect(true);
+      }, 1000);
+    } else if (error) {
+      setAlert({
+        open: true,
+        message: error,
+      });
+    }
+  }, [data, error]);
 
   function handleChange({ target: { name, value } }) {
     switch (name) {
@@ -169,17 +161,21 @@ export default function SignupPage() {
 
   function handleSubmit(event) {
     event.preventDefault();
-    setShouldSubmit(true);
+    signup(
+      SIGNUP.variables({
+        email: signupEmail,
+        displayName: signupDisplayName,
+        password: signupPassword,
+        confirmPassword: signupConfirmPassword,
+      }),
+    );
   }
-
-  const classes = useStyles();
 
   return (
     <>
-      {homeRedirect && <Redirect to="/" />}
+      {homeRedirect && <Redirect to="/dashboard" />}
       <Paper className={classes.loginContentContainer}>
         <div className={classes.formContainer}>
-          {hasError && <div className={classes.errorDiv}>{errorMessage}</div>}
           <Avatar className={classes.avatar}>
             <LockOutlinedIcon />
           </Avatar>
@@ -250,6 +246,34 @@ export default function SignupPage() {
               >
                 Submit
               </Button>
+            </div>
+            <div className={classes.snackbarContainer}>
+              {loading && (
+                <CircularProgress
+                  color="primary"
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    left: "calc(50% - 20px)",
+                    marginTop: "-20px",
+                  }}
+                />
+              )}
+              <Snackbar
+                classes={{
+                  root: classes.snackbar,
+                }}
+                open={alert.open}
+                message={alert.message}
+                onClose={() => setAlert({ ...alert, open: false })}
+                autoHideDuration={5000}
+              >
+                <div>
+                  <Alert severity={(data && "success") || "error"}>
+                    {alert.message}
+                  </Alert>
+                </div>
+              </Snackbar>
             </div>
             <div className={classes.formButtonContainer}>
               <Typography

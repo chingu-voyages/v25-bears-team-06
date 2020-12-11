@@ -27,7 +27,7 @@ const getBookByIdVariables = ({ id }) => ({
 });
 
 const GET_BOOK_BY_ID = {
-  mutation: getBookByIdQuery,
+  query: getBookByIdQuery,
   variables: getBookByIdVariables,
 };
 

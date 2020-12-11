@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useContext } from "react";
 import { Redirect } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
@@ -15,6 +16,7 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import { AuthContext } from "../Context";
 import { LOGIN } from "../dataservice/mutations";
 import useMutation from "../dataservice/useMutation";
+import Alert from "../components/Alert";
 
 const useStyles = makeStyles((theme) => ({
   loginContentContainer: {
@@ -55,7 +57,10 @@ const useStyles = makeStyles((theme) => ({
   },
   formButton: {
     width: "100%",
-    // textAlign: "center",
+  },
+  formButtonHelperText: {
+    paddingTop: "1rem",
+    textAlign: "center",
   },
   loginImageContainer: {
     margin: `${theme.spacing(4)}px auto`,
@@ -66,6 +71,25 @@ const useStyles = makeStyles((theme) => ({
       width: "100%",
       marginBottom: "1rem",
     },
+  },
+  imgTextContainer: {
+    width: "80%",
+    margin: "auto",
+  },
+  imgText: {
+    textAlign: "center",
+    marginTop: theme.spacing(4),
+    padding: "2rem",
+  },
+  snackbarContainer: {
+    width: "100%",
+    position: "relative",
+    padding: 0,
+  },
+  snackbar: {
+    position: "absolute",
+    top: 10,
+    width: "100%",
   },
 }));
 
@@ -81,28 +105,27 @@ export default function LoginPage() {
 
   // Snackbar function
   const [alert, setAlert] = useState({
-    open: false,
-    message: "",
-    backgroundColor: "",
+    open: auth.tokenExpired,
+    message: auth.tokenExpired ? "Token Expired: Please Relog" : "",
   });
 
   useEffect(() => {
     if (data) {
-      const { email, displayName, token, userId } = data.login;
-      window.localStorage.setItem("email", email);
-      window.localStorage.setItem("displayName", displayName);
-      window.localStorage.setItem("token", token);
-      window.localStorage.setItem("userId", userId);
-      auth.setUser({ email, token, displayName, userId });
-      setHomeRedirect(true);
+      auth.login({ ...data.login });
+      setAlert({
+        open: true,
+        message: "Login Successful! Redirecting...",
+      });
+      window.setTimeout(() => {
+        setHomeRedirect(true);
+      }, 1000);
     } else if (error) {
       setAlert({
         open: true,
         message: error,
-        backgroundColor: "#ff9800",
       });
     }
-  }, [data, auth, error]);
+  }, [data, error]);
 
   function handleChange({ target: { name, value } }) {
     switch (name) {
@@ -123,17 +146,9 @@ export default function LoginPage() {
 
   return (
     <div className={classes.page}>
-      {homeRedirect && <Redirect to="/" />}
+      {homeRedirect && <Redirect to="/dashboard" />}
       <Paper className={classes.loginContentContainer}>
         <div className={classes.formContainer}>
-          <Snackbar
-            open={alert.open}
-            message={alert.message}
-            ContentProps={{ style: { backgroundColor: alert.backgroundColor } }}
-            anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-            onClose={() => setAlert({ ...alert, open: false })}
-            autoHideDuration={5000}
-          />
           <Avatar className={classes.avatar}>
             <LockOutlinedIcon />
           </Avatar>
@@ -167,18 +182,44 @@ export default function LoginPage() {
               className={classes.formTextField}
             />
             <div className={classes.formButtonContainer}>
-              {(!loading && (
-                <Button
-                  className={classes.formButton}
-                  disabled={loginPassword.length < 1}
-                  type="submit"
-                  variant="contained"
+              <Button
+                className={classes.formButton}
+                disabled={loginPassword.length < 1}
+                type="submit"
+                variant="contained"
+                color="primary"
+                disableElevation
+              >
+                Log In
+              </Button>
+            </div>
+            <div className={classes.snackbarContainer}>
+              {loading && (
+                <CircularProgress
                   color="primary"
-                  disableElevation
-                >
-                  Log In
-                </Button>
-              )) || <CircularProgress color="primary" />}
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    left: "calc(50% - 20px)",
+                    marginTop: "-20px",
+                  }}
+                />
+              )}
+              <Snackbar
+                classes={{
+                  root: classes.snackbar,
+                }}
+                open={alert.open}
+                message={alert.message}
+                onClose={() => setAlert({ ...alert, open: false })}
+                autoHideDuration={5000}
+              >
+                <div>
+                  <Alert severity={(data && "success") || "error"}>
+                    {alert.message}
+                  </Alert>
+                </div>
+              </Snackbar>
             </div>
             <div className={classes.formButtonContainer}>
               <Typography variant="body2">
