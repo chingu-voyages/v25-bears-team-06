@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
 
-const useMutation = (query, token) => {
+const useMutation = (query, token, onTokenExpired) => {
   const history = useHistory();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -40,17 +40,6 @@ const useMutation = (query, token) => {
         history.replace(history.location.pathname, {
           errorStatusCode: status,
         });
-
-        if (status === 401) {
-          // Server will return 401 if token is expired
-          // Delete localStorage data & redirect to /login
-          localStorage.removeItem("email");
-          localStorage.removeItem("token");
-          localStorage.removeItem("displayName");
-          localStorage.removeItem("userId");
-          window.location.href = "/login";
-          return;
-        }
       }
 
       const result = await response.json();
@@ -63,6 +52,9 @@ const useMutation = (query, token) => {
         const errorMessage =
           typeof message === "string" ? message : message.message;
 
+        if (errorMessage.includes("JWT Expired")) {
+          onTokenExpired();
+        }
         setError(errorMessage);
       } else if (result.data) {
         setData(result.data);

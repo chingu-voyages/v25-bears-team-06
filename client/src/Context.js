@@ -8,8 +8,11 @@ const AuthContext = createContext({
     email: null,
     displayName: null,
   },
+  tokenExpired: false,
   setUser: (user) => {},
-  logout: () => {},
+  onTokenExpired: () => {},
+  login: ({ email, token, displayName, userId }) => {},
+  logout: (isTokenExpired) => {},
 });
 
 const SearchContext = createContext({

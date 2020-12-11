@@ -10,8 +10,6 @@ import BookInfoPage from "./screens/BookInfoPage";
 import AboutPage from "./screens/AboutPage";
 import SignupPage from "./screens/SignupPage";
 import LoginPage from "./screens/LoginPage";
-import UploadBookPage from "./screens/UploadBookPage";
-import MyInventoryPage from "./screens/MyInventoryPage";
 import PageNotFound from "./screens/PageNotFound";
 import { SearchContext, AuthContext } from "./Context";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -32,6 +30,29 @@ function App() {
         }
       : null,
   );
+  const [tokenExpired, setTokenExpired] = useState(false);
+
+  const login = ({ email, token, displayName, userId }) => {
+    window.localStorage.setItem("email", email);
+    window.localStorage.setItem("displayName", displayName);
+    window.localStorage.setItem("token", token);
+    window.localStorage.setItem("userId", userId);
+    setTokenExpired(false);
+    setUser({
+      email,
+      token,
+      displayName,
+      userId,
+    });
+  };
+
+  const logout = () => {
+    localStorage.removeItem("email");
+    localStorage.removeItem("token");
+    localStorage.removeItem("displayName");
+    localStorage.removeItem("userId");
+    setUser(null);
+  };
 
   return (
     <Router>
@@ -40,13 +61,13 @@ function App() {
           value={{
             user,
             setUser,
-            logout: () => {
-              localStorage.removeItem("email");
-              localStorage.removeItem("token");
-              localStorage.removeItem("displayName");
-              localStorage.removeItem("userId");
-              setUser(null);
+            tokenExpired,
+            onTokenExpired: () => {
+              setTokenExpired(true);
+              logout();
             },
+            login,
+            logout,
           }}
         >
           <SearchContext.Provider value={{ query, setQuery }}>
