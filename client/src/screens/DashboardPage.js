@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import clsx from "clsx";
-import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Grid,
@@ -13,8 +13,7 @@ import {
   Snackbar,
 } from "@material-ui/core";
 import AddBoxIcon from "@material-ui/icons/AddBox";
-import ProtectedRoute from "../ProtectedRoute";
-import { AuthContext } from "../Context";
+import ProtectedRoute from "../components/ProtectedRoute";
 import { AuthContext } from "../Context";
 import { GET_USER } from "../dataservice/queries";
 import useQuery from "../dataservice/useQuery";
@@ -92,7 +91,7 @@ const DashboardPage = () => {
 
   const auth = useContext(AuthContext);
   const { token, displayName } = auth.user;
-  
+
   const { data, loading, error } = useQuery({
     query: GET_USER.query,
     token,
@@ -156,7 +155,12 @@ const DashboardPage = () => {
                   My Borrowing
                 </Typography>
                 <List>
-                  <ListItem divider button component={Link} to="/checkedout">
+                  <ListItem
+                    divider
+                    button
+                    component={Link}
+                    to="/dashboard/checkedout"
+                  >
                     <ListItemText
                       className={classes.menuItem}
                       disableTypography
@@ -176,7 +180,7 @@ const DashboardPage = () => {
                       )
                     </ListItemText>
                   </ListItem>
-                  <ListItem button component={Link} to="/waitlisted">
+                  <ListItem button component={Link} to="/dashboard/waitlisted">
                     <ListItemText
                       className={classes.menuItem}
                       disableTypography
@@ -206,7 +210,12 @@ const DashboardPage = () => {
                   My Inventory
                 </Typography>
                 <List>
-                  <ListItem divider button component={Link} to="/myinventory">
+                  <ListItem
+                    divider
+                    button
+                    component={Link}
+                    to="/dashboard/myinventory"
+                  >
                     <ListItemText
                       className={classes.menuItem}
                       disableTypography
@@ -243,10 +252,26 @@ const DashboardPage = () => {
 
           <Grid item xs={12} md={9} className={classes.pagesSection}>
             <Switch>
-              <ProtectedRoute path="/uploadbook" component={UploadBookPage} />
-              <ProtectedRoute path="/waitlisted" component={WaitlistedPage} />
-              <ProtectedRoute path="/checkedout" component={CheckedOutPage} />
-              <ProtectedRoute path="/myinventory" component={MyInventoryPage} />
+              <ProtectedRoute
+                exact
+                path="/dashboard/uploadbook"
+                component={UploadBookPage}
+              />
+              <ProtectedRoute
+                exact
+                path="/dashboard/waitlisted"
+                component={WaitlistedPage}
+              />
+              <ProtectedRoute
+                exact
+                path="/dashboard/checkedout"
+                component={CheckedOutPage}
+              />
+              <ProtectedRoute
+                exact
+                path="/dashboard/myinventory"
+                component={MyInventoryPage}
+              />
             </Switch>
           </Grid>
         </Grid>

@@ -14,7 +14,7 @@ import UploadBookPage from "./screens/UploadBookPage";
 import MyInventoryPage from "./screens/MyInventoryPage";
 import PageNotFound from "./screens/PageNotFound";
 import { SearchContext, AuthContext } from "./Context";
-import ProtectedRoute from "./ProtectedRoute";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   // sharing searchbox user input value across pages with context
@@ -59,44 +59,20 @@ function App() {
                   path="/searchresults"
                   component={SearchResultsPage}
                 />
+                <Route exact path="/signup" component={SignupPage} />
+                <Route exact path="/login" component={LoginPage} />
+                <Route path="/bookinfo/:id" component={BookInfoPage} />
                 <ProtectedRoute
                   exact
                   path="/dashboard"
                   component={DashboardPage}
                 />
-                <Route exact path="/signup" component={SignupPage} />
-                <Route exact path="/login" component={LoginPage} />
-                <Route
-                  exact
-                  path="/dashboard/myinventory"
-                  component={DashboardPage}
-                />
-                <Route
-                  exact
-                  path="/dashboard/uploadbook"
-                  component={DashboardPage}
-                />
-                <Route
-                  exact
-                  path="/dashboard/checkedout"
-                  component={DashboardPage}
-                />
-                <Route
-                  exact
-                  path="/dashboard/waitlist"
-                  component={DashboardPage}
-                />
-                <Route path="/bookinfo/:id" component={BookInfoPage} />
-                <ProtectedRoute
-                  path="/uploadbook/"
-                  component={UploadBookPage}
-                />
                 <ProtectedRoute
                   exact
-                  path="/myinventory"
-                  component={MyInventoryPage}
+                  path="/dashboard/*"
+                  component={DashboardPage}
                 />
-                <Route path="*" component={PageNotFound} />
+                <Route component={PageNotFound} />
               </Switch>
             </main>
             <Footer />

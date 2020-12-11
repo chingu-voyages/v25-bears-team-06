@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useContext } from "react";
 import { Route, Redirect } from "react-router-dom";
-import { AuthContext } from "./Context";
+import { AuthContext } from "../Context";
 
 const ProtectedRoute = ({ component: Component, ...rest }) => {
   const auth = useContext(AuthContext);
