@@ -7,11 +7,6 @@ const getInventoryQuery = `
         googleId
         title
         authors
-        description
-        categories
-        pageCount
-        publishedDate
-        publisher
       }
       checkoutData {
         user {

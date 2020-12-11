@@ -275,7 +275,7 @@ export default function SignupPage() {
                 autoHideDuration={5000}
               >
                 <div>
-                  <Alert severity={data || "success" || "error"}>
+                  <Alert severity={(data && "success") || "error"}>
                     {alert.message}
                   </Alert>
                 </div>
