@@ -31,6 +31,16 @@ const bookLoader = new DataLoader((bookIds) => {
 });
 
 const ownershipLoader = new DataLoader((ownerIds) => {
+  return Ownership.find({ _id: { $in: ownerIds } }).then((result) =>
+    result.sort((a, b) => {
+      return (
+        ownerIds.indexOf(a._id.toString()) - ownerIds.indexOf(b._id.toString())
+      );
+    })
+  );
+});
+
+const ownershipsLoader = new DataLoader((ownerIds) => {
   return owners(ownerIds);
 });
 
@@ -41,9 +51,13 @@ const user = async (userId) => {
     return {
       ...user._doc,
       password: null,
-      owns: () => ownershipLoader.loadMany(user._doc.owns),
-      checkedOut: () => ownershipLoader.loadMany(user._doc.checkedOut),
-      waitlisted: () => ownershipLoader.loadMany(user._doc.waitlisted),
+      owns: () => ownershipsLoader.loadMany(user._doc.owns),
+      checkedOut: () => ownershipsLoader.loadMany(user._doc.checkedOut),
+      waitlisted: () => {
+        return user.waitlisted.map((ownerId) => {
+          return owner(ownerId);
+        });
+      },
     };
   } catch (err) {
     throw err;
@@ -55,7 +69,32 @@ const book = async (bookId) => {
     const book = await bookLoader.load(bookId.toString());
     return {
       ...book._doc,
-      owners: () => ownershipLoader.loadMany(book._doc.owners),
+      owners: () => ownershipsLoader.loadMany(book._doc.owners),
+    };
+  } catch (err) {
+    throw err;
+  }
+};
+
+const owner = async (ownerId) => {
+  try {
+    const owner = await ownershipLoader.load(ownerId.toString());
+    return {
+      ...owner._doc,
+      owner: () => user(owner._doc.owner),
+      book: () => book(owner._doc.book),
+      checkoutData: () =>
+        owner.checkoutData.map((checkout) => {
+          return {
+            ...checkout._doc,
+            user: () => user(checkout.user),
+          };
+        }),
+      waitlist: () => {
+        return owner.waitlist.map((userWaiting) => {
+          return user(userWaiting);
+        });
+      },
     };
   } catch (err) {
     throw err;
@@ -104,9 +143,14 @@ const transformUser = (user) => {
   return {
     ...user._doc,
     password: null,
-    owns: () => ownershipLoader.loadMany(user._doc.owns),
-    checkedOut: () => ownershipLoader.loadMany(user._doc.checkedOut),
-    waitlisted: () => ownershipLoader.loadMany(user._doc.waitlisted),
+    owns: () => ownershipsLoader.loadMany(user._doc.owns),
+    checkedOut: () => ownershipsLoader.loadMany(user._doc.checkedOut),
+    // waitlisted: () => ownershipsLoader.loadMany(user._doc.waitlisted),
+    waitlisted: () => {
+      return user.waitlisted.map((ownerId) => {
+        return owner(ownerId);
+      });
+    },
   };
 };
 
@@ -122,14 +166,18 @@ const transformOwner = (ownership) => {
           user: () => user(checkout.user),
         };
       }),
-    waitlist: () => usersLoader.loadMany(ownership.waitlist),
+    waitlist: () => {
+      return ownership.waitlist.map((userWaiting) => {
+        return user(userWaiting);
+      });
+    },
   };
 };
 
 const transformBook = (book) => {
   return {
     ...book._doc,
-    owners: () => ownershipLoader.loadMany(book.owners),
+    owners: () => ownershipsLoader.loadMany(book.owners),
   };
 };
 
