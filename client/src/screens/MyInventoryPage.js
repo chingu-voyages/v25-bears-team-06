@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Redirect } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
-import { Typography } from "@material-ui/core";
+import { Snackbar, Typography } from "@material-ui/core";
 import InventoryCard from "../components/InventoryCard";
-import getInventoryRequest from "../dataservice/getInventoryRequest";
+import { AuthContext } from "../Context";
+import useQuery from "../dataservice/useQuery";
+import { GET_INVENTORY } from "../dataservice/queries";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -18,51 +19,40 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function MyInventoryPage() {
+  // state
   const [inventory, setInventory] = useState([]);
-  const [hasError, setHasError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(
-    "Something went wrong. Please try again later",
-  );
-  const [shouldRedirect, setShouldRedirect] = useState(false);
+  const [alert, setAlert] = useState({
+    open: false,
+    message: "",
+    backgroundColor: "",
+  });
+  // context
+  const auth = useContext(AuthContext);
+  // useQuery hook
+  const { data, error, loading } = useQuery({
+    query: GET_INVENTORY.query,
+    token: auth && auth.user && auth.user.token,
+  });
 
-  const token = localStorage.getItem("token");
-
-  useEffect(
-    function handleEffect() {
-      async function inventoryEffect() {
-        try {
-          const { getInventory, message } = await getInventoryRequest({
-            token,
-          });
-          if (getInventory) {
-            setInventory(getInventory);
-          } else if (
-            message.includes("expired") ||
-            message.includes("Authentication required")
-          ) {
-            setShouldRedirect(true);
-          } else if (message) {
-            setHasError(true);
-            setErrorMessage(message);
-          }
-        } catch (err) {
-          setHasError(true);
-          setErrorMessage(err.message);
-        }
-      }
-      inventoryEffect().catch((err) => {
-        setHasError(true);
-        setErrorMessage(err.message);
-      });
-    },
-    [token],
-  );
+  useEffect(() => {
+    if (data) {
+      setInventory(data.getInventory);
+    } else if (error) {
+      setAlert({ open: true, message: error, backgroundColor: "red" });
+    }
+  }, [JSON.stringify(data), JSON.stringify(error)]);
 
   const classes = useStyles();
   return (
     <main className={classes.root}>
-      {shouldRedirect && <Redirect to="/login" />}
-      {hasError && <div className={classes.errorDiv}>{errorMessage}</div>}
+      <Snackbar
+        open={alert.open}
+        message={alert.message}
+        ContentProps={{ style: { backgroundColor: alert.backgroundColor } }}
+        anchorOrigin={{ vertical: "top", horizontal: "left" }}
+        onClose={() => setAlert({ ...alert, open: false })}
+        autoHideDuration={5000}
+      />{" "}
       <Typography className={classes.pageHeader} variant="h4" component="h1">
         My Inventory
       </Typography>
@@ -97,6 +87,7 @@ export default function MyInventoryPage() {
               isAvailable={item.isAvailable}
               inventory={inventory}
               setInventory={setInventory}
+              setAlert={setAlert}
             />
           ))}
         </section>

@@ -4,7 +4,7 @@ import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 
 // style pagination buttons
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   pageBtn: {
     border: 0,
     marginRight: "0.2rem",
@@ -12,7 +12,7 @@ const useStyles = makeStyles(() => ({
     borderRadius: 5,
     height: 25,
     "&:focus": {
-      background: "#5f5fc4",
+      background: theme.palette.primary.light,
     },
   },
 }));

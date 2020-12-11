@@ -92,7 +92,6 @@ const HeaderSearchBox = () => {
           onClick={handleClick}
           variant="contained"
           className={classes.searchBtn}
-          // color="secondary"
           disableElevation
         >
           <SearchIcon className={classes.searchIcon} />

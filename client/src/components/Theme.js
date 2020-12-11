@@ -33,6 +33,12 @@ export default createMuiTheme({
       dark: "#f57c00",
       contrastText: "rgba(0, 0, 0, 0.87)",
     },
+    info: {
+      light: "#64b5f6",
+      main: "#2196f3",
+      dark: "#1976d2",
+      contrastText: "#fff",
+    },
   },
   typography: {
     tab: {

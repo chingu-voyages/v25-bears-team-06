@@ -34,15 +34,12 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down("xs")]: {
       width: "100%",
     },
+    textAlign: "center",
   },
   avatar: {
     margin: "0.5rem auto",
     backgroundColor: theme.palette.secondary.main,
     color: theme.palette.text.primary,
-  },
-  formHeader: {
-    textAlign: "center",
-    marginBottom: 0,
   },
   form: {
     display: "flex",
@@ -57,7 +54,6 @@ const useStyles = makeStyles((theme) => ({
   formButtonContainer: {
     margin: `${theme.spacing(4)}px auto`,
     width: "80%",
-    textAlign: "center",
   },
   formButton: {
     width: "100%",
@@ -231,10 +227,7 @@ export default function LoginPage() {
               </Snackbar>
             </div>
             <div className={classes.formButtonContainer}>
-              <Typography
-                className={classes.formButtonHelperText}
-                variant="body2"
-              >
+              <Typography variant="body2">
                 Not a member?{" "}
                 <Link href="/signup" underline="none">
                   Sign Up
@@ -243,13 +236,7 @@ export default function LoginPage() {
             </div>
           </form>
         </div>
-        <div className={classes.loginImageContainer}>
-          <div className={classes.imgTextContainer}>
-            <Typography variant="h6" className={classes.imgText}>
-              {/* Text placeholder  */}
-            </Typography>
-          </div>
-        </div>
+        <div className={classes.loginImageContainer} />
       </Paper>
     </div>
   );

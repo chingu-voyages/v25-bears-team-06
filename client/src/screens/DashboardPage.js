@@ -13,11 +13,16 @@ import {
   Snackbar,
 } from "@material-ui/core";
 import AddBoxIcon from "@material-ui/icons/AddBox";
-// Pages/Components to Import
-import UploadBookPage from "./UploadBookPage";
+import ProtectedRoute from "../ProtectedRoute";
+import { AuthContext } from "../Context";
 import { AuthContext } from "../Context";
 import { GET_USER } from "../dataservice/queries";
 import useQuery from "../dataservice/useQuery";
+// Pages/Components to Import
+import UploadBookPage from "./UploadBookPage";
+import WaitlistedPage from "./WaitlistedPage";
+import CheckedOutPage from "./CheckedOutPage";
+import MyInventoryPage from "./MyInventoryPage";
 import Alert from "../components/Alert";
 
 const useStyles = makeStyles((theme) => ({
@@ -86,9 +91,11 @@ const DashboardPage = () => {
   const classes = useStyles();
 
   const auth = useContext(AuthContext);
+  const { token, displayName } = auth.user;
+  
   const { data, loading, error } = useQuery({
     query: GET_USER.query,
-    token: auth.user.token,
+    token,
   });
 
   const [userData, setUserData] = useState({});
@@ -136,13 +143,10 @@ const DashboardPage = () => {
               </Snackbar>
             </div>
             <Typography variant="h5" color="primary" gutterBottom>
-              {" "}
               My Dashboard
             </Typography>
-            <Typography variant="body2">
-              {" "}
-              Welcome,{" "}
-              <span className={classes.userName}>{auth.user.displayName}</span>
+            <Typography variant="body1">
+              Welcome, <span className={classes.userName}>{displayName}</span>
             </Typography>
           </Grid>
           <Grid item xs={12} md={2} className={classes.navSection}>
@@ -152,7 +156,7 @@ const DashboardPage = () => {
                   My Borrowing
                 </Typography>
                 <List>
-                  <ListItem divider button component={Link} to="/#">
+                  <ListItem divider button component={Link} to="/checkedout">
                     <ListItemText
                       className={classes.menuItem}
                       disableTypography
@@ -172,7 +176,7 @@ const DashboardPage = () => {
                       )
                     </ListItemText>
                   </ListItem>
-                  <ListItem button component={Link} to="/#">
+                  <ListItem button component={Link} to="/waitlisted">
                     <ListItemText
                       className={classes.menuItem}
                       disableTypography
@@ -202,7 +206,7 @@ const DashboardPage = () => {
                   My Inventory
                 </Typography>
                 <List>
-                  <ListItem divider button component={Link} to="/#">
+                  <ListItem divider button component={Link} to="/myinventory">
                     <ListItemText
                       className={classes.menuItem}
                       disableTypography
@@ -239,7 +243,10 @@ const DashboardPage = () => {
 
           <Grid item xs={12} md={9} className={classes.pagesSection}>
             <Switch>
-              <Route path="/dashboard/uploadbook" component={UploadBookPage} />
+              <ProtectedRoute path="/uploadbook" component={UploadBookPage} />
+              <ProtectedRoute path="/waitlisted" component={WaitlistedPage} />
+              <ProtectedRoute path="/checkedout" component={CheckedOutPage} />
+              <ProtectedRoute path="/myinventory" component={MyInventoryPage} />
             </Switch>
           </Grid>
         </Grid>

@@ -5,7 +5,6 @@ import {
   AppBar,
   Toolbar,
   Button,
-  Typography,
   Tabs,
   Tab,
   useMediaQuery,
@@ -16,7 +15,6 @@ import {
   ListItemText,
 } from "@material-ui/core/";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
-import LocalLibraryIcon from "@material-ui/icons/LocalLibrary";
 import MenuIcon from "@material-ui/icons/Menu";
 import HeaderSearchBox from "./HeaderSearchBox";
 import { AuthContext } from "../Context";
@@ -46,8 +44,8 @@ const useStyles = makeStyles((theme) => ({
     marginRight: 5,
   },
   title: {
-    color: "white",
-    marginRight: "20",
+    height: "50px",
+    padding: "0.2rem",
   },
   tabContainer: {
     marginLeft: "auto",
@@ -282,10 +280,11 @@ const Header = () => {
               className={classes.logoContainer}
               onClick={() => setValue(0)}
             >
-              <Typography className={classes.title} variant="h6" noWrap>
-                <LocalLibraryIcon className={classes.logoIcon} />
-                CommunityBooks
-              </Typography>
+              <img
+                src="/images/openshelf3.png"
+                alt="shelf Logo"
+                className={classes.title}
+              />
             </Button>
           )}
 
