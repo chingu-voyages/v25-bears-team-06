@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useContext, useEffect } from "react";
+import clsx from "clsx";
 import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import {
@@ -8,10 +9,16 @@ import {
   ListItem,
   ListItemText,
   Paper,
+  CircularProgress,
+  Snackbar,
 } from "@material-ui/core";
 import AddBoxIcon from "@material-ui/icons/AddBox";
 // Pages/Components to Import
 import UploadBookPage from "./UploadBookPage";
+import { AuthContext } from "../Context";
+import { GET_USER } from "../dataservice/queries";
+import useQuery from "../dataservice/useQuery";
+import Alert from "../components/Alert";
 
 const useStyles = makeStyles((theme) => ({
   pageContainer: {
@@ -53,26 +60,92 @@ const useStyles = makeStyles((theme) => ({
     borderTop: "0.2rem solid",
     borderTopColor: theme.palette.primary.main,
   },
+  spinner: {
+    margin: "0 auto",
+  },
+  inlineSpinner: {
+    display: "inline",
+    maxWidth: "15px",
+    maxHeight: "15px",
+    padding: "0 5px",
+    margin: 0,
+  },
+  snackbarContainer: {
+    width: "100%",
+    position: "relative",
+    padding: 0,
+  },
+  snackbar: {
+    position: "absolute",
+    width: "100%",
+    top: 0,
+  },
 }));
 
 const DashboardPage = () => {
   const classes = useStyles();
 
+  const auth = useContext(AuthContext);
+  const { data, loading, error } = useQuery({
+    query: GET_USER.query,
+    token: auth.user.token,
+  });
+
+  const [userData, setUserData] = useState({});
+  const [alert, setAlert] = useState({
+    open: false,
+    message: "",
+  });
+
+  useEffect(() => {
+    if (data) {
+      setUserData(data.getUser);
+      setAlert({
+        open: true,
+        message: "Syncing Data...",
+      });
+    } else if (error) {
+      setAlert({
+        open: true,
+        message: error,
+      });
+    }
+  }, [data, error]);
+
   return (
     <Router>
       <Paper className={classes.pageContainer}>
         <Grid container>
-          <Grid xs={12} className={classes.welcomeSection}>
+          <Grid item xs={12} className={classes.welcomeSection}>
+            <div className={classes.snackbarContainer}>
+              <Snackbar
+                classes={{
+                  root: classes.snackbar,
+                }}
+                anchorOrigin={{ horizontal: "right", vertical: "top" }}
+                open={alert.open}
+                message={alert.message}
+                onClose={() => setAlert({ ...alert, open: false })}
+                autoHideDuration={5000}
+              >
+                <div>
+                  <Alert severity={(data && "success") || "error"}>
+                    {alert.message}
+                  </Alert>
+                </div>
+              </Snackbar>
+            </div>
             <Typography variant="h5" color="primary" gutterBottom>
               {" "}
               My Dashboard
             </Typography>
             <Typography variant="body2">
               {" "}
-              Welcome, <span className={classes.userName}>userName</span>
+              Welcome,{" "}
+              <span className={classes.userName}>{auth.user.displayName}</span>
             </Typography>
           </Grid>
-          <Grid xs={12} md={2} className={classes.navSection}>
+          <Grid item xs={12} md={2} className={classes.navSection}>
             <Paper>
               <Grid className={classes.borrowingContainer}>
                 <Typography variant="h6" gutterBottom>
@@ -84,16 +157,40 @@ const DashboardPage = () => {
                       className={classes.menuItem}
                       disableTypography
                     >
-                      Check Out (#)
-                    </ListItemText>{" "}
+                      Checked Out (
+                      {!loading && data ? (
+                        userData.owns.length
+                      ) : (
+                        <CircularProgress
+                          className={clsx(
+                            classes.spinner,
+                            classes.inlineSpinner,
+                          )}
+                          color="primary"
+                        />
+                      )}
+                      )
+                    </ListItemText>
                   </ListItem>
                   <ListItem button component={Link} to="/#">
                     <ListItemText
                       className={classes.menuItem}
                       disableTypography
                     >
-                      Waitlist (#)
-                    </ListItemText>{" "}
+                      Waitlist (
+                      {!loading && data ? (
+                        userData.owns.length
+                      ) : (
+                        <CircularProgress
+                          className={clsx(
+                            classes.spinner,
+                            classes.inlineSpinner,
+                          )}
+                          color="primary"
+                        />
+                      )}
+                      )
+                    </ListItemText>
                   </ListItem>
                 </List>
               </Grid>
@@ -110,7 +207,19 @@ const DashboardPage = () => {
                       className={classes.menuItem}
                       disableTypography
                     >
-                      View Inventory (#)
+                      View Inventory (
+                      {!loading && data ? (
+                        userData.owns.length
+                      ) : (
+                        <CircularProgress
+                          className={clsx(
+                            classes.spinner,
+                            classes.inlineSpinner,
+                          )}
+                          color="primary"
+                        />
+                      )}
+                      )
                     </ListItemText>{" "}
                   </ListItem>
                   <ListItem button component={Link} to="/dashboard/uploadbook">
@@ -128,7 +237,7 @@ const DashboardPage = () => {
 
           {/* Router Page Area  */}
 
-          <Grid xs={12} md={9} className={classes.pagesSection}>
+          <Grid item xs={12} md={9} className={classes.pagesSection}>
             <Switch>
               <Route path="/dashboard/uploadbook" component={UploadBookPage} />
             </Switch>
