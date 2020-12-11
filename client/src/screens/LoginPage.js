@@ -55,6 +55,7 @@ const useStyles = makeStyles((theme) => ({
   },
   formButton: {
     width: "100%",
+    // textAlign: "center",
   },
   loginImageContainer: {
     margin: `${theme.spacing(4)}px auto`,

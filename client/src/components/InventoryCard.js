@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
   paper: {
     padding: theme.spacing(2),
     margin: "auto",
-    maxWidth: 900,
+    maxWidth: 700,
   },
   bookInfoContainer: {
     display: "flex",
@@ -46,6 +46,7 @@ const useStyles = makeStyles((theme) => ({
     display: "block",
     maxWidth: "100%",
     maxHeight: "100%",
+    border: "1px solid #ddd",
   },
   bookInfo: {
     display: "flex",
@@ -58,36 +59,88 @@ const useStyles = makeStyles((theme) => ({
   },
   availabilityAccordion: {
     width: "100%",
+    marginTop: "0.8rem",
+    boxShadow: "none",
   },
-  availableSummary: {
+  availableSummaryContainer: {
     display: "flex",
     flexFlow: "row nowrap",
     justifyContent: "space-between",
-    alignItems: "baseline",
+    alignItems: "center",
     width: "100%",
+    margin: 0,
+    cursor: "default",
+    [theme.breakpoints.down("xs")]: {
+      flexFlow: "column nowrap",
+      alignItems: "flex-start",
+    },
   },
   availabilitySummaryText: {
     margin: theme.spacing(2),
+    color: theme.palette.success.dark,
+    [theme.breakpoints.down("xs")]: {
+      marginTop: theme.spacing(1),
+      marginBottom: 0,
+      marginLeft: 0,
+    },
+  },
+  boldText: {
+    fontWeight: 500,
   },
   availabilitySummaryBtn: {
-    margin: theme.spacing(2),
+    margin: "theme.spacing(1)",
+    backgroundColor: theme.palette.error.main,
+    color: theme.palette.error.contrastText,
+    "&:hover": {
+      backgroundColor: theme.palette.error.light,
+    },
+    [theme.breakpoints.down("xs")]: {
+      marginTop: theme.spacing(1),
+      marginLeft: 0,
+    },
   },
-  checkedOutSummary: {
-    display: "flex",
-    flexFlow: "column nowrap",
-  },
-  checkedOutSummaryText: {
+  checkedOutSummaryContainer: {
     display: "flex",
     flexFlow: "row nowrap",
     justifyContent: "space-between",
+    alignItems: "center",
+    width: "100%",
+    margin: 0,
+    cursor: "default",
+    [theme.breakpoints.down("xs")]: {
+      flexFlow: "column nowrap",
+      paddingTop: theme.spacing(1),
+      alignItems: "flex-start",
+    },
   },
-  checkedOutSummaryBtnContainer: {
+  checkedOutSummaryTextContainer: {
     display: "flex",
-    justifyContent: "center",
-    padding: theme.spacing(2),
+    flexFlow: "column nowrap",
+    justifyContent: "none",
+  },
+  textRow: {
+    display: "flex",
+    marginLeft: theme.spacing(2),
+    [theme.breakpoints.down("xs")]: {
+      marginLeft: 0,
+    },
   },
   checkedOutSummaryBtn: {
-    width: "100%",
+    margin: theme.spacing(1),
+    [theme.breakpoints.down("xs")]: {
+      marginTop: theme.spacing(1),
+      marginLeft: 0,
+    },
+  },
+  accordionDetails: {
+    padding: 0,
+    marginLeft: theme.spacing(4),
+    [theme.breakpoints.down("xs")]: {
+      marginLeft: theme.spacing(2),
+    },
+  },
+  accordionDetailsText: {
+    paddingTop: 12,
   },
   iconBtn: {
     fontSize: "2rem",
@@ -196,14 +249,8 @@ export default function InventoryCard({
             />
           </div>
           <div className={classes.bookInfo}>
-            <Typography variant="body1" component="p">
-              {title}
-            </Typography>
-            {authors && (
-              <Typography variant="body2" component="p">
-                by {authors}
-              </Typography>
-            )}
+            <Typography variant="body1">{title}</Typography>
+            {authors && <Typography variant="body2">by {authors}</Typography>}
           </div>
         </div>
         <div>
@@ -215,14 +262,13 @@ export default function InventoryCard({
                 onChange={toggleExpanded(id)}
               >
                 <AccordionSummary
-                  classes={{ content: classes.availableSummary }}
+                  classes={{ content: classes.availableSummaryContainer }}
                 >
                   <Typography
                     className={classes.availabilitySummaryText}
                     variant="body1"
-                    component="p"
                   >
-                    Available
+                    Available for checkout
                   </Typography>
                   <Button
                     className={classes.availabilitySummaryBtn}
@@ -234,12 +280,17 @@ export default function InventoryCard({
                     Remove
                   </Button>
                 </AccordionSummary>
-                <AccordionDetails>
+                <AccordionDetails className={classes.accordionDetails}>
                   <Grid item container xs={12}>
-                    <Grid item xs={9}>
-                      <Typography variant="h6">Confirm Removal</Typography>
+                    <Grid item xs={7} sm={9}>
+                      <Typography
+                        variant="h6"
+                        className={classes.accordionDetailsText}
+                      >
+                        Confirm Removal
+                      </Typography>
                     </Grid>
-                    <Grid item container xs={3}>
+                    <Grid item container xs={5} sm={3}>
                       <IconButton
                         className={classes.cancel}
                         onClick={toggleExpanded(id)}
@@ -270,42 +321,48 @@ export default function InventoryCard({
               >
                 <AccordionSummary
                   classes={{
-                    content: classes.checkedOutSummary,
+                    content: classes.checkedOutSummaryContainer,
                   }}
                 >
-                  <div className={classes.checkedOutSummaryText}>
-                    <Typography variant="body1" component="p">
-                      Checked out by:
-                    </Typography>
-                    <Typography variant="body1" component="p">
-                      {checkoutData.user.displayName}
-                    </Typography>
+                  <div className={classes.checkedOutSummaryTextContainer}>
+                    <div className={classes.textRow}>
+                      <Typography variant="body1" className={classes.boldText}>
+                        Checked out by: &nbsp;
+                      </Typography>
+                      <Typography variant="body1" className={classes.infoText}>
+                        {checkoutData.user.displayName}
+                      </Typography>
+                    </div>
+                    <div className={classes.textRow}>
+                      <Typography variant="body1" className={classes.boldText}>
+                        Due by: &nbsp;
+                      </Typography>
+                      <Typography variant="body1">
+                        {format(+checkoutData.dueDate, "PPPP")}
+                      </Typography>
+                    </div>
                   </div>
-                  <div className={classes.checkedOutSummaryText}>
-                    <Typography variant="body1" component="p">
-                      Due by:
-                    </Typography>
-                    <Typography variant="body1" component="p">
-                      {format(+checkoutData.dueDate, "PPPP")}
-                    </Typography>
-                  </div>
-                  <div className={classes.checkedOutSummaryBtnContainer}>
-                    <Button
-                      className={classes.checkedOutSummaryBtn}
-                      variant="contained"
-                      disableElevation
-                      color="primary"
-                    >
-                      Mark as Returned
-                    </Button>
-                  </div>
+
+                  <Button
+                    className={classes.checkedOutSummaryBtn}
+                    variant="contained"
+                    disableElevation
+                    color="primary"
+                  >
+                    Mark as Returned
+                  </Button>
                 </AccordionSummary>
-                <AccordionDetails>
+                <AccordionDetails className={classes.accordionDetails}>
                   <Grid item container xs={12}>
-                    <Grid item xs={9}>
-                      <Typography variant="h6">Confirm Return</Typography>
+                    <Grid item xs={7} sm={9}>
+                      <Typography
+                        variant="h6"
+                        className={classes.accordionDetailsText}
+                      >
+                        Confirm Return
+                      </Typography>
                     </Grid>
-                    <Grid item container xs={3}>
+                    <Grid item container xs={5} sm={3}>
                       <IconButton
                         className={classes.cancel}
                         onClick={toggleExpanded(id)}
