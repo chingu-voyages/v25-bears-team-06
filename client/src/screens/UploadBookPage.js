@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useContext } from "react";
 import { Redirect } from "react-router-dom";
 import axios from "axios";
@@ -10,7 +11,6 @@ import {
   Snackbar,
 } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
-import { set } from "date-fns";
 import Pagination from "../components/Pagination";
 import UploadBookCard from "../components/UploadBookCard";
 import { AuthContext } from "../Context";
@@ -59,6 +59,7 @@ const UploadBookPage = () => {
   const [uploadBook, { data, error, loading }] = useMutation(
     UPLOAD_BOOK.mutation,
     auth.user.token,
+    auth.onTokenExpired,
   );
 
   const [searchInput, setSearchInput] = useState("");
@@ -109,7 +110,7 @@ const UploadBookPage = () => {
     } else {
       fetchBooks();
     }
-  }, [searchInput, data, error, pressedEnter]);
+  }, [searchInput, JSON.stringify(data), error, pressedEnter]);
 
   // set user input
   const handleChange = (event) => {

@@ -95,6 +95,7 @@ const DashboardPage = () => {
   const { data, loading, error } = useQuery({
     query: GET_USER.query,
     token,
+    onTokenExpired: () => auth.onTokenExpired(),
   });
 
   const [userData, setUserData] = useState({});
@@ -132,7 +133,7 @@ const DashboardPage = () => {
                 open={alert.open}
                 message={alert.message}
                 onClose={() => setAlert({ ...alert, open: false })}
-                autoHideDuration={5000}
+                autoHideDuration={(data && 1500) || 5000}
               >
                 <div>
                   <Alert severity={(data && "success") || "error"}>
