@@ -168,7 +168,7 @@ const DashboardPage = () => {
                     >
                       Checked Out (
                       {!loading && data ? (
-                        userData.owns.length
+                        userData.checkedOut.length
                       ) : (
                         <CircularProgress
                           className={clsx(
@@ -188,7 +188,7 @@ const DashboardPage = () => {
                     >
                       Waitlist (
                       {!loading && data ? (
-                        userData.owns.length
+                        userData.waitlisted.length
                       ) : (
                         <CircularProgress
                           className={clsx(
