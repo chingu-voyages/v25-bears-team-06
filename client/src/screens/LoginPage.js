@@ -105,18 +105,13 @@ export default function LoginPage() {
 
   // Snackbar function
   const [alert, setAlert] = useState({
-    open: false,
-    message: "",
+    open: auth.tokenExpired,
+    message: auth.tokenExpired ? "Token Expired: Please Relog" : "",
   });
 
   useEffect(() => {
     if (data) {
-      const { email, displayName, token, userId } = data.login;
-      window.localStorage.setItem("email", email);
-      window.localStorage.setItem("displayName", displayName);
-      window.localStorage.setItem("token", token);
-      window.localStorage.setItem("userId", userId);
-      auth.setUser({ email, token, displayName, userId });
+      auth.login({ ...data.login });
       setAlert({
         open: true,
         message: "Login Successful! Redirecting...",

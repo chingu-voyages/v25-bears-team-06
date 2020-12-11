@@ -125,12 +125,7 @@ export default function SignupPage() {
 
   useEffect(() => {
     if (data) {
-      const { email, displayName, token, userId } = data.createAccount;
-      window.localStorage.setItem("email", email);
-      window.localStorage.setItem("displayName", displayName);
-      window.localStorage.setItem("token", token);
-      window.localStorage.setItem("userId", userId);
-      auth.setUser({ email, displayName, token, userId });
+      auth.login({ ...data.createAccount });
       setAlert({
         open: true,
         message: "Signup Successful! Redirecting...",
