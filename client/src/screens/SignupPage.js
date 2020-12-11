@@ -85,8 +85,7 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "center",
   },
   imgText: {
-    // textAlign: "center",
-    // marginTop: "theme.spacing(4)",
+    fontWeight: 500,
   },
 }));
 
@@ -274,7 +273,7 @@ export default function SignupPage() {
               Create an account to borrow or loan books.
             </Typography>
             <Typography variant="body2" className={classes.imgText}>
-              <Link href="/about" underline="none">
+              <Link href="/#questionInfoContainer" underline="none">
                 Learn more
               </Link>
             </Typography>

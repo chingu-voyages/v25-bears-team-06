@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import {
@@ -10,8 +10,13 @@ import {
   Paper,
 } from "@material-ui/core";
 import AddBoxIcon from "@material-ui/icons/AddBox";
+import ProtectedRoute from "../ProtectedRoute";
+import { AuthContext } from "../Context";
 // Pages/Components to Import
 import UploadBookPage from "./UploadBookPage";
+import WaitlistedPage from "./WaitlistedPage";
+import CheckedOutPage from "./CheckedOutPage";
+import MyInventoryPage from "./MyInventoryPage";
 
 const useStyles = makeStyles((theme) => ({
   pageContainer: {
@@ -57,6 +62,10 @@ const useStyles = makeStyles((theme) => ({
 
 const DashboardPage = () => {
   const classes = useStyles();
+
+  const auth = useContext(AuthContext);
+  const { displayName } = auth.user;
+
   return (
     <Router>
       <Paper className={classes.pageContainer}>
@@ -66,9 +75,9 @@ const DashboardPage = () => {
               {" "}
               My Dashboard
             </Typography>
-            <Typography variant="body2">
+            <Typography variant="body1">
               {" "}
-              Welcome, <span className={classes.userName}>userName</span>
+              Welcome, <span className={classes.userName}>{displayName}</span>
             </Typography>
           </Grid>
           <Grid xs={12} md={2} className={classes.navSection}>
@@ -78,7 +87,7 @@ const DashboardPage = () => {
                   My Borrowing
                 </Typography>
                 <List>
-                  <ListItem divider button component={Link} to="/#">
+                  <ListItem divider button component={Link} to="/checkedout">
                     <ListItemText
                       className={classes.menuItem}
                       disableTypography
@@ -86,7 +95,7 @@ const DashboardPage = () => {
                       Check Out (#)
                     </ListItemText>{" "}
                   </ListItem>
-                  <ListItem button component={Link} to="/#">
+                  <ListItem button component={Link} to="/waitlisted">
                     <ListItemText
                       className={classes.menuItem}
                       disableTypography
@@ -104,7 +113,7 @@ const DashboardPage = () => {
                   My Inventory
                 </Typography>
                 <List>
-                  <ListItem divider button component={Link} to="/#">
+                  <ListItem divider button component={Link} to="/myinventory">
                     <ListItemText
                       className={classes.menuItem}
                       disableTypography
@@ -129,7 +138,10 @@ const DashboardPage = () => {
 
           <Grid xs={12} md={9} className={classes.pagesSection}>
             <Switch>
-              <Route path="/uploadbook" component={UploadBookPage} />
+              <ProtectedRoute path="/uploadbook" component={UploadBookPage} />
+              <ProtectedRoute path="/waitlisted" component={WaitlistedPage} />
+              <ProtectedRoute path="/checkedout" component={CheckedOutPage} />
+              <ProtectedRoute path="/myinventory" component={MyInventoryPage} />
             </Switch>
           </Grid>
         </Grid>

@@ -32,15 +32,12 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down("xs")]: {
       width: "100%",
     },
+    textAlign: "center",
   },
   avatar: {
     margin: "0.5rem auto",
     backgroundColor: theme.palette.secondary.main,
     color: theme.palette.text.primary,
-  },
-  formHeader: {
-    textAlign: "center",
-    marginBottom: 0,
   },
   form: {
     display: "flex",
@@ -55,16 +52,10 @@ const useStyles = makeStyles((theme) => ({
   formButtonContainer: {
     margin: `${theme.spacing(4)}px auto`,
     width: "80%",
-    textAlign: "center",
   },
   formButton: {
     width: "100%",
-  },
-  formButtonHelperText: {
-    textAlign: "center",
-  },
-  errorDiv: {
-    height: "50px",
+    // textAlign: "center",
   },
   loginImageContainer: {
     margin: `${theme.spacing(4)}px auto`,
@@ -75,15 +66,6 @@ const useStyles = makeStyles((theme) => ({
       width: "100%",
       marginBottom: "1rem",
     },
-  },
-  imgTextContainer: {
-    width: "80%",
-    margin: "auto",
-  },
-  imgText: {
-    textAlign: "center",
-    marginTop: theme.spacing(4),
-    padding: "2rem",
   },
 }));
 
@@ -117,7 +99,7 @@ export default function LoginPage() {
       setAlert({
         open: true,
         message: error,
-        backgroundColor: "orange",
+        backgroundColor: "#ff9800",
       });
     }
   }, [data, auth, error]);
@@ -137,8 +119,6 @@ export default function LoginPage() {
   function handleSubmit(event) {
     event.preventDefault();
     login(LOGIN.variables({ email: loginEmail, password: loginPassword }));
-
-    // setShouldSubmit(true);
   }
 
   return (
@@ -150,7 +130,7 @@ export default function LoginPage() {
             open={alert.open}
             message={alert.message}
             ContentProps={{ style: { backgroundColor: alert.backgroundColor } }}
-            anchorOrigin={{ vertical: "top", horizontal: "left" }}
+            anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
             onClose={() => setAlert({ ...alert, open: false })}
             autoHideDuration={5000}
           />
@@ -201,10 +181,7 @@ export default function LoginPage() {
               )) || <CircularProgress color="primary" />}
             </div>
             <div className={classes.formButtonContainer}>
-              <Typography
-                className={classes.formButtonHelperText}
-                variant="body2"
-              >
+              <Typography variant="body2">
                 Not a member?{" "}
                 <Link href="/signup" underline="none">
                   Sign Up
@@ -213,13 +190,7 @@ export default function LoginPage() {
             </div>
           </form>
         </div>
-        <div className={classes.loginImageContainer}>
-          <div className={classes.imgTextContainer}>
-            <Typography variant="h6" className={classes.imgText}>
-              {/* Text placeholder  */}
-            </Typography>
-          </div>
-        </div>
+        <div className={classes.loginImageContainer} />
       </Paper>
     </div>
   );
