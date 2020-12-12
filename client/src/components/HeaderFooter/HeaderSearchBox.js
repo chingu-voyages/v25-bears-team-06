@@ -4,7 +4,7 @@ import SearchIcon from "@material-ui/icons/Search";
 import TextField from "@material-ui/core/TextField";
 import { Button } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
-import { SearchContext } from "../Context";
+import { SearchContext } from "../../Context";
 
 // searchbar styling
 const useStyles = makeStyles((theme) => ({
