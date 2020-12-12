@@ -8,7 +8,7 @@ import { GET_INVENTORY } from "../dataservice/queries";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    padding: `${theme.spacing(4)}px ${theme.spacing(2)}px`,
+    margin: "0 auto",
   },
   pageHeader: {
     paddingBottom: theme.spacing(2),
