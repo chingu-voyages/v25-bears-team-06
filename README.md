@@ -6,11 +6,11 @@ Chingu Voyage-25 (bears-team-06) (https://chingu.io/)
 
 ## Overview:
 
-OpenShelf is a responsive web app for people to share books with one another. T
+OpenShelf is a responsive web app for people to share books with one another.
 
 ## Demo:
 
-url here
+https://openshelf.netlify.app/
 
 ## Table of Contents
 
@@ -23,8 +23,7 @@ url here
   - [Configuration](#configuration)
 - [Development Environment](#development-environment)
 - [Runtime](#runtime)
-  - [X-DeploymentPlatform Deployment](#X-DeploymentPlatform-deployment)
-    - [X-DeploymentPlatform Deployment Steps](#X-DeploymentPlatform-deployment-steps)
+  - [Netlify Deployment](#netlify-deployment)
   - [Heroku Deployment](#heroku-deployment)
     - [Heroku Deployment Steps](#heroku-deployment-steps)
 - [Future Updates](#future-updates)
@@ -33,13 +32,15 @@ url here
 
 ## Features
 
-- Account Login and Register via email+password authentication
+- Account Login and Signup via email+password authentication
 
-Once authenticated, users are able to...
+- Search for books in the OpenShelf Library
+
+Once logged in, users will be able to-
 
 - Upload book titles using Google Books API
-- Check out books that other users have uploaded
-- Join a waitlist if a book is already checked out by someone else
+- Check out books that other members have uploaded
+- Join a waitlist if a book is already checked out
 - Remove books they no longer want to share or leave a waitlist
 
 ## Development
@@ -50,22 +51,21 @@ Once authenticated, users are able to...
 
 ### Technologies
 
-The primary libraries and dependencies used in the development of openShelf are shown below. For a complete list of dependencies, consult the package.json files inside `client` and `server` folders.
+The primary libraries and dependencies used in the development of openShelf are shown below. For a complete list of dependencies, consult the package.json files inside the `client` and `server` folders.
 
-| Library                                                            | Purpose                                                                                                    | Client or Server? |
-| :----------------------------------------------------------------- | :--------------------------------------------------------------------------------------------------------- | :---------------- |
-| [React](https://reactjs.org/)                                      | A JavaScript library for building UIs                                                                      | Client            |
-| [Material-UI](https://material-ui.com/)                            | React UI Component Library                                                                                 | Client            |
-| [Apollo Client](https://www.apollographql.com/docs/react/)         | State management library for JavaScript that enables you to manage both local and remote data with GraphQL | Client            |
-| [Airbnb](https://airbnb.io/javascript/react/)                      | React/JavaScript dev. Style Guide                                                                          | Client            |
-| [GraphQL](https://graphql.org/)                                    | API Query Language                                                                                         | Both              |
-| [Apollo Server](https://www.apollographql.com/docs/apollo-server/) | GraphQL Server                                                                                             | Server            |
-| [MongoDB with Mongoose](https://mongoosejs.com/)                   | Schema-Based MongoDB Application Data Modeling                                                             | Server            |
-| [Express](https://expressjs.com/)                                  | Backend Server Framework                                                                                   | Server            |
+| Library                                             | Purpose                                          | Client or Server? |
+| :-------------------------------------------------- | :----------------------------------------------- | :---------------- |
+| [React](https://reactjs.org/)                       | A JavaScript library for building UIs            | Client            |
+| [Material-UI](https://material-ui.com/)             | React UI Component Library                       | Client            |
+| [Airbnb](https://airbnb.io/javascript/react/)       | React/JavaScript Development Style Guide         | Client            |
+| [MongoDB with Mongoose](https://mongoosejs.com/)    | Schema-Based MongoDB Application Data Modeling   | Server            |
+| [Express](https://expressjs.com/)                   | Backend Server Framework                         | Server            |
+| [GraphQL](https://graphql.org/)                     | API Query Language                               | Server            |
+| [DataLoader](https://github.com/graphql/dataloader) | A generic utility for batching and caching data. | Server            |
 
 ### Development Style and Git Branches
 
-We developed the project using a source-control branching model called [Trunk Based Development](https://trunkbaseddevelopment.com/) which is used at tech companies like Google and Facebook. The model involves developers collobrating on a single branch known as the trunk, or more commonly known as the Master branch on Github.
+We developed the project using a source-control branching model called [Trunk Based Development](https://trunkbaseddevelopment.com/) which is used at tech companies like Google and Facebook. The model involves developers collobrating on a single branch known as the trunk, or more commonly known as the Master or Main branch on Github.
 
 In addition, we would create short-lived Git branches, unique to each developer, where we would push small commits and conduct code reviews using pull requests.
 
@@ -76,7 +76,7 @@ In addition, we would create short-lived Git branches, unique to each developer,
 | `npm run client`   | Run Frontend Dev. Server locally                    |
 | `npm run server`   | Run Backend locally using Nodemon                   |
 | `npm run dev`      | Run Frontend and Backend locally using Concurrently |
-|  |
+|                    |
 
 | (2) Commands (`/server`) | Purpose                           |
 | :----------------------- | :-------------------------------- |
@@ -136,40 +136,9 @@ REACT_APP_API_KEY = yourOwnAPIKeyHere
 
 ## Runtime
 
-### X-DeploymentPlatform Deployment
+### Netlify Deployment
 
-#### X-DeploymentPlatform Deployment Steps
-
-1. After downloading the repository, navigate to the `/client` directory in your command line and install dependencies:
-
-```
-cd local-repo-root-directory/client
-
-npm install
-```
-
-2. install the X-DeploymentPlatform command-line interface using npm:
-
-```
-// tbd
-```
-
-3. Initialize X-DeploymentPlatform by running this command and following the prompts from your command line:
-
-```
-// tbd
-```
-
-4. Deploy. By default the deploy command deploys to a preview URL and requires the `--prod` flag to deploy to production
-
-```
-// tbd
--- or --
-
-// tbd
-```
-
-Your client is now deployed on X-DeploymentPlatform!
+[View the Netlify Deploy Steps Here! (with pictures)](/netlify-deploy-doc.md)
 
 ### Heroku Deployment
 
