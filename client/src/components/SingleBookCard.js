@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 
 // Modal imports
 import Dialog from "@material-ui/core/Dialog";
+import clsx from "clsx";
 import CheckOutModal from "./CheckOutModal";
 
 // auth import
@@ -51,6 +52,12 @@ const useStyles = makeStyles((theme) => ({
       width: "46%",
     },
   },
+  btnAvailable: {
+    backgroundColor: theme.palette.success.main,
+  },
+  btnUnavailable: {
+    backgroundColor: theme.palette.error.main,
+  },
 }));
 
 // card template for book output
@@ -68,9 +75,14 @@ const SingleBookCard = (props) => {
     setBookResults,
     setAlert,
   } = props;
-
   // Modal actions
   const [open, setOpen] = useState(false);
+
+  const handleAvailability = () => {
+    return owners
+      .map((owner) => owner.isAvailable)
+      .filter((available) => available).length;
+  };
 
   const handleOpen = () => {
     setOpen(true);
@@ -123,13 +135,16 @@ const SingleBookCard = (props) => {
               Learn More
             </Button>
             <Button
-              className={classes.btn}
+              className={clsx(
+                classes.btn,
+                handleAvailability() && classes.btnAvailable,
+                !handleAvailability() && classes.btnUnavailable,
+              )}
               variant="contained"
-              color="primary"
               disableElevation
               onClick={handleOpen}
             >
-              Checkout
+              {handleAvailability() ? "Checkout" : "UnAvailable"}
             </Button>
           </Grid>
           {/* Modal  */}

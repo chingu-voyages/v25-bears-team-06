@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import React, { useState, useContext, useEffect } from "react";
 import clsx from "clsx";
 import { BrowserRouter as Router, Switch, Link } from "react-router-dom";
@@ -100,8 +101,7 @@ const DashboardPage = () => {
     token,
     onTokenExpired: () => auth.onTokenExpired(),
   });
-
-  const [userData, setUserData] = useState({});
+  const [userData, setUserData] = useState();
   const [alert, setAlert] = useState({
     open: false,
     message: "",
@@ -269,7 +269,12 @@ const DashboardPage = () => {
               <ProtectedRoute
                 exact
                 path="/dashboard/waitlisted"
-                component={WaitlistedPage}
+                component={() => (
+                  <WaitlistedPage
+                    userData={userData}
+                    setUserData={setUserData}
+                  />
+                )}
               />
               <ProtectedRoute
                 exact

@@ -14,8 +14,8 @@ import IconButton from "@material-ui/core/IconButton";
 import CancelIcon from "@material-ui/icons/Cancel";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import { addDays, format, getTime } from "date-fns";
-// checkout request
-import { CHECKOUT_BOOK } from "../dataservice/mutations";
+// data request
+import { CHECKOUT_BOOK, JOIN_WAITLIST } from "../dataservice/mutations";
 import useMutation from "../dataservice/useMutation";
 import { AuthContext } from "../Context";
 
@@ -113,23 +113,23 @@ export default function CheckOutModal({
   // checkout book function
   const auth = useContext(AuthContext);
 
-  const [checkoutBook, { data, error, loading }] = useMutation(
-    CHECKOUT_BOOK.mutation,
-    auth && auth.user && auth.user.token,
-  );
+  const [
+    checkoutBook,
+    { checkoutBookData, checkoutBookError, checkoutBookLoading },
+  ] = useMutation(CHECKOUT_BOOK.mutation, auth && auth.user && auth.user.token);
 
   useEffect(() => {
-    if (data) {
+    if (checkoutBookData) {
       setBookResults(
         () =>
           bookResults &&
           bookResults.map((bookResult) => ({
             ...bookResult,
             owners: bookResult.owners.map((ownership) =>
-              ownership._id === data.checkoutBook._id
+              ownership._id === checkoutBookData.checkoutBook._id
                 ? {
                     ...ownership,
-                    isAvailable: data.checkoutBook.isAvailable,
+                    isAvailable: checkoutBookData.checkoutBook.isAvailable,
                   }
                 : ownership,
             ),
@@ -141,12 +141,16 @@ export default function CheckOutModal({
         backgroundColor: "green",
       });
     }
-    if (error) {
-      setAlert({ open: true, message: error, backgroundColor: "red" });
+    if (checkoutBookError) {
+      setAlert({
+        open: true,
+        message: checkoutBookError,
+        backgroundColor: "red",
+      });
     }
   }, [
-    JSON.stringify(data),
-    JSON.stringify(error),
+    JSON.stringify(checkoutBookData),
+    checkoutBookError,
     bookResults,
     setAlert,
     setBookResults,
@@ -162,6 +166,74 @@ export default function CheckOutModal({
     );
   };
 
+  const [
+    joinWaitlist,
+    {
+      data: joinWaitlistData,
+      error: joinWaitlistError,
+      loading: joinWaitlistLoading,
+    },
+  ] = useMutation(JOIN_WAITLIST.mutation, auth && auth.user && auth.user.token);
+
+  useEffect(() => {
+    if (joinWaitlistData) {
+      console.log(joinWaitlistData);
+    }
+    if (joinWaitlistError) {
+      setAlert({
+        open: true,
+        message: joinWaitlistError,
+        backgroundColor: "red",
+      });
+    }
+  }, [JSON.stringify(joinWaitlistData), joinWaitlistError, setAlert]);
+
+  const handleJoinWaitlist = async ({ ownershipId }) => {
+    await joinWaitlist(JOIN_WAITLIST.variables({ ownershipId }));
+    setExpanded(false);
+  };
+
+  const handleCheckWaitlist = (owner) =>
+    owner && owner.waitlist && Array.isArray(owner.waitlist)
+      ? owner.waitlist
+          .map(({ _id }) => _id)
+          .indexOf(auth && auth.user && auth.user.userId)
+      : null;
+
+  const handleModalButton = (owner) => {
+    // book is available
+    if (owner.isAvailable) {
+      return "Checkout";
+    }
+    if (
+      owner.checkoutData[owner.checkoutData.length - 1].user._id ===
+        auth.user.userId &&
+      !owner.checkoutData[owner.checkoutData.length - 1].returnDate
+    ) {
+      return "View All Checked Out";
+    }
+    // book has been returned and user is the next person on waitlist
+    if (
+      owner.checkoutData[owner.checkoutData.length - 1].returnDate &&
+      owner.waitlist.length &&
+      owner.waitlist[0]._id === auth.user.userId
+    ) {
+      return "Checkout";
+    }
+    if (
+      !owner.waitlist.length ||
+      owner.waitlist
+        .map(({ _id }) => _id)
+        .indexOf(auth && auth.user && auth.user.userId) === -1
+    ) {
+      // book is unavailable and waitlist is empty or
+      // waitlist is not empty but does not include current user
+      return "Join Waitlist";
+    }
+    // same as above except the waitlist does include the current user
+    return "Leave Waitlist";
+  };
+
   return (
     <DialogContent>
       <Paper className={classes.paper}>
@@ -169,7 +241,7 @@ export default function CheckOutModal({
           <Grid item xs={3} className={classes.imageContainer}>
             <img className={classes.img} alt="complex" src={thumbnail} />
           </Grid>
-          <Grid item xs={9} container className={classes.infoContainer}>
+          <Grid item xs={9} container>
             <Grid item xs container direction="column" spacing={2}>
               <Grid item xs>
                 <Typography gutterBottom variant="subtitle1">
@@ -194,12 +266,7 @@ export default function CheckOutModal({
               </Grid>
               {/* start accordion below */}
               {owners.map((owner) => (
-                <Grid
-                  key={owner._id}
-                  item
-                  xs={12}
-                  className={classes.userContainer}
-                >
+                <Grid key={owner._id} item xs={12}>
                   <Accordion
                     expanded={expanded === owner._id}
                     onChange={toggleExpanded(owner._id)}
@@ -232,14 +299,14 @@ export default function CheckOutModal({
                             color="primary"
                             disableElevation
                           >
-                            {owner.isAvailable ? "Checkout" : "Join Waitlist"}
+                            {handleModalButton(owner)}
                           </Button>
                         </Grid>
                       </Grid>
                     </AccordionSummary>
                     {/* accordion expanded details below  */}
                     <AccordionDetails>
-                      {owner.isAvailable && (
+                      {owner.isAvailable ? (
                         <Grid item container xs={12}>
                           <Grid item xs={9}>
                             <Typography variant="h6">
@@ -261,6 +328,31 @@ export default function CheckOutModal({
                               className={classes.confirm}
                               onClick={() =>
                                 handleCheckout({ ownershipId: owner._id })
+                              }
+                            >
+                              <CheckCircleIcon className={classes.iconBtn} />
+                            </IconButton>
+                          </Grid>
+                        </Grid>
+                      ) : (
+                        <Grid item container xs={12}>
+                          <Grid item xs={9}>
+                            <Typography variant="h6">
+                              Confirm joining waitlist.
+                            </Typography>
+                          </Grid>
+
+                          <Grid item container xs={3}>
+                            <IconButton
+                              className={classes.cancel}
+                              onClick={toggleExpanded(owner._id)}
+                            >
+                              <CancelIcon className={classes.iconBtn} />
+                            </IconButton>
+                            <IconButton
+                              className={classes.confirm}
+                              onClick={() =>
+                                handleJoinWaitlist({ ownershipId: owner._id })
                               }
                             >
                               <CheckCircleIcon className={classes.iconBtn} />

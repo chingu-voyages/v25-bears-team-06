@@ -53,11 +53,21 @@ const getUserQuery = `
               displayName
             }
             isAvailable
+            waitlist {
+              _id
+            }
+            checkoutData {
+              returnDate
+              user {
+                _id
+              }
+            }
           }
         }
         owner {
           displayName
         }
+        
       }
     }
   }
