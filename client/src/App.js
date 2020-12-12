@@ -47,6 +47,7 @@ function App() {
   };
 
   const logout = () => {
+    setQuery("");
     localStorage.removeItem("email");
     localStorage.removeItem("token");
     localStorage.removeItem("displayName");
@@ -90,7 +91,17 @@ function App() {
                 />
                 <ProtectedRoute
                   exact
-                  path="/dashboard/*"
+                  path="/dashboard/myinventory"
+                  component={DashboardPage}
+                />
+                <ProtectedRoute
+                  exact
+                  path="/dashboard/checkedout"
+                  component={DashboardPage}
+                />
+                <ProtectedRoute
+                  exact
+                  path="/dashboard/waitlisted"
                   component={DashboardPage}
                 />
                 <Route component={PageNotFound} />
