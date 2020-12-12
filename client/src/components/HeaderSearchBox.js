@@ -22,7 +22,6 @@ const useStyles = makeStyles((theme) => ({
       height: "3rem",
       padding: "0.1rem",
     },
-    marginLeft: "-0.5rem",
     borderTopLeftRadius: 0,
     borderBottomLeftRadius: 0,
     borderBottomRightRadius: 0,

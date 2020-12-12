@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
     marginRight: 5,
   },
   title: {
-    height: "50px",
+    height: "25px",
     padding: "0.2rem",
   },
   tabContainer: {
@@ -281,7 +281,7 @@ const Header = () => {
               onClick={() => setValue(0)}
             >
               <img
-                src="/images/openshelf3.png"
+                src="/images/openshelf2_1.png"
                 alt="shelf Logo"
                 className={classes.title}
               />
