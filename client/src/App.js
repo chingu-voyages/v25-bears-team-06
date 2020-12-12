@@ -84,24 +84,21 @@ function App() {
                 <Route exact path="/signup" component={SignupPage} />
                 <Route exact path="/login" component={LoginPage} />
                 <Route path="/bookinfo/:id" component={BookInfoPage} />
+                <ProtectedRoute path="/dashboard" component={DashboardPage} />
                 <ProtectedRoute
-                  exact
-                  path="/dashboard"
-                  component={DashboardPage}
-                />
-                <ProtectedRoute
-                  exact
                   path="/dashboard/myinventory"
                   component={DashboardPage}
                 />
                 <ProtectedRoute
-                  exact
                   path="/dashboard/checkedout"
                   component={DashboardPage}
                 />
                 <ProtectedRoute
-                  exact
                   path="/dashboard/waitlisted"
+                  component={DashboardPage}
+                />
+                <ProtectedRoute
+                  path="/dashboard/uploadbook"
                   component={DashboardPage}
                 />
                 <Route component={PageNotFound} />
