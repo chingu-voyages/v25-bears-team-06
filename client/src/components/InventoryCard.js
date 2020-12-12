@@ -21,13 +21,12 @@ import { AuthContext } from "../Context";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    flexGrow: 1,
-    margin: "1rem",
+    margin: "1rem 0",
   },
   paper: {
     padding: theme.spacing(2),
     margin: "auto",
-    maxWidth: 700,
+    maxWidth: "100%",
   },
   bookInfoContainer: {
     display: "flex",
