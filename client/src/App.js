@@ -75,7 +75,6 @@ function App() {
             <Header />
             <main>
               <Switch>
-                <Route exact path="/" component={AboutPage} />
                 <Route
                   exact
                   path="/searchresults"
@@ -100,7 +99,12 @@ function App() {
                   path="/dashboard/uploadbook"
                   component={DashboardPage}
                 />
-                <ProtectedRoute path="/dashboard" component={DashboardPage} />
+                <ProtectedRoute
+                  exact
+                  path="/dashboard"
+                  component={DashboardPage}
+                />
+                <Route exact path="/" component={AboutPage} />
                 <Route component={PageNotFound} />
               </Switch>
             </main>
