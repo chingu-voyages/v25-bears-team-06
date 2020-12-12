@@ -4,7 +4,7 @@ import SearchIcon from "@material-ui/icons/Search";
 import TextField from "@material-ui/core/TextField";
 import { Button } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
-import { SearchContext } from "../Context";
+import { SearchContext } from "../../Context";
 
 // searchbar styling
 const useStyles = makeStyles((theme) => ({
@@ -26,6 +26,9 @@ const useStyles = makeStyles((theme) => ({
     borderTopLeftRadius: 0,
     borderBottomLeftRadius: 0,
     borderBottomRightRadius: 0,
+    "&:hover": {
+      backgroundColor: theme.palette.primary.light,
+    },
   },
   searchIcon: {
     alignSelf: "flex-end",
@@ -43,13 +46,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-// Basic Search Box
-
 const HeaderSearchBox = () => {
   const classes = useStyles();
   const history = useHistory();
 
-  // This value is passed to search results page. Not declaring value before setValue as not needed here.
+  // This value is passed to search results page.
   const { setQuery } = useContext(SearchContext);
 
   const [input, setInput] = useState("");
