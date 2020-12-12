@@ -11,7 +11,6 @@ import {
 } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { format } from "date-fns";
-import Grid from "@material-ui/core/Grid";
 import IconButton from "@material-ui/core/IconButton";
 import CancelIcon from "@material-ui/icons/Cancel";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
@@ -133,9 +132,14 @@ const useStyles = makeStyles((theme) => ({
   accordionDetails: {
     padding: 0,
     marginLeft: theme.spacing(2),
+    backgroundColor: "gold",
   },
-  accordionDetailsText: {
-    paddingTop: 12,
+  accordionDetailsFlex: {
+    display: "flex",
+    // flexFlow: "row",
+    alignItems: "center",
+    color: "purple",
+    justifyContent: "space-between",
   },
   iconBtn: {
     fontSize: "2rem",
@@ -276,34 +280,26 @@ export default function InventoryCard({
                   </Button>
                 </AccordionSummary>
                 <AccordionDetails className={classes.accordionDetails}>
-                  <Grid item container xs={12}>
-                    <Grid item xs={7} sm={9}>
-                      <Typography
-                        variant="h6"
-                        className={classes.accordionDetailsText}
-                      >
-                        Confirm Removal
-                      </Typography>
-                    </Grid>
-                    <Grid item container xs={5} sm={3}>
+                  <div className={classes.accordionDetailsFlex}>
+                    <Typography variant="h6">Confirm Removal</Typography>
+
+                    <IconButton
+                      className={classes.cancel}
+                      onClick={toggleExpanded(id)}
+                    >
+                      <CancelIcon className={classes.iconBtn} />
+                    </IconButton>
+                    {removeLoading ? (
+                      <CircularProgress color="primary" />
+                    ) : (
                       <IconButton
-                        className={classes.cancel}
-                        onClick={toggleExpanded(id)}
+                        className={classes.confirm}
+                        onClick={handleRemove}
                       >
-                        <CancelIcon className={classes.iconBtn} />
+                        <CheckCircleIcon className={classes.iconBtn} />
                       </IconButton>
-                      {removeLoading ? (
-                        <CircularProgress color="primary" />
-                      ) : (
-                        <IconButton
-                          className={classes.confirm}
-                          onClick={handleRemove}
-                        >
-                          <CheckCircleIcon className={classes.iconBtn} />
-                        </IconButton>
-                      )}
-                    </Grid>
-                  </Grid>
+                    )}
+                  </div>
                 </AccordionDetails>
               </Accordion>
             </div>
@@ -348,34 +344,25 @@ export default function InventoryCard({
                   </Button>
                 </AccordionSummary>
                 <AccordionDetails className={classes.accordionDetails}>
-                  <Grid item container xs={12}>
-                    <Grid item xs={7} sm={9}>
-                      <Typography
-                        variant="h6"
-                        className={classes.accordionDetailsText}
-                      >
-                        Confirm Return
-                      </Typography>
-                    </Grid>
-                    <Grid item container xs={5} sm={3}>
+                  <div className={classes.accordionDetailsFlex}>
+                    <Typography variant="h6">Confirm Return</Typography>
+                    <IconButton
+                      className={classes.cancel}
+                      onClick={toggleExpanded(id)}
+                    >
+                      <CancelIcon className={classes.iconBtn} />
+                    </IconButton>
+                    {returnLoading ? (
+                      <CircularProgress color="primary" />
+                    ) : (
                       <IconButton
-                        className={classes.cancel}
-                        onClick={toggleExpanded(id)}
+                        className={classes.confirm}
+                        onClick={handleReturn}
                       >
-                        <CancelIcon className={classes.iconBtn} />
+                        <CheckCircleIcon className={classes.iconBtn} />
                       </IconButton>
-                      {returnLoading ? (
-                        <CircularProgress color="primary" />
-                      ) : (
-                        <IconButton
-                          className={classes.confirm}
-                          onClick={handleReturn}
-                        >
-                          <CheckCircleIcon className={classes.iconBtn} />
-                        </IconButton>
-                      )}
-                    </Grid>
-                  </Grid>
+                    )}
+                  </div>
                 </AccordionDetails>
               </Accordion>
             </div>

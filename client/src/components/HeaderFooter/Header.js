@@ -17,7 +17,7 @@ import {
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import MenuIcon from "@material-ui/icons/Menu";
 import HeaderSearchBox from "./HeaderSearchBox";
-import { AuthContext } from "../Context";
+import { AuthContext } from "../../Context";
 
 // Styling for heading component
 const useStyles = makeStyles((theme) => ({

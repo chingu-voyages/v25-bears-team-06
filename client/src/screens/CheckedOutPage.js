@@ -7,7 +7,7 @@ import {
   Grid,
 } from "@material-ui/core";
 import { format } from "date-fns";
-import CheckedOutCard from "../components/cards/CheckedOutCard";
+import CheckedOutCard from "../components/Cards/CheckedOutCard";
 import Pagination from "../components/Pagination";
 import { AuthContext } from "../Context";
 import useQuery from "../dataservice/useQuery";
@@ -16,7 +16,7 @@ import Alert from "../components/Alert";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    padding: `${theme.spacing(4)}px ${theme.spacing(2)}px`,
+    margin: "0 auto",
   },
   centered: {
     textAlign: "center",
@@ -39,9 +39,8 @@ export default function CheckedOutPage() {
   const [alert, setAlert] = useState({
     open: false,
     message: "",
-    backgroundColor: "",
   });
-  // context
+
   const auth = useContext(AuthContext);
   const { token } = auth.user;
 
@@ -65,8 +64,8 @@ export default function CheckedOutPage() {
   }, [data, error]);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const numberofbooks = checkedOutBooks.length;
-  const booksPerPage = checkedOutBooks.length > 7 ? 8 : checkedOutBooks.length;
+  const numberOfBooks = checkedOutBooks.length;
+  const booksPerPage = checkedOutBooks.length > 4 ? 5 : checkedOutBooks.length;
   // Get currently displayed books - for pagination
   const indexOfLastBook = currentPage * booksPerPage;
   const indexOfFirstBook = indexOfLastBook - booksPerPage;
@@ -93,7 +92,7 @@ export default function CheckedOutPage() {
           </Alert>
         </div>
       </Snackbar>
-      <header className={`${classes.centered} ${classes.headerSection}`}>
+      <header className={classes.headerSection}>
         <Typography variant="h4" gutterBottom>
           Books you have checked out
         </Typography>
@@ -103,35 +102,48 @@ export default function CheckedOutPage() {
           gutterBottom
           color="primary"
         >
-          Showing {indexOfFirstBook}-{indexOfLastBook} of {numberofbooks}{" "}
-          results
+          Showing{" "}
+          {numberOfBooks === 0 ? indexOfFirstBook : indexOfFirstBook + 1}-
+          {numberOfBooks < indexOfLastBook ? numberOfBooks : indexOfLastBook} of{" "}
+          {numberOfBooks} results
         </Typography>
       </header>
 
       {/* card section */}
-      <div className={classes.centered}>
-        {loading && (
-          <CircularProgress color="primary" style={{ padding: "2.5rem" }} />
-        )}
-      </div>
-      {checkedOutBooks && checkedOutBooks.length && (
-        <section>
-          {currentBooks.map((item) => (
-            <CheckedOutCard
-              key={item._id}
-              googleId={item.book.googleId}
-              title={item.book.title}
-              authors={item.book.authors}
-              publishedDate={item.book.publishedDate}
-              owner={item.owner.displayName}
-              dueDate={format(
-                Number(item.checkoutData[item.checkoutData.length - 1].dueDate),
-                "PPPP",
-              )}
-            />
-          ))}
-        </section>
+      {loading && (
+        <CircularProgress color="primary" style={{ padding: "2.5rem" }} />
       )}
+
+      {!loading &&
+        (checkedOutBooks.length === 0 ? (
+          <>
+            <Typography variant="body1" gutterBottom>
+              It looks like you haven&apos;t checked out any books yet.
+              <br />
+              Simply search our database above and click on checkout if you see
+              a book you&apos;d like to read.
+            </Typography>
+          </>
+        ) : (
+          <section>
+            {currentBooks.map((item) => (
+              <CheckedOutCard
+                key={item._id}
+                googleId={item.book.googleId}
+                title={item.book.title}
+                authors={item.book.authors}
+                publishedDate={item.book.publishedDate}
+                owner={item.owner.displayName}
+                dueDate={format(
+                  Number(
+                    item.checkoutData[item.checkoutData.length - 1].dueDate,
+                  ),
+                  "PPPP",
+                )}
+              />
+            ))}
+          </section>
+        ))}
 
       {/* Display pagination  */}
       <Grid

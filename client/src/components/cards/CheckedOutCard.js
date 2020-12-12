@@ -9,8 +9,7 @@ const useStyles = makeStyles((theme) => ({
   },
   card: {
     padding: theme.spacing(2),
-    margin: "auto",
-    maxWidth: 700,
+    maxWidth: "100%",
   },
   imageContainer: {
     width: 128,
@@ -20,7 +19,6 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
     position: "relative",
     display: "inline-flex",
-    border: "1px solid #eff",
   },
   img: {
     display: "block",
