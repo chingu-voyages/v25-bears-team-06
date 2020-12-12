@@ -74,7 +74,6 @@ const SingleBookCard = (props) => {
     bookResults,
     setBookResults,
     setAlert,
-    waitlist,
   } = props;
   // Modal actions
   const [open, setOpen] = useState(false);

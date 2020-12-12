@@ -207,7 +207,8 @@ export default function CheckOutModal({
     }
     if (
       owner.checkoutData[owner.checkoutData.length - 1].user._id ===
-      auth.user.userId
+        auth.user.userId &&
+      !owner.checkoutData[owner.checkoutData.length - 1].returnDate
     ) {
       return "View All Checked Out";
     }

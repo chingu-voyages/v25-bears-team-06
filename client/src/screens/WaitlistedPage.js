@@ -57,7 +57,7 @@ const WaitlistedPage = ({ userData, setUserData }) => {
             </Typography>
           </>
         ) : (
-          userData.waitlisted.map(({ _id, waitlist, book }) => (
+          userData.waitlisted.map(({ _id, book }) => (
             <SingleBookCard
               key={book._id + Math.random()}
               id={book._id}
@@ -66,7 +66,6 @@ const WaitlistedPage = ({ userData, setUserData }) => {
               googleId={book.googleId}
               publishedDate={book.publishedDate}
               owners={book.owners}
-              waitlist={waitlist}
             />
           ))
         )}
