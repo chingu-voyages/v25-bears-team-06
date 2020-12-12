@@ -75,7 +75,6 @@ function App() {
             <Header />
             <main>
               <Switch>
-                <Route exact path="/" component={AboutPage} />
                 <Route
                   exact
                   path="/searchresults"
@@ -84,11 +83,6 @@ function App() {
                 <Route exact path="/signup" component={SignupPage} />
                 <Route exact path="/login" component={LoginPage} />
                 <Route path="/bookinfo/:id" component={BookInfoPage} />
-                <ProtectedRoute
-                  exact
-                  path="/dashboard"
-                  component={DashboardPage}
-                />
                 <ProtectedRoute
                   exact
                   path="/dashboard/myinventory"
@@ -104,6 +98,17 @@ function App() {
                   path="/dashboard/waitlisted"
                   component={DashboardPage}
                 />
+                <ProtectedRoute
+                  exact
+                  path="/dashboard/uploadbook"
+                  component={DashboardPage}
+                />
+                <ProtectedRoute
+                  exact
+                  path="/dashboard"
+                  component={DashboardPage}
+                />
+                <Route exact path="/" component={AboutPage} />
                 <Route component={PageNotFound} />
               </Switch>
             </main>
