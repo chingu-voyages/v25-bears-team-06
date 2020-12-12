@@ -24,7 +24,16 @@ const searchBooksQuery = `
             longitude
           }
         }
+        waitlist {
+          _id
+        }
         isAvailable
+        checkoutData {
+          user {
+            _id
+          }
+          returnDate
+        }
       }
     }  
   }

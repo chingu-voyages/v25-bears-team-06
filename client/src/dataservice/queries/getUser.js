@@ -51,6 +51,9 @@ const getUserQuery = `
         owner {
           displayName
         }
+        waitlist {
+          _id
+        }
       }
     }
   }
