@@ -5,7 +5,7 @@ import { Card, Grid, Typography } from "@material-ui/core";
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    margin: "1rem",
+    margin: "1rem 0",
   },
   card: {
     padding: theme.spacing(2),

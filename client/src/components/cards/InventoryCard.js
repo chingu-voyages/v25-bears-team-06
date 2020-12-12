@@ -130,16 +130,27 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   accordionDetails: {
-    padding: 0,
+    padding: "0 1rem",
     marginLeft: theme.spacing(2),
-    backgroundColor: "gold",
+    display: "flex",
+    justifyContent: "flex-end",
+    [theme.breakpoints.down("xs")]: {
+      justifyContent: "flex-start",
+      padding: 0,
+    },
   },
   accordionDetailsFlex: {
     display: "flex",
-    // flexFlow: "row",
     alignItems: "center",
-    color: "purple",
-    justifyContent: "space-between",
+  },
+  confirmationText: {
+    paddingRight: "1.5rem",
+    fontSize: "1.25rem",
+    fontWeight: 500,
+    [theme.breakpoints.down("xs")]: {
+      fontSize: "1rem",
+      paddingRight: "0.4rem",
+    },
   },
   iconBtn: {
     fontSize: "2rem",
@@ -281,7 +292,9 @@ export default function InventoryCard({
                 </AccordionSummary>
                 <AccordionDetails className={classes.accordionDetails}>
                   <div className={classes.accordionDetailsFlex}>
-                    <Typography variant="h6">Confirm Removal</Typography>
+                    <Typography className={classes.confirmationText}>
+                      Confirm Removal
+                    </Typography>
 
                     <IconButton
                       className={classes.cancel}
@@ -345,7 +358,9 @@ export default function InventoryCard({
                 </AccordionSummary>
                 <AccordionDetails className={classes.accordionDetails}>
                   <div className={classes.accordionDetailsFlex}>
-                    <Typography variant="h6">Confirm Return</Typography>
+                    <Typography className={classes.confirmationText}>
+                      Confirm Return
+                    </Typography>
                     <IconButton
                       className={classes.cancel}
                       onClick={toggleExpanded(id)}

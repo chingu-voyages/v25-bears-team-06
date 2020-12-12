@@ -52,7 +52,7 @@ export default function MyInventoryPage() {
 
   const [currentPage, setCurrentPage] = useState(1);
   const numberOfBooks = inventory.length;
-  const booksPerPage = inventory.length > 5 ? 6 : inventory.length;
+  const booksPerPage = inventory.length > 4 ? 5 : inventory.length;
   // Get currently displayed books - for pagination
   const indexOfLastBook = currentPage * booksPerPage;
   const indexOfFirstBook = indexOfLastBook - booksPerPage;
