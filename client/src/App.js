@@ -84,7 +84,6 @@ function App() {
                 <Route exact path="/signup" component={SignupPage} />
                 <Route exact path="/login" component={LoginPage} />
                 <Route path="/bookinfo/:id" component={BookInfoPage} />
-                <ProtectedRoute path="/dashboard" component={DashboardPage} />
                 <ProtectedRoute
                   path="/dashboard/myinventory"
                   component={DashboardPage}
@@ -101,6 +100,7 @@ function App() {
                   path="/dashboard/uploadbook"
                   component={DashboardPage}
                 />
+                <ProtectedRoute path="/dashboard" component={DashboardPage} />
                 <Route component={PageNotFound} />
               </Switch>
             </main>
