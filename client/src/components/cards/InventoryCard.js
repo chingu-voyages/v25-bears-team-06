@@ -6,7 +6,7 @@ import {
   AccordionDetails,
   AccordionSummary,
   CircularProgress,
-  Paper,
+  Card,
   Typography,
 } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -15,19 +15,19 @@ import Grid from "@material-ui/core/Grid";
 import IconButton from "@material-ui/core/IconButton";
 import CancelIcon from "@material-ui/icons/Cancel";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
-import useMutation from "../dataservice/useMutation";
-import { RETURN_BOOK, REMOVE_BOOK } from "../dataservice/mutations";
-import { AuthContext } from "../Context";
+import useMutation from "../../dataservice/useMutation";
+import { RETURN_BOOK, REMOVE_BOOK } from "../../dataservice/mutations";
+import { AuthContext } from "../../Context";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
     margin: "1rem",
   },
-  paper: {
+  card: {
     padding: theme.spacing(2),
     margin: "auto",
-    maxWidth: 700,
+    maxWidth: 600,
   },
   bookInfoContainer: {
     display: "flex",
@@ -76,7 +76,6 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   availabilitySummaryText: {
-    margin: theme.spacing(2),
     color: theme.palette.success.dark,
     [theme.breakpoints.down("xs")]: {
       marginTop: theme.spacing(1),
@@ -120,7 +119,6 @@ const useStyles = makeStyles((theme) => ({
   },
   textRow: {
     display: "flex",
-    marginLeft: theme.spacing(2),
     [theme.breakpoints.down("xs")]: {
       marginLeft: 0,
     },
@@ -134,10 +132,7 @@ const useStyles = makeStyles((theme) => ({
   },
   accordionDetails: {
     padding: 0,
-    marginLeft: theme.spacing(4),
-    [theme.breakpoints.down("xs")]: {
-      marginLeft: theme.spacing(2),
-    },
+    marginLeft: theme.spacing(2),
   },
   accordionDetailsText: {
     paddingTop: 12,
@@ -239,7 +234,7 @@ export default function InventoryCard({
   const classes = useStyles();
   return (
     <div className={classes.root}>
-      <Paper className={classes.paper}>
+      <Card className={classes.card}>
         <div className={classes.bookInfoContainer}>
           <div className={classes.bookThumbContainer}>
             <img
@@ -386,7 +381,7 @@ export default function InventoryCard({
             </div>
           )}
         </div>
-      </Paper>
+      </Card>
     </div>
   );
 }

@@ -30,6 +30,13 @@ const getUserQuery = `
         checkoutData {
           dueDate
         }
+        book {
+          _id
+          googleId
+          title
+          authors
+          publishedDate
+        }
       }
       waitlisted {
         _id

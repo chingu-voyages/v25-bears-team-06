@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Snackbar, Typography } from "@material-ui/core";
-import InventoryCard from "../components/InventoryCard";
+import InventoryCard from "../components/cards/InventoryCard";
 import { AuthContext } from "../Context";
 import useQuery from "../dataservice/useQuery";
 import { GET_INVENTORY } from "../dataservice/queries";
