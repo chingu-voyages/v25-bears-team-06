@@ -50,7 +50,7 @@ const SearchResultsPage = () => {
     }
   }, [data]);
 
-  const numberofbooks = bookResults.length;
+  const numberOfBooks = bookResults.length;
   const booksPerPage = bookResults.length > 7 ? 8 : bookResults.length;
 
   // Get currently displayed books - for pagination
@@ -89,8 +89,10 @@ const SearchResultsPage = () => {
             gutterBottom
             color="primary"
           >
-            Showing {indexOfFirstBook}-{indexOfLastBook} of {numberofbooks}{" "}
-            results
+            Showing{" "}
+            {numberOfBooks === 0 ? indexOfFirstBook : indexOfFirstBook + 1}-
+            {numberOfBooks < indexOfLastBook ? numberOfBooks : indexOfLastBook}{" "}
+            of {numberOfBooks} results
           </Typography>
         </Grid>
 

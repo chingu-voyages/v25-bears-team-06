@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { ThemeProvider } from "@material-ui/styles";
 import theme from "./components/Theme";
 import Header from "./components/HeaderFooter/Header";
-import Footer from "./components/Footer";
+import Footer from "./components/HeaderFooter/Footer";
 import DashboardPage from "./screens/DashboardPage";
 import SearchResultsPage from "./screens/SearchResultsPage";
 import BookInfoPage from "./screens/BookInfoPage";
