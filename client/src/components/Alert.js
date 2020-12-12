@@ -15,24 +15,24 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: "5px",
   },
   plain: {
-    backgroundColor: "white",
-    color: "black",
+    backgroundColor: theme.palette.plain.main,
+    color: theme.palette.plain.contrastText,
     border: "1px solid black",
   },
   success: {
     backgroundColor: theme.palette.success.main,
-    color: "white",
+    color: theme.palette.success.contrastText,
   },
   error: {
     backgroundColor: theme.palette.error.main,
-    color: "white",
+    color: theme.palette.error.contrastText,
   },
   alertText: {
     fontWeight: 500,
     fontSize: "0.9rem",
   },
   icon: {
-    color: "white",
+    color: theme.palette.info.contrastText,
     paddingRight: "10px",
   },
 }));
@@ -49,7 +49,7 @@ export default function Alert({ severity, children }) {
 
     return icon;
   };
-  // const AlertIcon = <ErrorOutlineIcon style={{ color: "white" }} />;
+
   let alertClass = classes.plain;
   if (severity === "success") {
     alertClass = classes.success;

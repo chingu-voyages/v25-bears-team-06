@@ -23,6 +23,7 @@ import UploadBookPage from "./UploadBookPage";
 import WaitlistedPage from "./WaitlistedPage";
 import CheckedOutPage from "./CheckedOutPage";
 import MyInventoryPage from "./MyInventoryPage";
+import DefaultDashboard from "../components/Dashboard/DefaultDashboard";
 import Alert from "../components/Alert";
 
 const useStyles = makeStyles((theme) => ({
@@ -50,9 +51,11 @@ const useStyles = makeStyles((theme) => ({
     ...theme.typography.tab,
     display: "flex",
     alignItems: "center",
+    whiteSpace: "nowrap",
   },
   pagesSection: {
-    padding: "0.5rem",
+    padding: `${theme.spacing(2)}px ${theme.spacing(2)}px`,
+    margin: "0 auto",
   },
   borrowingContainer: {
     padding: "0.5rem",
@@ -143,7 +146,7 @@ const DashboardPage = () => {
               </Snackbar>
             </div>
             <Typography variant="h5" color="primary" gutterBottom>
-              My Dashboard
+              Dashboard
             </Typography>
             <Typography variant="body1">
               Welcome, <span className={classes.userName}>{displayName}</span>
@@ -221,7 +224,7 @@ const DashboardPage = () => {
                       className={classes.menuItem}
                       disableTypography
                     >
-                      View Inventory (
+                      Inventory (
                       {!loading && data ? (
                         userData.owns.length
                       ) : (
@@ -253,6 +256,11 @@ const DashboardPage = () => {
 
           <Grid item xs={12} md={9} className={classes.pagesSection}>
             <Switch>
+              <ProtectedRoute
+                exact
+                path="/dashboard"
+                component={DefaultDashboard}
+              />
               <ProtectedRoute
                 exact
                 path="/dashboard/uploadbook"

@@ -38,6 +38,7 @@ const useStyles = makeStyles((theme) => ({
     display: "block",
     maxWidth: "100%",
     maxHeight: "100%",
+    border: "1px solid #ddd",
   },
   btn: {
     margin: 2,

@@ -66,9 +66,9 @@ const UploadBookPage = () => {
   const [books, setBooks] = useState([]);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const booksPerPage = 8;
+  const booksPerPage = books.length > 7 ? 8 : books.length;
 
-  const numberofbooks = books.length;
+  const numberOfBooks = books.length;
 
   // meant for showing loading only on given listing
   const [selectedBookIndex, setSelectedBookIndex] = useState(null);
@@ -190,7 +190,7 @@ const UploadBookPage = () => {
           direction="column"
           alignItems="center"
         >
-          <Typography variant="h3" gutterBottom>
+          <Typography variant="h4" gutterBottom>
             Upload New Book
           </Typography>
           <Typography variant="body1" gutterBottom>
@@ -218,9 +218,18 @@ const UploadBookPage = () => {
           </Grid>
 
           <Grid item>
-            <Typography variant="subtitle2" className={classes.resultsCount}>
-              Showing {indexOfFirstBook}-{indexOfLastBook} of {numberofbooks}{" "}
-              results
+            <Typography
+              variant="subtitle2"
+              className={classes.resultsCount}
+              gutterBottom
+              color="primary"
+            >
+              Showing{" "}
+              {numberOfBooks === 0 ? indexOfFirstBook : indexOfFirstBook + 1}-
+              {numberOfBooks < indexOfLastBook
+                ? numberOfBooks
+                : indexOfLastBook}{" "}
+              of {numberOfBooks} results
             </Typography>
           </Grid>
 
