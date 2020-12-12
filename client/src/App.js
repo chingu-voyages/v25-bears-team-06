@@ -47,6 +47,7 @@ function App() {
   };
 
   const logout = () => {
+    setQuery("");
     localStorage.removeItem("email");
     localStorage.removeItem("token");
     localStorage.removeItem("displayName");

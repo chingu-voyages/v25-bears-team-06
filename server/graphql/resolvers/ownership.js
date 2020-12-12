@@ -322,4 +322,32 @@ module.exports = {
       throw err;
     }
   },
+  // Function to fix null array data points in user/ownership
+  // normalizeData: async () => {
+  //   try {
+  //     const users = await User.find();
+  //     users.forEach(async (user, i) => {
+  //       if (!user.waitlisted || user.waitlisted.length === 0) {
+  //         user.waitlisted = [];
+  //       }
+  //       if (!user.checkedOut || user.checkedOut.length === 0) {
+  //         user.checkedOut = [];
+  //       }
+  //       await user.save();
+  //     });
+
+  //     const ownerships = await Ownership.find();
+  //     ownerships.forEach(async (ownership, i) => {
+  //       if (!ownership.waitlist || ownership.waitlist.length === 0) {
+  //         ownership.waitlist = [];
+  //       }
+  //       if (!ownership.checkoutData || ownership.checkoutData.length === 0) {
+  //         ownership.checkoutData = [];
+  //       }
+  //       await ownership.save();
+  //     });
+  //   } catch (err) {
+  //     throw err;
+  //   }
+  // },
 };

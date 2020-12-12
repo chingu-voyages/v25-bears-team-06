@@ -106,7 +106,7 @@ export default function LoginPage() {
   // Snackbar function
   const [alert, setAlert] = useState({
     open: auth.tokenExpired,
-    message: auth.tokenExpired ? "Token Expired: Please Relog" : "",
+    message: auth.tokenExpired ? "Token Expired: Please Log In Again." : "",
   });
 
   useEffect(() => {
