@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
+import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Paper,
@@ -73,19 +74,20 @@ const useStyles = makeStyles((theme) => ({
       alignItems: "center",
     },
   },
-  btnOne: {
+  btnPrimary: {
     marginRight: "1rem",
-    [theme.breakpoints.down("xs")]: {
-      marginTop: "0.8rem",
-      marginRight: 0,
-    },
   },
-  btnTwo: {
+  btnSecondary: {
     marginLeft: "1rem",
+  },
+  btnBase: {
     [theme.breakpoints.down("xs")]: {
-      marginTop: "0.8rem",
+      marginTop: "1.6rem",
+      marginRight: 0,
       marginLeft: 0,
     },
+    width: "200px",
+    height: "3rem",
   },
   questionInfoContainer: {
     display: "flex",
@@ -97,12 +99,13 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down("sm")]: {
       flexFlow: "column-reverse nowrap",
     },
+    justifyContent: "space-around",
   },
   questionSection: {
-    marginleft: 10,
-    padding: "1rem",
-    width: "40%",
+    width: "100%",
+    maxWidth: "40vw",
     textAlign: "center",
+    margin: "0 auto",
     [theme.breakpoints.down("sm")]: {
       width: "100%",
       marginleft: 0,
@@ -115,14 +118,16 @@ const useStyles = makeStyles((theme) => ({
   },
   aboutSection: {
     margin: "0 auto",
-    padding: "1rem",
-    marginLeft: "0.5rem",
-    width: "60%",
+    maxWidth: "40vw",
     [theme.breakpoints.down("sm")]: {
       width: "100%",
       marginLeft: 0,
       padding: 0,
     },
+    border: "0 solid black",
+  },
+  textContainer: {
+    padding: "3rem",
   },
   infographicContainer: {
     color: "#fff",
@@ -160,8 +165,14 @@ const AboutPage = () => {
   // set expanded
   const [expanded, setExpanded] = useState(false);
 
+  const aboutRef = useRef(null);
+
   const toggleExpanded = (currentAccordion) => (event, isExpanded) => {
     setExpanded(isExpanded ? currentAccordion : false);
+  };
+
+  const scrollTo = (ref) => {
+    ref.current.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
@@ -180,7 +191,7 @@ const AboutPage = () => {
               variant="contained"
               color="secondary"
               size="large"
-              className={classes.btnOne}
+              className={clsx(classes.btnBase, classes.btnPrimary)}
               component={Link}
               to="/signup"
             >
@@ -190,22 +201,21 @@ const AboutPage = () => {
               variant="outlined"
               color="secondary"
               size="large"
-              className={classes.btnTwo}
-              href="#questionInfoContainer"
+              className={clsx(classes.btnBase, classes.btnSecondary)}
+              onClick={() => scrollTo(aboutRef)}
             >
               Learn More
             </Button>
           </div>
         </div>
       </section>
-      <section
-        className={classes.questionInfoContainer}
-        id="questionInfoContainer"
-      >
+      <section className={classes.questionInfoContainer} ref={aboutRef}>
         <Paper className={classes.questionSection}>
-          <Typography variant="h6" gutterBottom>
-            Frequently Asked Questions (FAQs)
-          </Typography>
+          <div className={classes.textContainer}>
+            <Typography variant="h6" gutterBottom>
+              Frequently Asked Questions (FAQs)
+            </Typography>
+          </div>
           {questions.map((question) => {
             const { id, questionText, details } = question;
             return (
@@ -229,18 +239,21 @@ const AboutPage = () => {
             );
           })}
         </Paper>
-        <Paper className={classes.aboutSection}>
-          <Typography variant="h6" gutterBottom>
-            About
-          </Typography>
-          <Typography variant="body2" gutterBottom>
-            OpenShelf is a site for readers of all ages to share books with one
-            another. This project was created as part of a Chingu Voyage.
-            <br />
-            We conducted a survey to find out what people think of sharing books
-            with members of their communities. The infographic below shares some
-            of the findings.
-          </Typography>
+        <Paper className={classes.aboutSection} elevation={0}>
+          <div className={classes.textContainer}>
+            <Typography variant="h6" gutterBottom>
+              About
+            </Typography>
+            <Typography variant="body2" gutterBottom>
+              OpenShelf is a site for readers of all ages to share books with
+              one another. This project was created as part of a Chingu Voyage.
+              <br />
+              <br />
+              We conducted a survey to find out what people think of sharing
+              books with members of their communities. The infographic below
+              shares some of the findings.
+            </Typography>
+          </div>
           <Grid container className={classes.infographicContainer}>
             {/* ROW 1 */}
             <Grid

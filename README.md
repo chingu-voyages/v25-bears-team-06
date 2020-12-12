@@ -1,5 +1,7 @@
 # openShelf
 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/3e3ade1a-8845-49fd-a776-2f519cfb2322/deploy-status)](https://app.netlify.com/sites/openshelf/deploys)
+
 A web app that allows users to share books with members of their community. Users can upload books they own, check out books made available by others, or join a waitlist.
 
 Chingu Voyage-25 (bears-team-06) (https://chingu.io/)
@@ -23,8 +25,8 @@ https://openshelf.netlify.app/
   - [Configuration](#configuration)
 - [Development Environment](#development-environment)
 - [Runtime](#runtime)
-  - [Netlify Deployment](#netlify-deployment)
-  - [Heroku Deployment](#heroku-deployment)
+  - [Netlify Deployment](#netlify-deployment-client)
+  - [Heroku Deployment](#heroku-deployment-server)
     - [Heroku Deployment Steps](#heroku-deployment-steps)
 - [Future Updates](#future-updates)
   - [Known Bugs + Planned Fixes](#known-bugs-+-planned-fixes)
@@ -71,18 +73,22 @@ In addition, we would create short-lived Git branches, unique to each developer,
 
 ### Usage
 
-| (1) Commands (`/`) | Purpose                                             |
-| :----------------- | :-------------------------------------------------- |
-| `npm run client`   | Run Frontend Dev. Server locally                    |
-| `npm run server`   | Run Backend locally using Nodemon                   |
-| `npm run dev`      | Run Frontend and Backend locally using Concurrently |
+| (1) Commands (`/`) | Purpose                                                            |
+| :----------------- | :----------------------------------------------------------------- |
+| `npm run client`   | Run Frontend Dev. Server locally                                   |
+| `npm run server`   | Run Backend locally using Nodemon                                  |
+| `npm run dev`      | Run Frontend and Backend (with nodemon) locally using Concurrently |
 |                    |
 
-| (2) Commands (`/server`) | Purpose                           |
-| :----------------------- | :-------------------------------- |
-| `npm start`              | Run Backend Server                |
-| `npm run devStart`       | Run Backend locally using Nodemon |
-| `npm run test`           | Run Backend Tests                 |
+| (2) Commands (`/client`) | Purpose                          |
+| :----------------------- | :------------------------------- |
+| `npm start`              | Run Frontend Dev. Server locally |
+| `npm run build`          | Build Frontend for Production    |
+| `npm run test`           | Run Frontend Tests               |
+
+| (3) Commands (`/server`) | Purpose                    |
+| :----------------------- | :------------------------- |
+| `npm start`              | Run Backend Server Locally |
 
 ### Configuration
 
@@ -136,13 +142,15 @@ REACT_APP_API_KEY = yourOwnAPIKeyHere
 
 ## Runtime
 
-### Netlify Deployment
+### Netlify Deployment (client)
 
-[View the Netlify Deploy Steps Here! (with pictures)](/netlify-deploy-doc.md)
+[Netlify Deploy Guide (with pictures!)](/netlify-deploy-doc.md)
 
-### Heroku Deployment
+### Heroku Deployment (server)
 
-Due to having both the server and client in a single Github Repo, the server must be deployed to Heroku using a git command to push a subtree from the root of the repository directory.
+Due to having both the server and client in a single Github Repo, the server must be deployed using a git command to push a subtree from the root of the repository directory.
+
+As a quick disclaimer, we are deploying the server as it is structured in the repo
 
 #### Heroku Deployment Steps
 
@@ -242,6 +250,6 @@ User Data:
 
 ## Authors
 
-- Babak Chehraz
+- Babak Chehraz [[Portfolio](https://bit.ly/3cecdMs])]
 - Andrew Knox
 - Michelle Bence
