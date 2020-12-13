@@ -21,18 +21,18 @@ const useStyles = makeStyles((theme) => ({
   },
   success: {
     backgroundColor: theme.palette.success.main,
-    color: theme.palette.success.contrastText,
+    color: theme.palette.alert.contrastText,
   },
   error: {
     backgroundColor: theme.palette.error.main,
-    color: theme.palette.error.contrastText,
+    color: theme.palette.alert.contrastText,
   },
   alertText: {
     fontWeight: 500,
     fontSize: "0.9rem",
   },
   icon: {
-    color: theme.palette.info.contrastText,
+    color: theme.palette.alert.contrastText,
     paddingRight: "10px",
   },
 }));
