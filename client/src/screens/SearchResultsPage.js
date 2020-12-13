@@ -50,6 +50,18 @@ const SearchResultsPage = () => {
     }
   }, [data]);
 
+  const updateOwners = (newOwners, bookId) => {
+    const bookIndex = bookResults.findIndex((book) => book._id === bookId);
+
+    const booksCopy = [...bookResults];
+    booksCopy[bookIndex] = {
+      ...booksCopy[bookIndex],
+      owners: newOwners,
+    };
+
+    setBookResults(booksCopy);
+  };
+
   const numberOfBooks = bookResults.length;
   const booksPerPage = bookResults.length > 7 ? 8 : bookResults.length;
 
@@ -127,8 +139,7 @@ const SearchResultsPage = () => {
                 googleId={book.googleId}
                 publishedDate={book.publishedDate}
                 owners={book.owners}
-                bookResults={bookResults}
-                setBookResults={setBookResults}
+                setOwners={updateOwners}
                 setAlert={setAlert}
               />
             ))

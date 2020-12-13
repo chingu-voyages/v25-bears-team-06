@@ -85,14 +85,14 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function CheckOutModal({
+  bookId,
   title,
   thumbnail,
   publishedDate,
   authors,
   loggedIn,
   owners,
-  bookResults,
-  setBookResults,
+  setOwners,
   setAlert,
 }) {
   const classes = useStyles();
@@ -115,26 +115,18 @@ export default function CheckOutModal({
 
   const [
     checkoutBook,
-    { checkoutBookData, checkoutBookError, checkoutBookLoading },
+    { data: checkoutBookData, checkoutBookError, checkoutBookLoading },
   ] = useMutation(CHECKOUT_BOOK.mutation, auth && auth.user && auth.user.token);
 
   useEffect(() => {
     if (checkoutBookData) {
-      setBookResults(
-        () =>
-          bookResults &&
-          bookResults.map((bookResult) => ({
-            ...bookResult,
-            owners: bookResult.owners.map((ownership) =>
-              ownership._id === checkoutBookData.checkoutBook._id
-                ? {
-                    ...ownership,
-                    isAvailable: checkoutBookData.checkoutBook.isAvailable,
-                  }
-                : ownership,
-            ),
-          })),
+      const ownerIndex = owners.findIndex(
+        (owner) => owner._id === checkoutBookData.checkoutBook._id,
       );
+      const ownersCopy = [...owners];
+      ownersCopy[ownerIndex] = checkoutBookData.checkoutBook;
+      setOwners(ownersCopy, bookId);
+
       setAlert({
         open: true,
         message: "Checkout Successful",
@@ -148,13 +140,7 @@ export default function CheckOutModal({
         backgroundColor: "red",
       });
     }
-  }, [
-    JSON.stringify(checkoutBookData),
-    checkoutBookError,
-    bookResults,
-    setAlert,
-    setBookResults,
-  ]);
+  }, [JSON.stringify(checkoutBookData), checkoutBookError, setAlert]);
 
   const handleCheckout = async ({ ownershipId }) => {
     await checkoutBook(
@@ -164,6 +150,7 @@ export default function CheckOutModal({
         dueDate: dueDate.toString(),
       }),
     );
+    setExpanded(false);
   };
 
   const [

@@ -26,6 +26,9 @@ const checkoutBookMutation = `
       book {
         _id
       }
+      waitlist {
+        _id
+      }
     }
   }
 `;

@@ -71,8 +71,7 @@ const SingleBookCard = (props) => {
     googleId,
     publishedDate,
     owners,
-    bookResults,
-    setBookResults,
+    setOwners,
     setAlert,
   } = props;
   // Modal actions
@@ -150,14 +149,14 @@ const SingleBookCard = (props) => {
           {/* Modal  */}
           <Dialog open={open} onClose={handleClose}>
             <CheckOutModal
+              bookId={id}
               title={title}
               thumbnail={thumbnail}
               publishedDate={publishedDate}
               authors={authors}
               loggedIn={loggedIn}
               owners={owners}
-              bookResults={bookResults}
-              setBookResults={setBookResults}
+              setOwners={setOwners}
               setAlert={setAlert}
             />
           </Dialog>

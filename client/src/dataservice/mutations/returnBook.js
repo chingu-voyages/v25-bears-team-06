@@ -14,6 +14,9 @@ const returnBookMutation = `
       book {
         _id
       }
+      checkoutData {
+        returnDate
+      }
     }
   }
 `;

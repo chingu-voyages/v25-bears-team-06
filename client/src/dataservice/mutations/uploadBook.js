@@ -19,7 +19,25 @@ const uploadBookMutation = `
       publishedDate: $publishedDate,
       publisher:  $publisher
     }) {
-      _id
+      owners {
+        _id
+        isAvailable
+        book {
+          _id
+          googleId
+          title
+          authors
+        }
+        checkoutData {
+          user {
+            displayName
+          }
+          checkoutDate
+          dueDate
+          returnDate
+          condition
+        }
+      }
     }
   }
 `;
