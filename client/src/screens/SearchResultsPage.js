@@ -9,22 +9,21 @@ import { SearchContext } from "../Context";
 import SEARCH_BOOKS from "../dataservice/queries/searchBooks";
 import Pagination from "../components/Pagination";
 import useQuery from "../dataservice/useQuery";
+import Alert from "../components/Alert";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   pageContainer: {
     maxWidth: 1200,
     margin: "auto",
-  },
-  errorDiv: {
-    height: "50%",
   },
   paginationContainer: {
     position: "relative",
     justifyContent: "center",
   },
-});
-
-// Display Search Results in a Grid
+  searchedTerm: {
+    color: theme.palette.info.main,
+  },
+}));
 
 const SearchResultsPage = () => {
   const classes = useStyles();
@@ -41,14 +40,18 @@ const SearchResultsPage = () => {
   const [alert, setAlert] = useState({
     open: false,
     message: "",
-    backgroundColor: "",
   });
 
   useEffect(() => {
     if (data) {
       setBookResults(data.books);
+    } else if (error) {
+      setAlert({
+        open: true,
+        message: error,
+      });
     }
-  }, [data]);
+  }, [data, error]);
 
   const numberOfBooks = bookResults.length;
   const booksPerPage = bookResults.length > 7 ? 8 : bookResults.length;
@@ -64,22 +67,29 @@ const SearchResultsPage = () => {
   return (
     <div>
       <Snackbar
+        classes={{
+          root: classes.snackbar,
+        }}
+        anchorOrigin={{ horizontal: "right", vertical: "top" }}
         open={alert.open}
         message={alert.message}
-        ContentProps={{ style: { backgroundColor: alert.backgroundColor } }}
-        anchorOrigin={{ vertical: "top", horizontal: "left" }}
         onClose={() => setAlert({ ...alert, open: false })}
-        autoHideDuration={5000}
-      />
+        autoHideDuration={(data && 1000) || 5000}
+      >
+        <div>
+          <Alert severity={(data && "success") || "error"}>
+            {alert.message}
+          </Alert>
+        </div>
+      </Snackbar>
       <Grid className={classes.pageContainer} container direction="column">
-        {error && <div className={classes.errorDiv}>{error}</div>}
         <Typography variant="h4" gutterBottom>
           Search Results{" "}
         </Typography>
 
         <Typography variant="subtitle1" gutterBottom>
           Authors and titles that contain:{" "}
-          <span style={{ color: "red" }}>{query}</span>
+          <span className={classes.searchedTerm}>{query}</span>
         </Typography>
 
         <Grid item>

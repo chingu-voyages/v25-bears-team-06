@@ -57,6 +57,10 @@ const useStyles = makeStyles((theme) => ({
   },
   btnUnavailable: {
     backgroundColor: theme.palette.error.main,
+    color: theme.palette.error.contrastText,
+    "&:hover": {
+      backgroundColor: theme.palette.error.dark,
+    },
   },
 }));
 
@@ -126,7 +130,11 @@ const SingleBookCard = (props) => {
           <Grid item xs={12} container className={classes.btnContainer} sm={3}>
             <Button
               component={Link}
-              to={`/bookinfo/${id}`}
+              to={
+                window.location.pathname === "/dashboard/waitlisted"
+                  ? `/dashboard/bookinfo/${id}`
+                  : `/bookinfo/${id}`
+              }
               className={classes.btn}
               variant="contained"
               color="primary"

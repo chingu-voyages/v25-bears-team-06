@@ -85,6 +85,11 @@ function App() {
                 <Route path="/bookinfo/:id" component={BookInfoPage} />
                 <ProtectedRoute
                   exact
+                  path="/dashboard/bookinfo/:id"
+                  component={BookInfoPage}
+                />
+                <ProtectedRoute
+                  exact
                   path="/dashboard/myinventory"
                   component={DashboardPage}
                 />

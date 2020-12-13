@@ -124,7 +124,7 @@ const BookInfoPage = () => {
         </Snackbar>
       </div>
       <div className={classes.root}>
-        <Button onClick={handleGoBack}> Back to search results</Button>
+        <Button onClick={handleGoBack}> Back</Button>
         <Paper className={classes.paper}>
           <Grid container spacing={2}>
             <Grid item xs={3} md={2} className={classes.imageContainer}>

@@ -21,7 +21,7 @@ https://openshelf.netlify.app/
   - [Architecture](#architecture)
   - [Technologies](#technologies)
   - [Development Style and Git Branches](#development-style-and-git-branches)
-  - [Useage](#usage)
+  - [Usage](#usage)
   - [Configuration](#configuration)
 - [Development Environment](#development-environment)
 - [Runtime](#runtime)
@@ -38,12 +38,13 @@ https://openshelf.netlify.app/
 
 - Search for books in the OpenShelf Library
 
-Once logged in, users will be able to-
+Once logged in, users will be able to:
 
-- Upload book titles using Google Books API
+- Upload book titles using the Google Books API
+- Manage their inventory by marking books as returned or removing books they no longer want to share
 - Check out books that other members have uploaded
 - Join a waitlist if a book is already checked out
-- Remove books they no longer want to share or leave a waitlist
+- Leave a waitlist
 
 ## Development
 
@@ -53,7 +54,7 @@ Once logged in, users will be able to-
 
 ### Technologies
 
-The primary libraries and dependencies used in the development of openShelf are shown below. For a complete list of dependencies, consult the package.json files inside the `client` and `server` folders.
+The primary libraries and dependencies used in the development of OpenShelf are shown below. For a complete list of dependencies, consult the package.json files inside the `client` and `server` folders.
 
 | Library                                             | Purpose                                          | Client or Server? |
 | :-------------------------------------------------- | :----------------------------------------------- | :---------------- |
@@ -67,7 +68,7 @@ The primary libraries and dependencies used in the development of openShelf are 
 
 ### Development Style and Git Branches
 
-We developed the project using a source-control branching model called [Trunk Based Development](https://trunkbaseddevelopment.com/) which is used at tech companies like Google and Facebook. The model involves developers collobrating on a single branch known as the trunk, or more commonly known as the Master or Main branch on Github.
+We developed the project using a source-control branching model called [Trunk Based Development](https://trunkbaseddevelopment.com/) which is used at tech companies like Google and Facebook. The model involves developers collaborating on a single branch known as the trunk, or more commonly known as the Master or Main branch on Github.
 
 In addition, we would create short-lived Git branches, unique to each developer, where we would push small commits and conduct code reviews using pull requests.
 
@@ -76,7 +77,7 @@ In addition, we would create short-lived Git branches, unique to each developer,
 | (1) Commands (`/`) | Purpose                                                            |
 | :----------------- | :----------------------------------------------------------------- |
 | `npm run client`   | Run Frontend Dev. Server locally                                   |
-| `npm run server`   | Run Backend locally using Nodemon                                  |
+| `npm run server`   | Run Backend locally using nodemon                                  |
 | `npm run dev`      | Run Frontend and Backend (with nodemon) locally using Concurrently |
 |                    |
 
@@ -96,7 +97,7 @@ In addition, we would create short-lived Git branches, unique to each developer,
 | :---------------- | :----------------------------------------------------------------- |
 | `/client`         | Frontend source directory                                          |
 | `../components`   | App Components (React)                                             |
-| `../pages`        | Nextjs Pages directory                                             |
+| `../pages`        | Next.js Pages directory                                            |
 | `../public`       | Static Assets                                                      |
 | `../theme`        | Global Styles directory                                            |
 | `../utils`        | Frontend Helper Methods                                            |
@@ -111,12 +112,12 @@ In addition, we would create short-lived Git branches, unique to each developer,
 
 ## Development Environment
 
-Before starting the server in your local dev. environment,the following environment variables should be defined:
+Before starting the server in your local development environment, the following environment variables should be defined:
 
-| Variable Name           | Description                                                                                     |
-| :---------------------- | :---------------------------------------------------------------------------------------------- |
-| MONGO_CONNECTION_STRING | MongoDB Atlas connection string (e.g. `mongodb+srv://MONGO_USER:MONGO_PASSWORD@cluster...`)     |
-| PORT                    | Server Port (5000 by default for local deploy). In production Heroku will provide its own port. |
+| Variable Name           | Description                                                                                      |
+| :---------------------- | :----------------------------------------------------------------------------------------------- |
+| MONGO_CONNECTION_STRING | MongoDB Atlas connection string (e.g. `mongodb+srv://MONGO_USER:MONGO_PASSWORD@cluster...`)      |
+| PORT                    | Server Port (5000 by default for local deploy). In production, Heroku will provide its own port. |
 
 This is accomplished by including the following in the .env file located in the root of the `/server` directory. This .env file must never be pushed to GitHub since it contains application sensitive information such as the database username and password.
 
@@ -135,6 +136,8 @@ You will need a Google account and register your application with the Google API
 `https://developers.google.com/books/docs/v1/getting_started`
 
 After registering your API key, store it in the .env file located in the /client directory. Again, never push this .env file to Github as it contains your secret Google Books API key.
+
+The /client/.env file must contain the following:
 
 ```
 REACT_APP_API_KEY = yourOwnAPIKeyHere
@@ -158,7 +161,7 @@ Before deploying to Heroku, make sure you have created an account with a new pro
 
 **\*Disclaimer**: In order to deploy with Heroku with Redis, you must have a verified Heroku account which means adding a credit card to your account.\*
 
-1. After downloading the repository, from the command line, go to `/server` directory and install dependencies.
+1. After downloading the repository, from the command-line, go to `/server` directory and install dependencies.
 
 ```
 cd local-repo-root-directory/server
@@ -166,7 +169,7 @@ cd local-repo-root-directory/server
 npm install
 ```
 
-2. Download the Heroku command line interface.
+2. Download the Heroku command-line interface.
 
 MacOS
 
@@ -182,19 +185,19 @@ sudo snap install --classic heroku
 
 For Windows, find the download for 64-bit or 32-bit [here](https://devcenter.heroku.com/articles/heroku-cli).
 
-3. Login with Heroku from the command line
+3. Login with Heroku from the command-line
 
 ```
 heroku login
 ```
 
-4. Check to see if your project already has a redis instance
+4. Check to see if your project already has a Redis instance
 
 ```
 heroku addons | grep heroku-redis
 ```
 
-5. If you don't have a redis instance, add one now using the free hobby-dev tier. Make sure to replace 'your-app-name' with your project name in Heroku.
+5. If you don't have a Redis instance, add one now using the free hobby-dev tier. Make sure to replace 'your-app-name' with your project name in Heroku.
 
 This will automatically add the REDIS_URL env variable to your Heroku project settings.
 
@@ -210,7 +213,7 @@ heroku config:set ORIGIN="your_Netlify_deployment_url" --app your-app-name
 heroku config:set SESSION_SECRET="your session secret from .env folder goes here" --app your-app-name
 ```
 
-7. the Heroku command line uses git commits to figure out what to push to Heroku. If you have not pushed your project to your own remote branch on Github or if you have previously made changes in the code, make sure you run the following:
+7. The Heroku command-line uses git commits to figure out what to push to Heroku. If you have not pushed your project to your own remote branch on Github or if you have previously made changes in the code, make sure you run the following:
 
 ```
 git add .
@@ -241,7 +244,7 @@ That's it! You're now deployed on Heroku using the Redis add-on.
 
 User Data:
 
-- Add user location to serve wider geographical area
+- Add user locations to serve a wider geographical area
 - Add contact / messaging feature
 
 ### Known Bugs + Planned Fixes
@@ -250,6 +253,6 @@ User Data:
 
 ## Authors
 
-- Babak Chehraz [[Portfolio](https://bit.ly/3cecdMs])]
+- Babak Chehraz [[Portfolio](https://bit.ly/3cecdMs)]
 - Andrew Knox
 - Michelle Bence
