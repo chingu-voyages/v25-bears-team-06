@@ -135,24 +135,18 @@ const DashboardPage = () => {
     });
   };
 
-  const setCheckedOut = (newCheckedOut) => {
-    setUserData({
-      ...userData,
-      checkedOut: [newCheckedOut],
-    });
-  };
-
-  const setWaitlisted = (newWaitlisted) => {
-    setUserData({
-      ...userData,
-      waitlisted: [...newWaitlisted],
-    });
-  };
-
   const addInventory = (newItem) => {
     setUserData({
       ...userData,
       owns: [newItem, ...userData.owns],
+    });
+  };
+
+  const setWaitlistedAndCheckedOut = (newWaitlisted, newCheckedOut) => {
+    setUserData({
+      ...userData,
+      waitlisted: [...newWaitlisted],
+      checkedOut: [...newCheckedOut],
     });
   };
 
@@ -306,9 +300,8 @@ const DashboardPage = () => {
                 component={() => (
                   <WaitlistedPage
                     checkedOut={userData.checkedOut}
-                    setCheckedOut={setCheckedOut}
                     waitlisted={userData.waitlisted}
-                    setWaitlisted={setWaitlisted}
+                    setWaitlistedAndCheckedOut={setWaitlistedAndCheckedOut}
                     loading={loading}
                     setAlert={setAlert}
                   />

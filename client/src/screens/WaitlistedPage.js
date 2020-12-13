@@ -1,14 +1,8 @@
 import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import {
-  Typography,
-  Grid,
-  CircularProgress,
-  Snackbar,
-} from "@material-ui/core";
+import { Typography, Grid, CircularProgress } from "@material-ui/core";
 import SingleBookCard from "../components/SingleBookCard";
 import Pagination from "../components/Pagination";
-import Alert from "../components/Alert";
 
 const useStyles = makeStyles({
   pageContainer: {
@@ -23,9 +17,8 @@ const useStyles = makeStyles({
 
 const WaitlistedPage = ({
   checkedOut,
-  setCheckedOut,
   waitlisted,
-  setWaitlisted,
+  setWaitlistedAndCheckedOut,
   loading,
   setAlert,
 }) => {
@@ -46,16 +39,72 @@ const WaitlistedPage = ({
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const setOwners = (newOwners, bookId) => {
+    // 3 Cases where Dashboard UI needs updating upon receiving new owners data
+    // 1) User Joins Waitlist (update waitlisted)
+    // 2) User Leaves Waitlist (update waitlisted)
+    // 3) User Checks out book && leaves waitlist (update waitlisted AND checkedOut)
+    // and at the same time, handle modal UI updating
+
+    // get index in waitlist of the book we are performing the action for
     const waitlistIndex = waitlisted.findIndex(
       ({ book }) => book._id === bookId,
     );
 
     const waitlistedCopy = [...waitlisted];
-    waitlistedCopy[waitlistIndex].book = {
-      ...waitlistedCopy[waitlistIndex].book,
-      newOwners,
-    };
-    setWaitlisted(waitlistedCopy);
+
+    // Gather lengths of all waitlists & checkoutData of all ownerships at waitlistIndex
+    const prevWaitlistLengths = [];
+    const prevCheckoutDataLengths = [];
+    waitlisted[waitlistIndex].book.owners.forEach(
+      ({ waitlist, checkoutData }) => {
+        prevWaitlistLengths.push(waitlist.length);
+        prevCheckoutDataLengths.push(checkoutData.length);
+      },
+    );
+
+    newOwners.every(({ waitlist, checkoutData }, i) => {
+      const prevWaitlistLength = prevWaitlistLengths[i];
+      const prevCheckoutDataLength = prevCheckoutDataLengths[i];
+
+      // Check if new waitlist lengths match with previous lengths
+      if (waitlist.length !== prevWaitlistLength) {
+        if (waitlist.length > prevWaitlistLength) {
+          // CASE 1: joined a waitlist
+          waitlistedCopy[waitlistIndex].book = {
+            ...waitlistedCopy[waitlistIndex].book,
+            newOwners,
+          };
+          const newWaitlistItem = { ...waitlistedCopy[waitlistIndex] };
+          waitlistedCopy.unshift(waitlistedCopy[newWaitlistItem]);
+
+          // update dashboard with updated waitlist with no changes to checkedOut
+          setWaitlistedAndCheckedOut(waitlistedCopy, checkedOut);
+        } else {
+          // CASE 2: left a waitlist
+
+          // Update waitlist at index with new owners data
+          waitlistedCopy[waitlistIndex].book = {
+            ...waitlistedCopy[waitlistIndex].book,
+            newOwners,
+          };
+
+          const checkedOutCopy = [...checkedOut];
+          if (checkoutData.length !== prevCheckoutDataLength) {
+            // CASE 3: they made a checkout in addition to leaving a waitlist
+
+            // push the updated waitlist ownership object to the front of checkedOut array
+            const newCheckedOutItem = { ...waitlistedCopy[waitlistIndex] };
+            checkedOutCopy.unshift(newCheckedOutItem);
+          }
+          // Delete current waitlist from dashboard waitlisted array
+          waitlistedCopy.splice(waitlistIndex, 1);
+
+          setWaitlistedAndCheckedOut(waitlistedCopy, checkedOutCopy);
+        }
+        return false;
+      }
+      return true;
+    });
   };
 
   return (
