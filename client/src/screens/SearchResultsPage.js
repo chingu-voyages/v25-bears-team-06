@@ -9,6 +9,7 @@ import { SearchContext } from "../Context";
 import SEARCH_BOOKS from "../dataservice/queries/searchBooks";
 import Pagination from "../components/Pagination";
 import useQuery from "../dataservice/useQuery";
+import Alert from "../components/Alert";
 
 const useStyles = makeStyles({
   pageContainer: {
@@ -41,7 +42,7 @@ const SearchResultsPage = () => {
   const [alert, setAlert] = useState({
     open: false,
     message: "",
-    backgroundColor: "",
+    type: "",
   });
 
   useEffect(() => {
@@ -50,7 +51,7 @@ const SearchResultsPage = () => {
     }
   }, [data]);
 
-  const updateOwners = (newOwners, bookId) => {
+  const setOwners = (newOwners, bookId) => {
     const bookIndex = bookResults.findIndex((book) => book._id === bookId);
 
     const booksCopy = [...bookResults];
@@ -82,7 +83,11 @@ const SearchResultsPage = () => {
         anchorOrigin={{ vertical: "top", horizontal: "left" }}
         onClose={() => setAlert({ ...alert, open: false })}
         autoHideDuration={5000}
-      />
+      >
+        <div>
+          <Alert severity={alert.type}>{alert.message}</Alert>
+        </div>
+      </Snackbar>
       <Grid className={classes.pageContainer} container direction="column">
         {error && <div className={classes.errorDiv}>{error}</div>}
         <Typography variant="h4" gutterBottom>
@@ -139,7 +144,7 @@ const SearchResultsPage = () => {
                 googleId={book.googleId}
                 publishedDate={book.publishedDate}
                 owners={book.owners}
-                setOwners={updateOwners}
+                setOwners={setOwners}
                 setAlert={setAlert}
               />
             ))

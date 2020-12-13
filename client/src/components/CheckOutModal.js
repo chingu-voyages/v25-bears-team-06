@@ -130,14 +130,14 @@ export default function CheckOutModal({
       setAlert({
         open: true,
         message: "Checkout Successful",
-        backgroundColor: "green",
+        type: "success",
       });
     }
     if (checkoutBookError) {
       setAlert({
         open: true,
         message: checkoutBookError,
-        backgroundColor: "red",
+        type: "error",
       });
     }
   }, [JSON.stringify(checkoutBookData), checkoutBookError, setAlert]);
@@ -170,7 +170,7 @@ export default function CheckOutModal({
       setAlert({
         open: true,
         message: joinWaitlistError,
-        backgroundColor: "red",
+        type: "error",
       });
     }
   }, [JSON.stringify(joinWaitlistData), joinWaitlistError, setAlert]);

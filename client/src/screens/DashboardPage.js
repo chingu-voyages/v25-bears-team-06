@@ -304,12 +304,12 @@ const DashboardPage = () => {
                 path="/dashboard/waitlisted"
                 component={() => (
                   <WaitlistedPage
-                    userData={userData}
-                    setUserData={setUserData}
                     checkedOut={userData.checkedOut}
                     setCheckedOut={setCheckedOut}
                     waitlisted={userData.waitlisted}
                     setWaitlisted={setWaitlisted}
+                    loading={loading}
+                    setAlert={setAlert}
                   />
                 )}
               />
@@ -326,6 +326,7 @@ const DashboardPage = () => {
                     inventory={userData.owns}
                     setInventory={setInventory}
                     loading={loading}
+                    setAlert={setAlert}
                   />
                 )}
               />
