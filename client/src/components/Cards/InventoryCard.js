@@ -85,12 +85,15 @@ const useStyles = makeStyles((theme) => ({
   boldText: {
     fontWeight: 500,
   },
+  infoText: {
+    color: theme.palette.info.main,
+  },
   availabilitySummaryBtn: {
     margin: "theme.spacing(1)",
     backgroundColor: theme.palette.error.main,
     color: theme.palette.error.contrastText,
     "&:hover": {
-      backgroundColor: theme.palette.error.light,
+      backgroundColor: theme.palette.error.dark,
     },
     [theme.breakpoints.down("xs")]: {
       marginTop: theme.spacing(1),
@@ -336,7 +339,7 @@ export default function InventoryCard({
                       <Typography variant="body1" className={classes.boldText}>
                         Checked out by: &nbsp;
                       </Typography>
-                      <Typography variant="body1" className={classes.infoText}>
+                      <Typography variant="body1">
                         {checkoutData.user.displayName}
                       </Typography>
                     </div>
@@ -344,7 +347,7 @@ export default function InventoryCard({
                       <Typography variant="body1" className={classes.boldText}>
                         Due by: &nbsp;
                       </Typography>
-                      <Typography variant="body1">
+                      <Typography variant="body1" className={classes.infoText}>
                         {format(+checkoutData.dueDate, "PPPP")}
                       </Typography>
                     </div>

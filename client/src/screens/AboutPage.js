@@ -102,8 +102,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "space-around",
   },
   questionSection: {
-    width: "100%",
-    maxWidth: "40vw",
+    width: "45%",
     textAlign: "center",
     margin: "0 auto",
     [theme.breakpoints.down("sm")]: {
@@ -118,7 +117,7 @@ const useStyles = makeStyles((theme) => ({
   },
   aboutSection: {
     margin: "0 auto",
-    maxWidth: "40vw",
+    width: "45%",
     [theme.breakpoints.down("sm")]: {
       width: "100%",
       marginLeft: 0,

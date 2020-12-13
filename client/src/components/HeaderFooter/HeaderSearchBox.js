@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
     borderBottomLeftRadius: 0,
     borderBottomRightRadius: 0,
     "&:hover": {
-      backgroundColor: theme.palette.primary.light,
+      backgroundColor: theme.palette.primary.darker,
     },
   },
   searchIcon: {

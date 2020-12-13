@@ -24,6 +24,7 @@ import WaitlistedPage from "./WaitlistedPage";
 import CheckedOutPage from "./CheckedOutPage";
 import MyInventoryPage from "./MyInventoryPage";
 import DefaultDashboard from "../components/Dashboard/DefaultDashboard";
+import BookInfoPage from "./BookInfoPage";
 import Alert from "../components/Alert";
 
 const useStyles = makeStyles((theme) => ({
@@ -329,6 +330,11 @@ const DashboardPage = () => {
                     setAlert={setAlert}
                   />
                 )}
+              />
+              <ProtectedRoute
+                exact
+                path="/dashboard/bookinfo/:id"
+                component={BookInfoPage}
               />
             </Switch>
           </Grid>

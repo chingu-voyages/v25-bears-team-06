@@ -7,6 +7,7 @@ export default createMuiTheme({
       light: "#5f5fc4",
       main: "#283593",
       dark: "#001064",
+      darker: "#00003E",
       contrastText: "#fff",
     },
     secondary: {
@@ -42,6 +43,9 @@ export default createMuiTheme({
     plain: {
       main: "#fff",
       contrastText: "#222",
+    },
+    alert: {
+      contrastText: "#fff",
     },
   },
   typography: {
