@@ -100,6 +100,11 @@ module.exports = {
         throw new Error("Cannot find a user with hte requester's userId");
       }
 
+      // Output ownership items in reverse order (most recently added first)
+      user.owns.reverse();
+      user.checkedOut.reverse();
+      user.waitlisted.reverse();
+
       return transformUser(user);
     } catch (err) {
       throw err;

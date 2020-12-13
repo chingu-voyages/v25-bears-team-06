@@ -102,7 +102,12 @@ const DashboardPage = () => {
     token,
     onTokenExpired: () => auth.onTokenExpired(),
   });
-  const [userData, setUserData] = useState();
+  const [userData, setUserData] = useState({
+    owns: [],
+    checkedOut: [],
+    waitlisted: [],
+  });
+
   const [alert, setAlert] = useState({
     open: false,
     message: "",
@@ -122,6 +127,34 @@ const DashboardPage = () => {
       });
     }
   }, [data, error]);
+
+  const setInventory = (newInventory) => {
+    setUserData({
+      ...userData,
+      owns: [...newInventory],
+    });
+  };
+
+  const setCheckedOut = (newCheckedOut) => {
+    setUserData({
+      ...userData,
+      checkedOut: [newCheckedOut],
+    });
+  };
+
+  const setWaitlisted = (newWaitlisted) => {
+    setUserData({
+      ...userData,
+      waitlisted: [...newWaitlisted],
+    });
+  };
+
+  const addInventory = (newItem) => {
+    setUserData({
+      ...userData,
+      owns: [newItem, ...userData.owns],
+    });
+  };
 
   return (
     <Router>
@@ -265,15 +298,19 @@ const DashboardPage = () => {
               <ProtectedRoute
                 exact
                 path="/dashboard/uploadbook"
-                component={UploadBookPage}
+                component={() => <UploadBookPage addInventory={addInventory} />}
               />
               <ProtectedRoute
                 exact
                 path="/dashboard/waitlisted"
                 component={() => (
                   <WaitlistedPage
-                    userData={userData}
-                    setUserData={setUserData}
+                    checkedOut={userData.checkedOut}
+                    setCheckedOut={setCheckedOut}
+                    waitlisted={userData.waitlisted}
+                    setWaitlisted={setWaitlisted}
+                    loading={loading}
+                    setAlert={setAlert}
                   />
                 )}
               />
@@ -285,7 +322,14 @@ const DashboardPage = () => {
               <ProtectedRoute
                 exact
                 path="/dashboard/myinventory"
-                component={MyInventoryPage}
+                component={() => (
+                  <MyInventoryPage
+                    inventory={userData.owns}
+                    setInventory={setInventory}
+                    loading={loading}
+                    setAlert={setAlert}
+                  />
+                )}
               />
               <ProtectedRoute
                 exact

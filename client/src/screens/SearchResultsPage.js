@@ -40,6 +40,7 @@ const SearchResultsPage = () => {
   const [alert, setAlert] = useState({
     open: false,
     message: "",
+    type: "",
   });
 
   useEffect(() => {
@@ -52,6 +53,18 @@ const SearchResultsPage = () => {
       });
     }
   }, [data, error]);
+
+  const setOwners = (newOwners, bookId) => {
+    const bookIndex = bookResults.findIndex((book) => book._id === bookId);
+
+    const booksCopy = [...bookResults];
+    booksCopy[bookIndex] = {
+      ...booksCopy[bookIndex],
+      owners: newOwners,
+    };
+
+    setBookResults(booksCopy);
+  };
 
   const numberOfBooks = bookResults.length;
   const booksPerPage = bookResults.length > 7 ? 8 : bookResults.length;
@@ -74,12 +87,10 @@ const SearchResultsPage = () => {
         open={alert.open}
         message={alert.message}
         onClose={() => setAlert({ ...alert, open: false })}
-        autoHideDuration={(data && 1000) || 5000}
+        autoHideDuration={5000}
       >
         <div>
-          <Alert severity={(data && "success") || "error"}>
-            {alert.message}
-          </Alert>
+          <Alert severity={alert.type}>{alert.message}</Alert>
         </div>
       </Snackbar>
       <Grid className={classes.pageContainer} container direction="column">
@@ -137,8 +148,7 @@ const SearchResultsPage = () => {
                 googleId={book.googleId}
                 publishedDate={book.publishedDate}
                 owners={book.owners}
-                bookResults={bookResults}
-                setBookResults={setBookResults}
+                setOwners={setOwners}
                 setAlert={setAlert}
               />
             ))
