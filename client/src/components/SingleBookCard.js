@@ -54,6 +54,10 @@ const useStyles = makeStyles((theme) => ({
   },
   btnAvailable: {
     backgroundColor: theme.palette.success.main,
+    color: theme.palette.alert.contrastText,
+    "&:hover": {
+      backgroundColor: theme.palette.success.dark,
+    },
   },
   btnUnavailable: {
     backgroundColor: theme.palette.error.main,
