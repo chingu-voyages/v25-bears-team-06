@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const UploadBookPage = () => {
+const UploadBookPage = ({ addInventory }) => {
   const classes = useStyles();
   const auth = useContext(AuthContext);
 
@@ -84,7 +84,7 @@ const UploadBookPage = () => {
   // to redirect upon success
   const [successRedirect, setSuccessRedirect] = useState(false);
 
-  useEffect(() => {
+  useEffect(async () => {
     const fetchBooks = async () => {
       if (searchInput !== "") {
         const result = await axios.get(
@@ -101,6 +101,7 @@ const UploadBookPage = () => {
       });
       window.setTimeout(() => {
         setSuccessRedirect(true);
+        addInventory(data.addBook.owners[data.addBook.owners.length - 1]);
       }, 1000);
     } else if (error) {
       setAlert({
@@ -108,7 +109,7 @@ const UploadBookPage = () => {
         message: error,
       });
     } else {
-      fetchBooks();
+      await fetchBooks();
     }
   }, [searchInput, JSON.stringify(data), error, pressedEnter]);
 

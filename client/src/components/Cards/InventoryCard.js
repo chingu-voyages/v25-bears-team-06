@@ -180,22 +180,25 @@ export default function InventoryCard({
   const [
     returnBook,
     { data: returnData, error: returnError, loading: returnLoading },
-  ] = useMutation(RETURN_BOOK.mutation, auth && auth.user && auth.user.token);
+  ] = useMutation(RETURN_BOOK.mutation, auth.user.token, auth.onTokenExpired);
 
   useEffect(() => {
     if (returnData) {
       setInventory(
-        () =>
-          inventory &&
-          inventory.map((item) => {
-            if (item._id === returnData.returnBook._id) {
-              return {
-                ...item,
-                isAvailable: returnData.returnBook.isAvailable,
-              };
-            }
-            return { ...item };
-          }),
+        inventory.map((item) => {
+          if (item._id === returnData.returnBook._id) {
+            const checkout = returnData.returnBook.checkoutData;
+            return {
+              ...item,
+              isAvailable: returnData.returnBook.isAvailable,
+              checkoutData: {
+                ...item.checkoutData,
+                returnDate: checkout[checkout.length - 1].returnDate,
+              },
+            };
+          }
+          return { ...item };
+        }),
       );
     }
     if (returnError) {
@@ -226,7 +229,7 @@ export default function InventoryCard({
 
   useEffect(() => {
     if (removeData) {
-      setInventory(() => inventory.filter((item) => item._id !== id));
+      setInventory(inventory.filter((item) => item._id !== id));
     }
     if (removeError) {
       setAlert({ open: true, message: removeError, backgroundColor: "red" });
@@ -264,7 +267,7 @@ export default function InventoryCard({
           </div>
         </div>
         <div>
-          {isAvailable ? (
+          {isAvailable || (checkoutData && checkoutData.returnDate) ? (
             <div className={classes.bookAvailableContainer}>
               <Accordion
                 className={classes.availabilityAccordion}
