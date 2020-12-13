@@ -82,11 +82,11 @@ function App() {
                 />
                 <Route exact path="/signup" component={SignupPage} />
                 <Route exact path="/login" component={LoginPage} />
-                <Route path="/bookinfo/:id" component={BookInfoPage} />
+                <Route exact path="/bookinfo/:id" component={BookInfoPage} />
                 <ProtectedRoute
                   exact
                   path="/dashboard/bookinfo/:id"
-                  component={BookInfoPage}
+                  component={DashboardPage}
                 />
                 <ProtectedRoute
                   exact
