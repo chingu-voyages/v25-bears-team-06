@@ -79,7 +79,6 @@ const SearchResultsPage = () => {
       <Snackbar
         open={alert.open}
         message={alert.message}
-        ContentProps={{ style: { backgroundColor: alert.backgroundColor } }}
         anchorOrigin={{ vertical: "top", horizontal: "left" }}
         onClose={() => setAlert({ ...alert, open: false })}
         autoHideDuration={5000}
