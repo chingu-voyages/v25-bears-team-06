@@ -5,6 +5,7 @@ import CHECKOUT_BOOK from "./checkoutBook";
 import RETURN_BOOK from "./returnBook";
 import REMOVE_BOOK from "./removeBook";
 import JOIN_WAITLIST from "./joinWaitlist";
+import LEAVE_WAITLIST from "./leaveWaitlist";
 
 export {
   LOGIN,
@@ -14,4 +15,5 @@ export {
   RETURN_BOOK,
   REMOVE_BOOK,
   JOIN_WAITLIST,
+  LEAVE_WAITLIST,
 };
