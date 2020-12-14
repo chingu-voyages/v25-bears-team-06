@@ -65,7 +65,7 @@ const useStyles = makeStyles((theme) => ({
   loginImageContainer: {
     margin: `${theme.spacing(4)}px auto`,
     minHeight: "20vh",
-    background: `linear-gradient(to top right, rgba(255, 255, 255, 0.3), rgba(255, 230, 240, 0.2)), url("/images/library-image.jpg") no-repeat center center/cover`,
+    background: `linear-gradient(to top right, rgba(255, 255, 255, 0.3), rgba(255, 230, 240, 0.2)), url("/images/library-img.jpg") no-repeat center center/cover`,
     width: "60%",
     [theme.breakpoints.down("xs")]: {
       width: "100%",
