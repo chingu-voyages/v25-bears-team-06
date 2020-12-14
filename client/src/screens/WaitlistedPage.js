@@ -4,16 +4,19 @@ import { Typography, Grid, CircularProgress } from "@material-ui/core";
 import SingleBookCard from "../components/SingleBookCard";
 import Pagination from "../components/Pagination";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   pageContainer: {
     maxWidth: 1200,
     margin: "auto",
+  },
+  headerSection: {
+    marginBottom: theme.spacing(4),
   },
   paginationContainer: {
     position: "relative",
     justifyContent: "center",
   },
-});
+}));
 
 const WaitlistedPage = ({
   checkedOut,
@@ -110,18 +113,22 @@ const WaitlistedPage = ({
   return (
     <div>
       <Grid className={classes.pageContainer} container direction="column">
-        <Typography variant="h4">Books you have waitlisted for</Typography>
-        <Typography
-          variant="subtitle2"
-          className={classes.resultsCount}
-          gutterBottom
-          color="primary"
-        >
-          Showing{" "}
-          {numberOfBooks === 0 ? indexOfFirstBook : indexOfFirstBook + 1}-
-          {numberOfBooks < indexOfLastBook ? numberOfBooks : indexOfLastBook} of{" "}
-          {numberOfBooks} results
-        </Typography>
+        <header className={classes.headerSection}>
+          <Typography variant="h4" gutterBottom>
+            Books you have waitlisted for
+          </Typography>
+          <Typography
+            variant="subtitle2"
+            className={classes.resultsCount}
+            gutterBottom
+            color="primary"
+          >
+            Showing{" "}
+            {numberOfBooks === 0 ? indexOfFirstBook : indexOfFirstBook + 1}-
+            {numberOfBooks < indexOfLastBook ? numberOfBooks : indexOfLastBook}{" "}
+            of {numberOfBooks} results
+          </Typography>
+        </header>
 
         {/* Display waitlisted books  */}
 
