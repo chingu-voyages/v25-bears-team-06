@@ -6,7 +6,6 @@ import { Button } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import { SearchContext } from "../../Context";
 
-// searchbar styling
 const useStyles = makeStyles((theme) => ({
   searchContainer: {
     display: "flex",
@@ -58,7 +57,6 @@ const HeaderSearchBox = () => {
     setInput(event.target.value);
   };
 
-  // HANDLE SEARCH BUTTON CLICK FUNCTION
   const handleClick = () => {
     setQuery(input);
 

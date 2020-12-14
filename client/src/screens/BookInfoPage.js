@@ -1,17 +1,7 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { useHistory, useParams } from "react-router-dom";
-import {
-  CircularProgress,
-  Grid,
-  Paper,
-  Typography,
-  Button,
-  Dialog,
-  Snackbar,
-} from "@material-ui/core";
-import CheckOutModal from "../components/CheckOutModal";
-import { AuthContext } from "../Context";
+import { Grid, Paper, Typography, Button, Snackbar } from "@material-ui/core";
 import { GET_BOOK_BY_ID } from "../dataservice/queries";
 import useQuery from "../dataservice/useQuery";
 import Alert from "../components/Alert";
@@ -59,20 +49,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-// Template for book info page
 const BookInfoPage = () => {
   const classes = useStyles();
   const history = useHistory();
   const { id } = useParams();
-  const auth = useContext(AuthContext);
-  const loggedIn = auth && auth.user && auth.user.token;
 
-  const { data, loading, error } = useQuery({
+  const { data, error } = useQuery({
     query: GET_BOOK_BY_ID.query,
     variables: GET_BOOK_BY_ID.variables({ id }),
   });
 
-  const [open, setOpen] = useState(false);
   const [bookResult, setBookResult] = useState([]);
   const [alert, setAlert] = useState({
     open: false,
@@ -93,14 +79,6 @@ const BookInfoPage = () => {
   // back to search results
   const handleGoBack = () => {
     history.goBack();
-  };
-
-  const handleOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
   };
 
   const thumbnail = `http://books.google.com/books/content?id=${bookResult.googleId}&printsec=frontcover&img=1&zoom=1&source=gbs_api`;
@@ -172,35 +150,6 @@ const BookInfoPage = () => {
                 </Grid>
               </Grid>
             </Grid>
-            {/* <Grid item xs={12} container sm={3}> */}
-            {/*  {!loading ? ( */}
-            {/*    <Button */}
-            {/*      className={classes.btn} */}
-            {/*      variant="contained" */}
-            {/*      color="primary" */}
-            {/*      disableElevation */}
-            {/*      onClick={handleOpen} */}
-            {/*      disabled={!!error} */}
-            {/*    > */}
-            {/*      Checkout */}
-            {/*    </Button> */}
-            {/*  ) : ( */}
-            {/*    <CircularProgress */}
-            {/*      color="primary" */}
-            {/*      style={{ margin: "0 auto" }} */}
-            {/*    /> */}
-            {/*  )} */}
-            {/* </Grid> */}
-            {/* <Dialog open={open} onClose={handleClose}> */}
-            {/*  <CheckOutModal */}
-            {/*    title={bookResult.title} */}
-            {/*    thumbnail={thumbnail} */}
-            {/*    publishedDate={bookResult.publishedDate} */}
-            {/*    authors={bookResult.authors} */}
-            {/*    loggedIn={loggedIn} */}
-            {/*    owners={bookResult.owners} */}
-            {/*  /> */}
-            {/* </Dialog> */}
             <Grid item container>
               {bookResult.description && (
                 <Typography variant="body2">

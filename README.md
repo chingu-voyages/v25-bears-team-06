@@ -31,7 +31,9 @@ https://openshelf.netlify.app/
   - [Configuration](#configuration)
 - [Development Environment](#development-environment)
   - [Server Variables](#server-variables)
+  - [MongoDB and Mongoose Setup](#setting-up-a-mongodb-atlas-account)
   - [Client Variables](#client-variables)
+  - [Google Books API](#google-books-api)
 - [Runtime](#runtime)
   - [Netlify Deployment](#netlify-deployment-client)
   - [Heroku Deployment](#heroku-deployment-server)
@@ -140,15 +142,13 @@ MONGODB_PASSWORD = <db_password>
 MONGODB_NAME = <db_name>
 ```
 
+**Note:** When running client and server concurrently from the root directory, you will need to have these `.env` variables inside the root folder as well.
+
 ### Setting up a MongoDB Atlas Account
 
 Instructions on how to create a MongoDB Atlas account and how to obtain the MONGO_CONNECTION_STRING mentioned above can be found at the link below.
 
 [MongoDB and Mongoose (with pictures!)](/mongo-mongoose-info.md)
-
-### Google Books API\*\*
-
-Note: When running client and server concurrently from the root directory, you will need to have these `.env` variables inside the root folder as well.
 
 ### Client Variables
 

@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect, useState } from "react";
 import { Redirect } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
@@ -12,7 +11,6 @@ import {
   CircularProgress,
   Snackbar,
 } from "@material-ui/core";
-// import Alert from "@material-ui/lab/Alert";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import { AuthContext } from "../Context";
 import { SIGNUP } from "../dataservice/mutations";

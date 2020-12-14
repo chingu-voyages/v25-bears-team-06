@@ -69,7 +69,6 @@ export default function CheckedOutCard({
               </Grid>
             </Grid>
           </Grid>
-          {/* end of main grid below  */}
         </Grid>
 
         <br />

@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useContext } from "react";
 import { Redirect } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
@@ -103,7 +102,6 @@ export default function LoginPage() {
 
   const [login, { data, loading, error }] = useMutation(LOGIN.mutation);
 
-  // Snackbar function
   const [alert, setAlert] = useState({
     open: auth.tokenExpired,
     message: auth.tokenExpired ? "Token Expired: Please Log In Again." : "",

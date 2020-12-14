@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Snackbar,
@@ -8,9 +8,6 @@ import {
 } from "@material-ui/core";
 import InventoryCard from "../components/Cards/InventoryCard";
 import Pagination from "../components/Pagination";
-import { AuthContext } from "../Context";
-import useQuery from "../dataservice/useQuery";
-import { GET_USER } from "../dataservice/queries";
 import Alert from "../components/Alert";
 
 const useStyles = makeStyles((theme) => ({

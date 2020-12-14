@@ -160,7 +160,6 @@ const AboutPage = () => {
 
   const questions = FAQs;
 
-  // set expanded
   const [expanded, setExpanded] = useState(false);
 
   const aboutRef = useRef(null);
