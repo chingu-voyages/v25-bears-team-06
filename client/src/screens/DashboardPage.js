@@ -272,7 +272,7 @@ const DashboardPage = () => {
                       className={classes.menuItem}
                       disableTypography
                     >
-                      Upload Book &nbsp; <AddBoxIcon color="primary" />
+                      Share Books &nbsp; <AddBoxIcon color="primary" />
                     </ListItemText>
                   </ListItem>
                 </List>

@@ -92,7 +92,7 @@ const UploadBookCard = (props) => {
                 color="primary"
                 disableElevation
               >
-                Upload
+                Share
               </Button>
             ) : (
               <CircularProgress color="primary" />

@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import React, { useState, useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
@@ -60,10 +61,10 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   btnUnavailable: {
-    backgroundColor: theme.palette.error.main,
-    color: theme.palette.error.contrastText,
+    backgroundColor: theme.palette.success.main,
+    color: theme.palette.alert.contrastText,
     "&:hover": {
-      backgroundColor: theme.palette.error.dark,
+      backgroundColor: theme.palette.success.dark,
     },
   },
 }));
@@ -155,7 +156,7 @@ const SingleBookCard = (props) => {
               disableElevation
               onClick={handleOpen}
             >
-              {handleAvailability() ? "Checkout" : "UnAvailable"}
+              {handleAvailability() ? "Checkout" : "Waitlist Options"}
             </Button>
           </Grid>
           {/* Modal  */}

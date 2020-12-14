@@ -95,7 +95,6 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: 1440,
     margin: "1rem auto",
     paddingTop: "1rem",
-    textAlign: "center",
     [theme.breakpoints.down("sm")]: {
       flexFlow: "column-reverse nowrap",
     },
@@ -103,7 +102,6 @@ const useStyles = makeStyles((theme) => ({
   },
   questionSection: {
     width: "45%",
-    textAlign: "center",
     margin: "0 auto",
     [theme.breakpoints.down("sm")]: {
       width: "100%",
@@ -127,6 +125,7 @@ const useStyles = makeStyles((theme) => ({
   },
   textContainer: {
     padding: "3rem",
+    textAlign: "center",
   },
   infographicContainer: {
     color: "#fff",

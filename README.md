@@ -140,6 +140,14 @@ MONGODB_PASSWORD = <db_password>
 MONGODB_NAME = <db_name>
 ```
 
+### Setting up a MongoDB Atlas Account
+
+Instructions on how to create a MongoDB Atlas account and how to obtain the MONGO_CONNECTION_STRING mentioned above can be found at the link below.
+
+[MongoDB and Mongoose (with pictures!)](/mongo-mongoose-info.md)
+
+### Google Books API\*\*
+
 Note: When running client and server concurrently from the root directory, you will need to have these `.env` variables inside the root folder as well.
 
 ### Client Variables
