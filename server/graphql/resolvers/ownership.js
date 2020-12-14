@@ -22,13 +22,6 @@ module.exports = {
         !ownership.isAvailable &&
         !ownership.checkoutData[ownership.checkoutData.length - 1].returnDate
       ) {
-        throw new Error("Cannot remove a book that is checked out!");
-      }
-
-      if (
-        !ownership.isAvailable &&
-        !ownership.checkoutData[ownership.checkoutData.length - 1].returnDate
-      ) {
         throw new Error("Cannot checkout a book that is already checked out!");
       }
 
