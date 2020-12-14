@@ -28,6 +28,9 @@ const useStyles = makeStyles((theme) => ({
     margin: "auto",
     position: "relative",
   },
+  centered: {
+    textAlign: "center",
+  },
   searchContainer: {
     [theme.breakpoints.down("xl")]: {
       width: "30rem",
@@ -97,7 +100,7 @@ const UploadBookPage = () => {
     if (data) {
       setAlert({
         open: true,
-        message: "Book uploaded successfully!",
+        message: "Book info uploaded successfully!",
       });
       window.setTimeout(() => {
         setSuccessRedirect(true);
@@ -191,11 +194,13 @@ const UploadBookPage = () => {
           alignItems="center"
         >
           <Typography variant="h4" gutterBottom>
-            Upload New Book
+            Share a Book
           </Typography>
-          <Typography variant="body1" gutterBottom>
-            To upload a book to your inventory, enter the title below to search
-            for a book that matches.
+          <Typography variant="body1" gutterBottom className={classes.centered}>
+            To share a book you own with others, you need to add it to your
+            inventory. <br />
+            Do this by searching for the title. Once you click on the
+            &quot;share&quot; button, others can see that you own that book.
           </Typography>
 
           {/* Search input area  */}
