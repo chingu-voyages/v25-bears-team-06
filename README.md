@@ -1,4 +1,8 @@
+<div align="center">
+
 ![OpenShelf](logo.png "OpenShelf")
+
+</div>
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/3e3ade1a-8845-49fd-a776-2f519cfb2322/deploy-status)](https://app.netlify.com/sites/openshelf/deploys)
 
