@@ -10,7 +10,7 @@ MongoDB is a NoSQL database. This project specifically used MongoDB Atlas, which
 
 ### Creating a MongoDB Atlas Account
 
-1. Create a [MongoDB Cloud](https://www.mongodb.com/tryFirst) account.
+1. Create a [MongoDB Cloud](https://www.mongodb.com/try) account.
 
 2. After registering your free account, [log into Atlas](https://account.mongodb.com/account/login).
 
