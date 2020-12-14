@@ -1,14 +1,16 @@
-# openShelf
+![OpenShelf](logo.png "OpenShelf")
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/3e3ade1a-8845-49fd-a776-2f519cfb2322/deploy-status)](https://app.netlify.com/sites/openshelf/deploys)
 
-A web app that allows users to share books with members of their community. Users can upload books they own, check out books made available by others, or join a waitlist.
+A Book Sharing Community web app that let's you be your own library.
 
 Chingu Voyage-25 (bears-team-06) (https://chingu.io/)
 
 ## Overview:
 
-OpenShelf is a responsive web app for people to share books with one another.
+OpenShelf is a responsive web app for people who want to share books with one another. Members can check out books from their community or manage their own library.
+
+Features include: uploading owned books (with help from the Google Books API), inventory management, and waitlists for unavailable books.
 
 ## Demo:
 
@@ -51,7 +53,7 @@ Once logged in, users will be able to:
 
 ### Architecture
 
-![TBD](imageName.jpg)
+![OpenShelf Architecture](architecture.png "OpenShelf Architecture")
 
 ### Technologies
 
