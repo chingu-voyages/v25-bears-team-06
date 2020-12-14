@@ -172,35 +172,35 @@ const BookInfoPage = () => {
                 </Grid>
               </Grid>
             </Grid>
-            <Grid item xs={12} container sm={3}>
-              {!loading ? (
-                <Button
-                  className={classes.btn}
-                  variant="contained"
-                  color="primary"
-                  disableElevation
-                  onClick={handleOpen}
-                  disabled={!!error}
-                >
-                  Checkout
-                </Button>
-              ) : (
-                <CircularProgress
-                  color="primary"
-                  style={{ margin: "0 auto" }}
-                />
-              )}
-            </Grid>
-            <Dialog open={open} onClose={handleClose}>
-              <CheckOutModal
-                title={bookResult.title}
-                thumbnail={thumbnail}
-                publishedDate={bookResult.publishedDate}
-                authors={bookResult.authors}
-                loggedIn={loggedIn}
-                owners={bookResult.owners}
-              />
-            </Dialog>
+            {/* <Grid item xs={12} container sm={3}> */}
+            {/*  {!loading ? ( */}
+            {/*    <Button */}
+            {/*      className={classes.btn} */}
+            {/*      variant="contained" */}
+            {/*      color="primary" */}
+            {/*      disableElevation */}
+            {/*      onClick={handleOpen} */}
+            {/*      disabled={!!error} */}
+            {/*    > */}
+            {/*      Checkout */}
+            {/*    </Button> */}
+            {/*  ) : ( */}
+            {/*    <CircularProgress */}
+            {/*      color="primary" */}
+            {/*      style={{ margin: "0 auto" }} */}
+            {/*    /> */}
+            {/*  )} */}
+            {/* </Grid> */}
+            {/* <Dialog open={open} onClose={handleClose}> */}
+            {/*  <CheckOutModal */}
+            {/*    title={bookResult.title} */}
+            {/*    thumbnail={thumbnail} */}
+            {/*    publishedDate={bookResult.publishedDate} */}
+            {/*    authors={bookResult.authors} */}
+            {/*    loggedIn={loggedIn} */}
+            {/*    owners={bookResult.owners} */}
+            {/*  /> */}
+            {/* </Dialog> */}
             <Grid item container>
               {bookResult.description && (
                 <Typography variant="body2">
