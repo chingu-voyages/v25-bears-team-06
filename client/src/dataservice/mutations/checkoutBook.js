@@ -17,6 +17,7 @@ const checkoutBookMutation = `
       checkoutData {
         user {
           displayName
+          _id
         }
         checkoutDate
         dueDate
