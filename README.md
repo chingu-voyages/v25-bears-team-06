@@ -142,7 +142,9 @@ MONGODB_PASSWORD = <db_password>
 MONGODB_NAME = <db_name>
 ```
 
-#### Setting up a MongoDB Atlas Account
+**Note:** When running client and server concurrently from the root directory, you will need to have these `.env` variables inside the root folder as well.
+
+### Setting up a MongoDB Atlas Account
 
 Instructions on how to create a MongoDB Atlas account and how to obtain the MONGO_CONNECTION_STRING mentioned above can be found at the link below.
 
@@ -151,8 +153,6 @@ Instructions on how to create a MongoDB Atlas account and how to obtain the MONG
 ### Client Variables
 
 #### Google Books API
-
-Note: When running client and server concurrently from the root directory, you will need to have these `.env` variables inside the root folder as well.
 
 You will need a Google account and register your application with the Google API Console.
 `https://developers.google.com/books/docs/v1/getting_started`
