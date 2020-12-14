@@ -46,6 +46,7 @@ const SearchResultsPage = () => {
   useEffect(() => {
     if (data) {
       setBookResults(data.books);
+      setCurrentPage(1);
     } else if (error) {
       setAlert({
         open: true,
