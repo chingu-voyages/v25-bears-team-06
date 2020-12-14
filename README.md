@@ -130,7 +130,13 @@ REDIS_URL="127.0.0.1:6379"
 PORT=5000
 ```
 
-Google Books API
+### Setting up a MongoDB Atlas Account
+
+Instructions on how to create a MongoDB Atlas account and how to obtain the MONGO_CONNECTION_STRING mentioned above can be found at the link below.
+
+[MongoDB and Mongoose (with pictures!)](/mongo-mongoose-info.md)
+
+### Google Books API\*\*
 
 You will need a Google account and register your application with the Google API Console.
 `https://developers.google.com/books/docs/v1/getting_started`
