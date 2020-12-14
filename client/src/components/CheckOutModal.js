@@ -103,11 +103,7 @@ export default function CheckOutModal({
   // checkout book function
   const [
     checkoutBook,
-    {
-      data: checkoutBookData,
-      error: checkoutBookError,
-      loading: checkoutBookLoading,
-    },
+    { data: checkoutBookData, error: checkoutBookError },
   ] = useMutation(
     CHECKOUT_BOOK.mutation,
     auth.user ? auth.user.token : null,
@@ -152,11 +148,7 @@ export default function CheckOutModal({
   // join waitlist function
   const [
     joinWaitlist,
-    {
-      data: joinWaitlistData,
-      error: joinWaitlistError,
-      loading: joinWaitlistLoading,
-    },
+    { data: joinWaitlistData, error: joinWaitlistError },
   ] = useMutation(
     JOIN_WAITLIST.mutation,
     auth.user && auth.user.token,
@@ -196,11 +188,7 @@ export default function CheckOutModal({
 
   const [
     leaveWaitlist,
-    {
-      data: leaveWaitlistData,
-      error: leaveWaitlistError,
-      tope: leaveWaitlistLoading,
-    },
+    { data: leaveWaitlistData, error: leaveWaitlistError },
   ] = useMutation(
     LEAVE_WAITLIST.mutation,
     auth.user && auth.user.token,
@@ -237,13 +225,6 @@ export default function CheckOutModal({
     await leaveWaitlist(LEAVE_WAITLIST.variables({ ownershipId }));
     setExpanded(false);
   };
-
-  const handleCheckWaitlist = (owner) =>
-    owner && owner.waitlist && Array.isArray(owner.waitlist)
-      ? owner.waitlist
-          .map(({ _id }) => _id)
-          .indexOf(auth && auth.user && auth.user.userId)
-      : null;
 
   const handleModalAccordion = (owner) => {
     // book is available
@@ -524,7 +505,7 @@ export default function CheckOutModal({
                     handleJoinWaitlist={handleJoinWaitlist}
                   />
                 ))}
-              {/* Avialable Copies */}
+              {/* Available Copies */}
               <Grid item container spacing={1}>
                 <Grid item>
                   <Typography variant="body1">Available Copies</Typography>
@@ -560,8 +541,6 @@ export default function CheckOutModal({
                       handleJoinWaitlist={handleJoinWaitlist}
                     />
                   ))}
-                {/* start accordion below */}
-                {/* end Accordion above the last grid close  */}
               </Grid>
             </>
           ) : (

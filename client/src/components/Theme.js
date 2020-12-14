@@ -1,6 +1,5 @@
 import { unstable_createMuiStrictModeTheme as createMuiTheme } from "@material-ui/core/styles";
 
-// custom styling for later
 export default createMuiTheme({
   palette: {
     primary: {

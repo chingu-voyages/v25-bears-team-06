@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useContext } from "react";
 import { Redirect } from "react-router-dom";
 import axios from "axios";
@@ -73,10 +72,8 @@ const UploadBookPage = ({ addInventory }) => {
 
   const numberOfBooks = books.length;
 
-  // meant for showing loading only on given listing
   const [selectedBookIndex, setSelectedBookIndex] = useState(null);
 
-  // show success msg
   const [alert, setAlert] = useState({
     open: false,
     message: "",
@@ -239,7 +236,6 @@ const UploadBookPage = ({ addInventory }) => {
             </Typography>
           </Grid>
 
-          {/* Success/Error Message */}
           <Snackbar
             classes={{
               root: classes.snackbar,
@@ -256,7 +252,6 @@ const UploadBookPage = ({ addInventory }) => {
               </Alert>
             </div>
           </Snackbar>
-          {/* end of success msg  */}
 
           {/* Display search results  */}
           <Grid>
