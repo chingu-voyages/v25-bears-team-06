@@ -281,7 +281,7 @@ const Header = () => {
               onClick={() => setValue(0)}
             >
               <img
-                src="/images/openshelf2_1.png"
+                src="/images/logo.png"
                 alt="shelf Logo"
                 className={classes.title}
               />

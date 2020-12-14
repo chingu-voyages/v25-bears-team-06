@@ -26,29 +26,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function MyInventoryPage() {
+const MyInventoryPage = ({ inventory, setInventory, loading }) => {
   const classes = useStyles();
-  // state
-  const [inventory, setInventory] = useState([]);
+
   const [alert, setAlert] = useState({
     open: false,
     message: "",
   });
-  // context
-  const auth = useContext(AuthContext);
-  // useQuery hook
-  const { data, error, loading } = useQuery({
-    query: GET_USER.query,
-    token: auth && auth.user && auth.user.token,
-  });
-
-  useEffect(() => {
-    if (data) {
-      setInventory(data.getUser.owns);
-    } else if (error) {
-      setAlert({ open: true, message: error });
-    }
-  }, [JSON.stringify(data), JSON.stringify(error)]);
 
   const [currentPage, setCurrentPage] = useState(1);
   const numberOfBooks = inventory.length;
@@ -71,10 +55,10 @@ export default function MyInventoryPage() {
         open={alert.open}
         message={alert.message}
         onClose={() => setAlert({ ...alert, open: false })}
-        autoHideDuration={(data && 1000) || 5000}
+        autoHideDuration={(inventory && 1000) || 5000}
       >
         <div>
-          <Alert severity={(data && "success") || "error"}>
+          <Alert severity={(inventory && "success") || "error"}>
             {alert.message}
           </Alert>
         </div>
@@ -152,4 +136,6 @@ export default function MyInventoryPage() {
       </Grid>
     </main>
   );
-}
+};
+
+export default MyInventoryPage;

@@ -1,14 +1,20 @@
-# openShelf
+<div align="center">
+
+![OpenShelf](logo.png "OpenShelf")
+
+</div>
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/3e3ade1a-8845-49fd-a776-2f519cfb2322/deploy-status)](https://app.netlify.com/sites/openshelf/deploys)
 
-A web app that allows users to share books with members of their community. Users can upload books they own, check out books made available by others, or join a waitlist.
+A Book Sharing Community web app that let's you be your own library.
 
 Chingu Voyage-25 (bears-team-06) (https://chingu.io/)
 
 ## Overview:
 
-OpenShelf is a responsive web app for people to share books with one another.
+OpenShelf is a responsive web app for people who want to share books with one another. Members can check out books from their community or manage their own library.
+
+Features include: uploading owned books (with help from the Google Books API), inventory management, and waitlists for unavailable books.
 
 ## Demo:
 
@@ -24,18 +30,19 @@ https://openshelf.netlify.app/
   - [Usage](#usage)
   - [Configuration](#configuration)
 - [Development Environment](#development-environment)
+  - [Server Variables](#server-variables)
+  - [Client Variables](#client-variables)
 - [Runtime](#runtime)
   - [Netlify Deployment](#netlify-deployment-client)
   - [Heroku Deployment](#heroku-deployment-server)
-    - [Heroku Deployment Steps](#heroku-deployment-steps)
 - [Future Updates](#future-updates)
+  - [Feature Ideas](#feature-ideas)
   - [Known Bugs + Planned Fixes](#known-bugs-+-planned-fixes)
 - [Authors](#authors)
 
 ## Features
 
 - Account Login and Signup via email+password authentication
-
 - Search for books in the OpenShelf Library
 
 Once logged in, users will be able to:
@@ -50,7 +57,7 @@ Once logged in, users will be able to:
 
 ### Architecture
 
-![TBD](imageName.jpg)
+![OpenShelf Architecture](architecture.png "OpenShelf Architecture")
 
 ### Technologies
 
@@ -93,41 +100,44 @@ In addition, we would create short-lived Git branches, unique to each developer,
 
 ### Configuration
 
-| Location          | Purpose                                                            |
-| :---------------- | :----------------------------------------------------------------- |
-| `/client`         | Frontend source directory                                          |
-| `../components`   | App Components (React)                                             |
-| `../pages`        | Next.js Pages directory                                            |
-| `../public`       | Static Assets                                                      |
-| `../theme`        | Global Styles directory                                            |
-| `../utils`        | Frontend Helper Methods                                            |
-| `../../graphql`   | GraphQL Server Queries, Mutations, Variables used in Apollo Client |
-| `/server`         | Backend source directory                                           |
-| `../graphql`      | GraphQL Resolvers, Type Definitions, and Schema                    |
-| `../../utils`     | GraphQL Helper Methods                                             |
-| `../../resolvers` | GraphQL Resolvers                                                  |
-| `../models`       | MongoDB/Mongoose Data Models and Schemas                           |
-| `../tests`        | Backend Tests                                                      |
-| `../utils`        | Backend Helper Methods                                             |
+| Location             | Purpose                               |
+| :------------------- | :------------------------------------ |
+| `/client`            | Frontend Directory                    |
+| `../public`          | Static Assets                         |
+| `../src`             | Source Directory                      |
+| `../../components`   | React Components                      |
+| `../../screens`      | Pages Directory                       |
+| `../../dataservice`  | Data Fetching                         |
+| `../../../queries`   | GraphQL Query and Variable Objects    |
+| `../../../mutations` | GraphQL Mutation and Variable Objects |
+| `/server`            | Backend Source Directory              |
+| `../graphql`         | GraphQL Type Definitions              |
+| `../../schema`       | GraphQL Schema                        |
+| `../../resolvers`    | GraphQL Resolvers                     |
+| `../models`          | MongoDB/Mongoose Data Schemas         |
 
 ## Development Environment
 
+### Server Variables
+
 Before starting the server in your local development environment, the following environment variables should be defined:
 
-| Variable Name           | Description                                                                                      |
-| :---------------------- | :----------------------------------------------------------------------------------------------- |
-| MONGO_CONNECTION_STRING | MongoDB Atlas connection string (e.g. `mongodb+srv://MONGO_USER:MONGO_PASSWORD@cluster...`)      |
-| PORT                    | Server Port (5000 by default for local deploy). In production, Heroku will provide its own port. |
+| Variable Name    | Description                                                       |
+| :--------------- | :---------------------------------------------------------------- |
+| AUTH_SECRET      | A random string of characters used for encrypting JSON Web Tokens |
+| MONGODB_USER     | Database username, used in MongoDB Atlas connection string.       |
+| MONGODB_PASSWORD | Database password, used in MongoDB Atlas connection string        |
+| MONGODB_NAME     | Database name, used in MongoDB Atlas connection string            |
 
 This is accomplished by including the following in the .env file located in the root of the `/server` directory. This .env file must never be pushed to GitHub since it contains application sensitive information such as the database username and password.
 
 The `/server/.env` file must contain the following:
 
 ```
-MONGO_CONNECTION_STRING="mongodb+srv://..."
-SESSION_SECRET="random character string"
-REDIS_URL="127.0.0.1:6379"
-PORT=5000
+AUTH_SECRET = <random-secret-key>
+MONGODB_USER = <db_user>
+MONGODB_PASSWORD = <db_password>
+MONGODB_NAME = <db_name>
 ```
 
 ### Setting up a MongoDB Atlas Account
@@ -137,6 +147,12 @@ Instructions on how to create a MongoDB Atlas account and how to obtain the MONG
 [MongoDB and Mongoose (with pictures!)](/mongo-mongoose-info.md)
 
 ### Google Books API\*\*
+
+Note: When running client and server concurrently from the root directory, you will need to have these `.env` variables inside the root folder as well.
+
+### Client Variables
+
+#### Google Books API
 
 You will need a Google account and register your application with the Google API Console.
 `https://developers.google.com/books/docs/v1/getting_started`
@@ -148,6 +164,8 @@ The /client/.env file must contain the following:
 ```
 REACT_APP_API_KEY = yourOwnAPIKeyHere
 ```
+
+Note: When deploying to Netlify, make sure to add this environment variable when adding the project to Netlify. See the [Netlify Deployment Guide](/netlify-deploy-doc.md) for more information on how to do this.
 
 ## Runtime
 
@@ -165,12 +183,10 @@ As a quick disclaimer, we are deploying the server as it is structured in the re
 
 Before deploying to Heroku, make sure you have created an account with a new project on https://heroku.com
 
-**\*Disclaimer**: In order to deploy with Heroku with Redis, you must have a verified Heroku account which means adding a credit card to your account.\*
-
 1. After downloading the repository, from the command-line, go to `/server` directory and install dependencies.
 
 ```
-cd local-repo-root-directory/server
+cd <repo-root-directory>/server
 
 npm install
 ```
@@ -197,44 +213,44 @@ For Windows, find the download for 64-bit or 32-bit [here](https://devcenter.her
 heroku login
 ```
 
-4. Check to see if your project already has a Redis instance
+4. Verify heroku has been added to git's remote.
 
 ```
-heroku addons | grep heroku-redis
+git remote -v
 ```
 
-5. If you don't have a Redis instance, add one now using the free hobby-dev tier. Make sure to replace 'your-app-name' with your project name in Heroku.
+If you see "heroku" in the list, you can skip step 5.
 
-This will automatically add the REDIS_URL env variable to your Heroku project settings.
-
-```
-heroku addons:create heroku-redis:hobby-dev -a your-app-name
-```
-
-6. Add Config Variables to Heroku (environment variables). Read more about these needed variables [here](#development-environment). Fill out the variables according to your variables set in `/server/.env`
+5. Add Heroku as a remote repository
 
 ```
-heroku config:set MONGO_CONNECTION_STRING="mongodb+srv://..." --app your-app-name
-heroku config:set ORIGIN="your_Netlify_deployment_url" --app your-app-name
-heroku config:set SESSION_SECRET="your session secret from .env folder goes here" --app your-app-name
+git remote add heroku https://git.heroku.com/<your-heroku-project-name-here>.git.
 ```
 
-7. The Heroku command-line uses git commits to figure out what to push to Heroku. If you have not pushed your project to your own remote branch on Github or if you have previously made changes in the code, make sure you run the following:
+6. Add Config Variables (environment variables) to Heroku. Read more about these needed variables [here](#development-environment). Fill out the variables according to your variables set in `/server/.env`
 
 ```
-git add .
-git commit -m "my commit message"
+heroku config:set AUTH_SECRET="<your-auth-secret>" --app your-app-name
+heroku config:set MONGODB_USER="<db_user>" --app your-app-name
+heroku config:set MONGODB_PASSWORD="<db_password>" --app your-app-name
+heroku config:set MONGODB_NAME="<db_name>" --app your-app-name
 ```
 
-8. Since we want to push the `/server` directory to Heroku only, we must use a subtree. This is how we do it:
+7. The Heroku command-line uses git commits to figure out what to push to Heroku.
 
-Before we do that, we need to go back one level in the directory since the last place we left off was inside the `/server` directory.
+   Since we are using a mono repo (client and server are in one github repo), then we will create a subtree with git and specify the subdirectory.
+
+   Before we do that, we have to be in the root directory. If you've been following along, at this point you should be inside `/server` and need to go up one level.
 
 ```
 cd ../
 ```
 
+8. Then let's make a subtree push to Heroku with the server directory which follows this structure.
+
 ```
+git subtree push --prefix [subdirectory] [remote] [branch]
+--
 git subtree push --prefix server heroku master
 ```
 
@@ -244,14 +260,20 @@ Although this method works, if there is ever a time where the commits made to yo
 git push heroku $(git subtree split --prefix=server $(git symbolic-ref --short -q HEAD)):master --force
 ```
 
-That's it! You're now deployed on Heroku using the Redis add-on.
+That's it! The server is now deployed on Heroku.
 
 ## Future Updates
 
+### Feature Ideas
+
 User Data:
 
-- Add user locations to serve a wider geographical area
-- Add contact / messaging feature
+- User locations to serve a wider geographical area
+- Contact / messaging feature
+
+Book Search:
+
+- Add book search filters i.e. by location radius, availability, etc.
 
 ### Known Bugs + Planned Fixes
 

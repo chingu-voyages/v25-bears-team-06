@@ -18,7 +18,10 @@ module.exports = {
         throw new Error("Cannot find an Ownership with the given ID");
       }
 
-      if (!ownership.isAvailable) {
+      if (
+        !ownership.isAvailable &&
+        !ownership.checkoutData[ownership.checkoutData.length - 1].returnDate
+      ) {
         throw new Error("Cannot checkout a book that is already checked out!");
       }
 
