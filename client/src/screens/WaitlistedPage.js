@@ -23,14 +23,14 @@ const WaitlistedPage = ({
   setAlert,
 }) => {
   const classes = useStyles();
-  const [waitlistedBooks, setWaitlistedBooks] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
 
   if (loading) {
     return <CircularProgress color="primary" />;
   }
 
-  const booksPerPage = waitlisted.length > 7 ? 8 : waitlisted.length;
+  const numberOfBooks = waitlisted.length;
+  const booksPerPage = waitlisted.length > 4 ? 5 : waitlisted.length;
   // Get currently displayed books - for pagination
   const indexOfLastBook = currentPage * booksPerPage;
   const indexOfFirstBook = indexOfLastBook - booksPerPage;
@@ -111,7 +111,17 @@ const WaitlistedPage = ({
     <div>
       <Grid className={classes.pageContainer} container direction="column">
         <Typography variant="h4">Books you have waitlisted for</Typography>
-        <Typography variant="h5">Total: {waitlisted.length}</Typography>
+        <Typography
+          variant="subtitle2"
+          className={classes.resultsCount}
+          gutterBottom
+          color="primary"
+        >
+          Showing{" "}
+          {numberOfBooks === 0 ? indexOfFirstBook : indexOfFirstBook + 1}-
+          {numberOfBooks < indexOfLastBook ? numberOfBooks : indexOfLastBook} of{" "}
+          {numberOfBooks} results
+        </Typography>
 
         {/* Display waitlisted books  */}
 
@@ -122,7 +132,7 @@ const WaitlistedPage = ({
             </Typography>
           </>
         ) : (
-          waitlisted.map(({ _id, book }) => (
+          currentBooks.map(({ book }) => (
             <SingleBookCard
               key={book._id + Math.random()}
               id={book._id}
@@ -146,7 +156,7 @@ const WaitlistedPage = ({
         >
           <Pagination
             booksPerPage={booksPerPage}
-            totalBooks={waitlistedBooks.length}
+            totalBooks={waitlisted.length}
             paginate={paginate}
             className={classes.pagination}
           />
