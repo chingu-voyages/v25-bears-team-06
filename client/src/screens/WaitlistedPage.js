@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import { Typography, Grid, CircularProgress } from "@material-ui/core";
 import SingleBookCard from "../components/SingleBookCard";
@@ -26,6 +27,8 @@ const WaitlistedPage = ({
   setAlert,
 }) => {
   const classes = useStyles();
+
+  const history = useHistory();
   const [currentPage, setCurrentPage] = useState(1);
 
   if (loading) {
@@ -42,6 +45,7 @@ const WaitlistedPage = ({
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const setOwners = (newOwners, bookId) => {
+    history.go(0);
     // 3 Cases where Dashboard UI needs updating upon receiving new owners data
     // 1) User Joins Waitlist (update waitlisted)
     // 2) User Leaves Waitlist (update waitlisted)
